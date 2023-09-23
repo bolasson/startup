@@ -4,6 +4,6 @@ Have you ever looked for new and exhilrating ways to play with foam dart blaster
 ### Design
 Below are visuals for a home page and an example forum page, respectively.
 
-![Home Page](StartupHomePage.jpg) ![Forum Page](StartupContentPage2.jpg)
+![Home Page](StartupHomePage.jpg) ![Forum Page](StartupContentScreen15.jpg)
 
 ![Voting sequence diagram](votingSequenceDiagram.png)
