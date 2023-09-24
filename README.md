@@ -8,6 +8,6 @@ Below are visuals for a home page and an example forum page, respectively.
 
 Below is a visual of how the users may interact with the backend.
 
-![Voting sequence diagram](postingSequenceDiagramFinal.png)
+![Voting sequence diagram](postingSequenceDiagramFinal.jpg)
 
 ### Key Features
