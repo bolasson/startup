@@ -50,7 +50,7 @@ The required technologies for this course will be applied as follows
     - Can't submit, rank, or review unless authenticated.
 
 > [!NOTE]
-> I don't fully understand the capabillities or purpose of the following two technologies. As such I have filled them out to the best of my abillities!
+> I don't fully _understand the capabillities or purpose_ of the following two technologies. **_However_**, I have filled them out to the best of my abillities!
 
 - **WebSocket**
     - Whenever a submission is posted, it notifies all users with an account
