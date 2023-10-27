@@ -57,3 +57,15 @@ The required technologies for this course will be applied as follows
     - Whenever a submission is ranked or reviewed, it notifies the author 
 - **React**
     - Application ported to use the React web framework.
+
+## HTML deliverable
+
+For this deliverable I built out the structure of my application using HTML.
+
+- **HTML pages** - Three HTML pages that serve as: a landing page, a search/forum page, and a login page, respectively.
+- **Links** - The login page automatically links to the search page.
+- **Text** - Each of the game descriptions are represented by text.
+- **Images** - Main Page implements temporary pictures that represent the application.
+- **Login** - Input box and submit button for login.
+- **Database** - The example post represents data pulled from the database.
+- **WebSocket** - On the search page there is a section for notifications about posts when they're created.
