@@ -1,1 +1,135 @@
 /*CSS file for Search Page*/
+body, h1, h2, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    color: #2c1302;
+    background-color: #ffffff;
+}
+
+
+header {
+    background-color: #0785D8;
+    color: #ffffff;
+    padding: 10px 0;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header .logo {
+    display: inline-block;
+}
+
+header nav ul {
+    list-style: none;
+}
+
+header nav ul li {
+    display: inline;
+    margin-right: 20px;
+    font-size: larger;
+}
+
+.content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.left-section {
+    width: 30%;
+    float: left;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-right: 20px;
+}
+
+.left-section h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #2c1302;
+}
+
+.right-section {
+    width: 65%;
+    float: left;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.right-section h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #2c1302;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #2c1302;
+}
+
+button {
+    background-color: #42adf5;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0b81d0;
+}
+
+
+.post {
+    background-color: #fbccad;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.post h3 {
+    font-size: 20px;
+}
+
+.post p {
+    margin: 10px 0;
+}
+
+.post-rating strong {
+    color: #000;
+}
+
+.post-tags {
+    font-style: italic;
+    color: #555;
+}
+
+.post-author {
+    text-align: right;
+    color: #555;
+}
