@@ -13,6 +13,8 @@ body {
 
 
 header {
+    position: sticky;
+    top: 0;
     background-color: #0785D8;
     color: #ffffff;
     padding: 10px 0;
@@ -39,11 +41,15 @@ header nav ul li {
 .content {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
 }
 
 .left-section {
-    width: 30%;
+    position: sticky;
+    top: 175px;
+    width: 20%;
     float: left;
     padding: 10px;
     background-color: #fff;
@@ -55,13 +61,15 @@ header nav ul li {
     margin-top: 0;
     font-size: 24px;
     color: #2c1302;
+    padding: 10px;
+    text-align: center;
 }
 
 .right-section {
-    width: 65%;
+    width: 60%;
     float: left;
     padding: 10px;
-    background-color: #fff;
+    background-color: #ffF;
     border: 1px solid #ddd;
 }
 
@@ -73,11 +81,20 @@ header nav ul li {
 
 .form-group {
     margin-bottom: 20px;
+    padding: 2.5px;
 }
 
 label {
     display: block;
     margin-bottom: 5px;
+}
+
+.notifications {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    align-items: center;
+    text-align: center;
 }
 
 input[type="text"],
@@ -106,7 +123,7 @@ button:hover {
 
 
 .post {
-    background-color: #fbccad;
+    background-color: #fff;
     border: 1px solid #ccc;
     margin-bottom: 20px;
     padding: 10px;
