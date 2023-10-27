@@ -65,6 +65,7 @@ For this deliverable I built out the structure of my application using HTML.
 - **HTML pages** - Three HTML pages that serve as: a landing page, a search/forum page, and a login page, respectively.
 - **Links** - The login page automatically links to the search page.
 - **Text** - Each of the game descriptions are represented by text.
+- **3rd Party Service Calls** - Placeholder for motivational battle quotes on the main page.
 - **Images** - Main Page implements temporary pictures that represent the application.
 - **Login** - Input box and submit button for login.
 - **Database** - The example post represents data pulled from the database.
