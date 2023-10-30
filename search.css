@@ -15,10 +15,9 @@ header {
     top: 0;
     background-color: #076ac8;
     color: #ffffff;
-    padding: 10px 0;
+    padding: 10px;
     text-align: left;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 
@@ -26,14 +25,16 @@ header .logo {
     display: inline-block;
 }
 
-header nav ul {
-    list-style: none;
-}
-
 header nav ul li {
     display: inline;
-    margin-right: 20px;
     font-size: larger;
+    color: #fff;
+}
+
+a {
+    padding: 5px;
+    color: #fff;
+    text-decoration: none;
 }
 
 .content {
@@ -87,7 +88,7 @@ input[type="text"],
 input[type="password"],
 textarea,
 select,
-[class*="post"] {
+.create-post {
     width: 90%;
     padding: 5%;
     border: 1px solid #ccc;
@@ -113,19 +114,20 @@ button:hover {
 }
 
 .post {
-    background-color: #fff;
+    width: 90%;
+    padding-inline: 5%;
     border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #fff;
     margin-bottom: 20px;
-    color: #000;
-    padding: 10px;
+    line-height: 1.75;
 }
 
-.post h3 {
-    font-size: 20px;
-}
-
-.post p {
-    margin: 10px 0;
+.post-info {
+    font-size: small;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
 }
 
 .form-inline {
