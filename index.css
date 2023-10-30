@@ -54,11 +54,17 @@ a {
 h1 {
     font-size: 36px;
     margin: 20px 0;
+    text-align: center;
 }
 
 p {
-    font-size: 16px;
-    margin: 10px 0;
+    text-align: justify;
+    font-size: 20px;
+    line-height: 2;
+    margin-top: 30px;
+    margin-bottom: 75px;
+    margin-left: 200px;
+    margin-right: 200px;
 }
 
 #scroll-down-image {
@@ -78,6 +84,7 @@ p {
 .action-images p {
     font-size: 18px;
     margin: 10px 0;
+    text-align: center;
 }
 
 .action-images img {
