@@ -70,3 +70,14 @@ For this deliverable I built out the structure of my application using HTML.
 - **Login** - Input box and submit button for login.
 - **Database** - The example post represents data pulled from the database.
 - **WebSocket** - On the search page there is a section for notifications about posts when they're created.
+
+## CSS deliverable
+
+For this deliverable I styled the application.
+
+- **Header, footer, and main content body**
+- **Navigation elements** - I dropped the underlines and changed the color for navigation elements.
+- **Responsive to window resizing** - My app looks decent on different window sizes and devices.
+- **Application elements** - Balanced color scheme and whitespace.
+- **Application text content** - Consistent fonts, clean sizing and spacing.
+- **Application images** - Alligned correctly, and put in a grid where applicable.
