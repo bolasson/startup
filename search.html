@@ -70,6 +70,7 @@
                 </form>
             </section>
             <section class="right-section">
+                <section class="create-post">
                 <h2>Create a Post</h2>
                 <form>
                     <div class="form-group">
@@ -80,20 +81,19 @@
                         <label for="post-content">Gameplay:</label>
                         <textarea id="post-content" name="post-content" rows="4" required></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="post-rating">Rating:</label>
-                        <input type="number" id="post-rating" name="post-rating" min="1" max="5" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="post-tags">Tags:</label>
-                        <input type="text" id="post-tags" name="post-tags">
-                    </div>
-                    <div class="form-group">
-                        <label for="post-author">Author:</label>
-                        <input type="text" id="post-author" name="post-author">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="post-tags">Tags:</label>
+                            <input type="text" id="post-tags" name="post-tags">
+                        </div>
+                        <div class="form-group">
+                            <label for="post-author">Author:</label>
+                            <input type="text" id="post-author" name="post-author">
+                        </div>
                     </div>
                     <button type="submit">Submit Post</button>
                 </form>
+                </section>
                 <h1>Below is an example of data to be retrieved from the database, to be implemented later</h1>
                 <h2>Example Post</h2>
                 <div class="post">
@@ -101,9 +101,6 @@
                         <h3>Title: The Alamo</h3>
                     </div>
                     <p>Gameplay: One player is selected to go play as the attacker, while all of the other players gather in a fort on the other side of the game field as defenders. The defenders may not leave the fort. When a defender is hit, they leave the fort and become an attacker. When an attacker is hit they must touch the wall on the opposite side of the fort. They respawn and keep attacking. The defenders win if they hold the fort for 7 minutes.</p>
-                    <div class="post-rating">
-                        <p>Rating: <strong>5/5</strong> Stars</p>
-                    </div>
                     <div class="post-tags">
                         <p>Tags: 'Large Area' 'Large Group' 'Small Group' 'High Rating'</p>
                     </div>
@@ -116,9 +113,7 @@
     </div>
     </main>
     <footer>
-        <hr>
         <div class="footer-left">
-            <spap>Have a fun game play idea to share?</span>
             <a href="login.html"><button>Login / Sign Up</button></a>
         </div>
         <span class="footer-right">Bryce Lasson</span>

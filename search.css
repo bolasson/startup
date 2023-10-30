@@ -4,13 +4,11 @@ body, h1, h2, p, ul, li {
     padding: 0;
 }
 
-
 body {
     font-family: Arial, sans-serif;
     color: #f4f4f4;
     background-color: #252729;
 }
-
 
 header {
     position: sticky;
@@ -57,26 +55,18 @@ header nav ul li {
     margin-right: 20px;
 }
 
-.left-section h2 {
+.right-section {
+    width: 60%;
+    float: left;
+}
+
+.left-section h2,
+.right-section h2 {
     margin-top: 0;
     font-size: 24px;
     color: #f4f4f4;
     padding: 10px;
     text-align: center;
-}
-
-.right-section {
-    width: 60%;
-    float: left;
-    padding: 10px;
-    background-color: #2c2e31;
-    border: 1px solid #ddd;
-}
-
-.right-section h2 {
-    margin-top: 0;
-    font-size: 24px;
-    color: #f4f4f4;
 }
 
 .form-group {
@@ -96,12 +86,13 @@ label {
 input[type="text"],
 input[type="password"],
 textarea,
-select {
-    width: auto;
-    padding: 10px;
+select,
+[class*="post"] {
+    width: 90%;
+    padding: 5%;
     border: 1px solid #ccc;
     border-radius: 5px;
-    color: #000;
+    color: #fff;
 }
 
 button {
@@ -113,15 +104,13 @@ button {
     cursor: pointer;
 }
 
-
 .big-button {
-    width: 225px;
+    width: 205px;
 }
 
 button:hover {
     background-color: #0b81d0;
 }
-
 
 .post {
     background-color: #fff;
@@ -139,18 +128,8 @@ button:hover {
     margin: 10px 0;
 }
 
-.post-rating strong {
-    color: #000;
-}
-
-.post-tags {
-    font-style: italic;
-    color: #555;
-}
-
-.post-author {
-    text-align: right;
-    color: #555;
+.form-inline {
+    display: inline;
 }
 
 footer {
@@ -164,7 +143,6 @@ footer {
 }
 
 .footer-container {
-    padding: 0%;
     display: flex;
     justify-content: space-between;
 }
@@ -176,5 +154,5 @@ footer {
 
 .footer-right {
     flex: 0.1;
-    padding-right: 20px;
+    padding-right: 30px;
 }
