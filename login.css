@@ -60,7 +60,6 @@ h2,p {
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
-    justify-content: space-between;
 }
 
 .left-section {
@@ -104,14 +103,20 @@ input[type="email"] {
 button {
     background-color: #42adf5;
     color: #fff;
-    padding: 10px 20px;
+    padding: 10px;
+    margin-top: 20px;
     border: none;
     border-radius: 5px;
+    float: right;
     cursor: pointer;
 }
 
 .big-button {
     width: 205px;
+    float: none;
+    margin-top: 0px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 button:hover {
