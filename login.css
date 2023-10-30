@@ -103,6 +103,15 @@ input[type="email"] {
 button {
     background-color: #42adf5;
     color: #fff;
+    padding: 10px 20px; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.login-button {
+    background-color: #42adf5;
+    color: #fff;
     padding: 10px;
     margin-top: 20px;
     border: none;

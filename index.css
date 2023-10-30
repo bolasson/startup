@@ -1,1 +1,135 @@
 /*This will be the index page's css*/
+body, h1, h2, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Base styles for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    color: #f4f4f4;
+    background-color: #252729;
+}
+
+/* Header styles */
+header {
+    position: sticky;
+    top: 0;
+    background-color: #076ac8;
+    color: #ffffff;
+    padding: 10px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+header .logo {
+    display: inline-block;
+}
+
+header nav ul li {
+    display: inline;
+    font-size: larger;
+    color: #fff;
+}
+
+a {
+    padding: 5px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.header-right {
+    position: fixed;
+    right: 0;
+    padding: 10px;
+}
+
+.content {
+    max-width: 1200px;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 36px;
+    margin: 20px 0;
+}
+
+p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+#scroll-down-image {
+    width: 700px;
+    height: 160px;
+    display: block;
+    margin: 20px auto;
+}
+
+.action-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    text-align: center;
+    margin: 20px 0;
+}
+
+.action-images p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.action-images img {
+    width: 300px;
+    height: 250px;
+    margin: 10px;
+}
+
+h2 {
+    font-size: 20px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+footer {
+    background-color: #0d0d0d;
+    color: #f4f4f4;
+    padding: 10px 0;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-left {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.footer-right {
+    flex: 0.1;
+    padding-right: 30px;
+}
+
+button {
+    background-color: #42adf5;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.big-button {
+    width: 205px;
+}
+
+.button:hover {
+    background-color: #0b81d0;
+}
