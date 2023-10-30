@@ -37,6 +37,12 @@ a {
     text-decoration: none;
 }
 
+.header-right {
+    position: fixed;
+    right: 0;
+    padding: 10px;
+}
+
 .content {
     max-width: 1200px;
     margin: 0 auto;
@@ -78,6 +84,7 @@ a {
 label {
     display: block;
     margin-bottom: 5px;
+    color: #FFF;
 }
 
 .notifications {
@@ -93,7 +100,7 @@ select,
     padding: 5%;
     border: 1px solid #ccc;
     border-radius: 5px;
-    color: #fff;
+    color: #000;
 }
 
 button {

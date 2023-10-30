@@ -1,1 +1,143 @@
 /*CSS file for the login page*/
+body, h1, h2, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #f4f4f4;
+    background-color: #252729;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    background-color: #076ac8;
+    color: #ffffff;
+    padding: 10px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+header .logo {
+    display: inline-block;
+}
+
+header nav ul li {
+    display: inline;
+    font-size: larger;
+    color: #fff;
+}
+
+a {
+    padding: 5px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.header-right {
+    position: fixed;
+    right: 0;
+    padding: 10px;
+}
+
+.content {
+    max-width: 1200px;
+    padding: 10px;
+    display: flex;
+}
+
+h2,p {
+    text-align: center;
+    padding: 10px;
+}
+
+.login-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-section {
+    width: 50%;
+    padding: 20px;
+    background-color: #2c2e31;
+    border: 1px solid #ddd;
+    margin-right: 10px;
+}
+
+.right-section {
+    width: 50%;
+    padding: 20px;
+    background-color: #2c2e31;
+    border: 1px solid #ddd;
+    margin-left: 10px;
+}
+
+label {
+    margin: 5px;
+}
+
+.form-group {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    line-height: 50px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 50%;
+    height: 4px;
+    padding: 5%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #000;
+}
+
+button {
+    background-color: #42adf5;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.big-button {
+    width: 205px;
+}
+
+button:hover {
+    background-color: #0b81d0;
+}
+
+footer {
+    background-color: #0d0d0d;
+    color: #f4f4f4;
+    padding: 10px 0;
+    text-align: left;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-right {
+    flex: 0.1;
+    padding-right: 30px;
+}
