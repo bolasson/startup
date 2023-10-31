@@ -81,3 +81,12 @@ For this deliverable I styled the application.
 - **Application elements** - Balanced color scheme and whitespace.
 - **Application text content** - Consistent fonts, clean sizing and spacing.
 - **Application images** - Alligned correctly, and put in a grid where applicable.
+
+- ## JavaScript deliverable
+
+For this deliverable I implemented JavaScript for the following features/technologies.
+
+- **login** - Can create a user and stores it in localStorage. Can then log in using the log in section. Open to future connections.
+- **database** - Displays the posts from local storage. Option to create new posts locally, option to connect later.
+- **WebSocket** - I used the setInterval function to periodically announce a new post. This will be replaced with WebSocket messages later.
+- **application logic** - I don't totally understand what this is asking for, however my submission matches everything in the assignment description.
