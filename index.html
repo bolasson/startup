@@ -11,7 +11,7 @@
             <a href="index.html"><img src="Logo.png" alt="Logo" width="50" height="50"></a>
         </div>
         <nav>
-            <ul>
+            <ul>    
                 <li><a href="index.html">Home</a></li>
                 <li><a href="search.html">Search</a></li>
                 <li><a href="login.html">Login</a></li>
@@ -44,9 +44,14 @@
                 <a href="search.html"><img src="LargeGLargeA.png" alt="Search" width="300" height="250"></a>
             </div>
         </div>
-        <h1>Below is an example of a motivational quote to be retrieved via 3rd party service calls, to be implemented later</h1>
+        <!-- <h1>Below is an example of a motivational quote to be retrieved via 3rd party service calls, to be implemented later</h1> -->
         <h2>It's Nerf, or Nothing - Hasbro</h2>
     </div>
+    <script>
+        document.getElementById('scroll-down-image').addEventListener('click', function () {
+            window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+        });
+    </script>
     </main>
     <footer>
         <div class="footer-left">
