@@ -1,4 +1,9 @@
 //Javascript for accessing the database.
+setInterval(() => {
+    const score = Math.floor(Math.random() * 300);
+    document.querySelector('.notifications').textContent = `John Cena just created a post! Post ID: ${score}`;
+}, 5000);
+
 function storeNewPostData() {
     const postTitle = document.getElementById("new-post-title").value;
     const postContent = document.getElementById("new-post-content").value;
