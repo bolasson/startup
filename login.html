@@ -19,7 +19,6 @@
             </ul>
         </nav>
         <div class="header-right">
-            <a href="login.html"><button>Login / Sign Up</button></a>
         </div>
     </header>
     <main>
@@ -27,7 +26,7 @@
         <div class="login-container">
             <section class="left-section">
                 <h2>User Login</h2>
-                <form>
+                <form id="loginForm">
                     <hr>
                     <div class="form-group">
                         <label for="username">Username</label>
@@ -37,7 +36,7 @@
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password" autocomplete="off">
                     </div>
-                    <a href="index.html"><button type="submit" class="login-button">Login</button></a>
+                    <a href="index.html"><button type="submit" onclick="Login()" class="login-button">Login</button></a>
                 </form>
             </section>
             <section class="right-section">

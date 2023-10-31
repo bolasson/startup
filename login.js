@@ -1,4 +1,16 @@
 //Javascript for Login features.
+function Login(){
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    if (username === 'testusername' && password === 'testpassword') {
+        localStorage.setItem('loggedInUser', username);
+        alert('Login successful. You can now access your account.');
+        LoadSearchPage();
+    } else {
+        alert('Invalid username or password. Please try again.');
+    }
+}
+
 function createAccount() {
     const usernameElement = document.querySelector("#new-username");
     localStorage.setItem("username", usernameElement.value);
