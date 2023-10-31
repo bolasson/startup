@@ -7,6 +7,7 @@
 <body>
     <header>
         <link rel="stylesheet" type="text/css" href="search.css">
+        <script src="search.js"></script>
         <div class="logo">
             <a href="index.html"><img src="Logo.png" alt="Logo" width="50" height="50"></a>
         </div>
@@ -86,28 +87,31 @@
                         <p>Author: bolasson</p>
                     </div>
                 </section>
+                <div id="post-container">
+                    <!-- New posts will go here -->
+                </div>
                 <section class="create-post">
                 <h2>Create a Post</h2>
                 <form>
                     <div class="form-group">
-                        <label for="post-title">Title:</label>
-                        <input type="text" id="post-title" name="post-title" required>
+                        <label for="new-post-title">Title:</label>
+                        <input type="text" id="new-post-title" name="new-post-title" required>
                     </div>
                     <div class="form-group">
-                        <label for="post-content">Gameplay:</label>
-                        <textarea id="post-content" name="post-content" rows="4" required></textarea>
+                        <label for="new-post-content">Gameplay:</label>
+                        <textarea id="new-post-content" name="new-post-content" rows="4" required></textarea>
                     </div>
                     <div class="form-inline">
                         <div class="form-group">
-                            <label for="post-tags">Tags:</label>
-                            <input type="text" id="post-tags" name="post-tags">
+                            <label for="new-post-tags">Tags:</label>
+                            <input type="text" id="new-post-tags" name="new-post-tags">
                         </div>
                         <div class="form-group">
-                            <label for="post-author">Author:</label>
-                            <input type="text" id="post-author" name="post-author">
+                            <label for="new-post-author">Author:</label>
+                            <input type="text" id="new-post-author" name="new-post-author">
                         </div>
                     </div>
-                    <button type="submit">Submit Post</button>
+                    <button type="submit" onclick="storeNewPostData()">Submit Post</button>
                 </form>
                 </section>
             </section>

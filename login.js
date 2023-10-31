@@ -2,10 +2,9 @@
 function Login(){
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    if (username === 'testusername' && password === 'testpassword') {
+    if ((username === 'testusername' && password === 'testpassword') || (username === localStorage.getItem("username") && password === localStorage.getItem("password"))) {
         localStorage.setItem('loggedInUser', username);
         alert('Login successful. You can now access your account.');
-        LoadSearchPage();
     } else {
         alert('Invalid username or password. Please try again.');
     }
