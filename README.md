@@ -2,6 +2,8 @@
 
 This application allows players to test how well they know their friends’ opinions on fun and unexpected scales. Nope to Dope is a multiplayer guessing game designed for social interaction and engagement. The app allows up to 8 players per game and tracks scores across rounds. It combines creativity, humor, and real-time collaboration, ensuring an entertaining experience for all participants.
 
+[Check out the app's current progress here!](https://brycelasson.click)
+
 ---
 
 ## Specification Deliverable  
