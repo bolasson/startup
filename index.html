@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8" />
         <title>Rank It</title>
         <link rel="icon" href="./images/favicon.ico">
     </head>
     <body>
         <header>
-
+            <img src="./images/logo.png" alt="Logo" width="75" />
+            <h1>Rank It</h1>
+            <nav>
+                <menu>
+                    <li><a href="index.html">Home</a></li>
+                    <!-- <li><a href="play.html">Play</a></li> -->
+                    <!-- <li><a href="scores.html">Scores</a></li> -->
+                </menu>
         </header>
         <main>
-    
+            <form method="get">     <!-- Add me when the play.html page exists action="play.html" -->
+                <input type="text" id="usernameField" name="usernameValue" placeholder="Username or email address" required/>
+                <input type="password" id="passwordField" name="passwordValue" placeholder="Password" required/>
+                <button type="submit">Start</button>
+            </form>
         </main>
         <footer>
             <span>Bryce Lasson</span>
