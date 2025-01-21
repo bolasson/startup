@@ -11,5 +11,14 @@ Names of people I've met in this class:
 - Blonde, glasses, wears all black: Evan 
 - Brunette, somewhat receeding hairline, short hair: Derek
 
-Good quotes:
+**Good quotes:**
 - "Be famous and awesome so I can put you on my slides. But have good quotes" - Lee Jensen
+
+**Famous People**
+- Tim Berners-Lee: Created HTML
+- Hakon Wium Lie: Created CSS
+- Brendan Eich: Created Javascript (in a week)
+
+**HTML**
+- Document Object Model (DOM)
+- ^ A tree like structure, filled with nodes! That makes so much sense!!
