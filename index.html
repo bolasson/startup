@@ -4,6 +4,14 @@
         <meta charset="UTF-8" />
         <title>Rank It</title>
         <link rel="icon" href="./images/favicon.ico">
+        <!-- I know we aren't doing styling yet, but it was bugging me a lot, so I just added this to the form fields. -->
+        <style>
+            .form-field {
+                display: flex;
+                align-items: center;
+                column-gap: 10px;
+            }
+        </style>
     </head>
     <body>
         <header>
@@ -12,28 +20,29 @@
             <nav>
                 <menu>
                     <li><a href="index.html">Home</a></li>
-                    <!-- <li><a href="play.html">Play</a></li> -->
-                    <!-- <li><a href="scores.html">Scores</a></li> -->
+                    <li><a href="play.html">Play</a></li>
+                    <li><a href="statistics.html">My Statistics</a></li>
                 </menu>
             </nav>
             <hr/>
         </header>
         <main>
             <!-- Using the get method for now, so I can verify the form is working -->
-            <form method="get">     <!-- Add me when the play.html page exists action="play.html" -->
-                <div>
+            <form method="get" action="play.html">
+                <h2>Login</h2>
+                <div class="form-field">
                     <img src="./images/user_black.svg">
                     <input type="text" id="usernameField" name="usernameValue" placeholder="Username" required/>
                 </div>
                 <br/>
-                <div>
+                <div class="form-field">
                     <img src="./images/key_black.svg">
                     <input type="password" id="passwordField" name="passwordValue" placeholder="Password" required/>
-                    <img src="./images/hide_black.svg" alt="Show"/>
+                    <img src="./images/hide_black.svg" width="25" alt="Show"/>
                 </div>
                 <br/>
                 <button type="submit">Login</button>
-                <button type="submit">Create</button>
+                <button type="submit">Create Player</button>
             </form>
         </main>
         <footer>
