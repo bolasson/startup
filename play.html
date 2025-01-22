@@ -22,23 +22,22 @@
             <section class="round-details">
                 <p>Player Name: Bryce</p>
                 <h2 class="countdown">Time Remaining: 8s</h2>
-                <span>On a scale of <strong>Ancient</strong> to <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?</span>           
+                <p>On a scale of <strong>Ancient</strong> to <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?</p>           
             </section>
             <section class="voting-details">
-                <br/>
-                <div class="player-vote">
-                    <span><strong>Jessica</strong>: 3</span>
-                </div>
-                <div class="player-vote">
-                    <span><strong>Wayne</strong>: 7</span>
+                <div class="other-player-votes">
+                    <p><strong>Jessica</strong> voted: 3</p>
+                    <p><strong>Wayne</strong> voted: 7</p>
                 </div>
                 <form class="scale" method="get">
+                    <label for="range">1 2 3 4 5 6 7 8 9 10</label>
+                    <br/>
                     <span class="lower-limit">Ancient</span>
                     <input type="range" min="1" max="10" value="5" step="1" id="range" name="rangeValue">
                     <span class="upper-limit">Modern</span>
                     <br/>
                     <output for="range" id="rangeOutput">Range Output: 5</output>
-                    <button type="submit">Submit</button>
+                    <button type="submit">Vote</button>
                 </form>
             </section>
             <aside class="leaderboard">
