@@ -13,23 +13,33 @@
                 <menu>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="create_or_join.html">Create/Join Game</a></li>
-                    <li><a href="statistics.html">My Statistics</a></li>
                 </menu>
             </nav>
             <hr/>
         </header>
         <main>
+            <p>Player Name: Bryce</p>
+            <section class="clue-submission">
+                <h2>Clue Component</h2>
+                <p>Enter a clue to help players guess the number <strong>4</strong> on a scale of <strong>Ancient</strong> to <strong>Modern</strong>:</p>
+                <form class="clue-form" method="get">
+                    <label for="clue">Clue:</label>
+                    <input type="text" id="clue" name="clue" placeholder="ie. rotary phones" required/>
+                    <button type="submit">Submit Clue</button>
+                </form>
+            </section>
             <section class="round-details">
-                <p>Player Name: Bryce</p>
-                <h2 class="countdown">Time Remaining: 8s</h2>
+                <h2>Details Component</h2>
+                <h4 class="countdown">Time Remaining: 8s</h4>
                 <p>On a scale of <strong>Ancient</strong> to <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?</p>           
             </section>
             <section class="voting-details">
+                <h2>Voting Component</h2>
                 <div class="other-player-votes">
                     <p><strong>Jessica</strong> voted: 3</p>
                     <p><strong>Wayne</strong> voted: 7</p>
                 </div>
-                <form class="scale" method="get">
+                <form class="scale-form" method="get">
                     <label for="range">1 2 3 4 5 6 7 8 9 10</label>
                     <br/>
                     <span class="lower-limit">Ancient</span>
@@ -41,7 +51,7 @@
                 </form>
             </section>
             <aside class="leaderboard">
-                <h2>Leaderboard</h2>
+                <h2>Leaderboard Component</h2>
                 <table>
                     <thead>
                         <tr>

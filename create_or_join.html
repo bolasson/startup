@@ -13,7 +13,6 @@
                 <menu>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="create_or_join.html">Create/Join Game</a></li>
-                    <li><a href="statistics.html">My Statistics</a></li>
                 </menu>
             </nav>
             <hr/>
@@ -28,15 +27,16 @@
             
             <!-- Using the get method for now, so I can verify the form is working -->
             <form class="create-game" method="get" action="play.html">
-                <h2>Create New Game</h2>
-                <p>Head to <a href="https://startup.brycelasson.click" target="_blank">startup.brycelasson.click</a> and use the code below to join my game!</p>
+                <h2>Create New Game Form</h2>
+                <p>Head to <a href="https://startup.brycelasson.click" target="_blank">startup.brycelasson.click</a> and use the assigned code below to join my game!</p>
                 <input type="number" id="generatedCodeField" name="generatedCodeValue" value="5296" readonly/>
+                <p><strong>Number of players</strong>: 4</p>
                 <button type="submit">Start Game</button>
             </form>
 
             <!-- Using the get method for now, so I can verify the form is working -->
             <form class="join-game" method="get" action="play.html">
-                <h2>Join Existing Game</h2>
+                <h2>Join Existing Game Form</h2>
                 <div class="form-field">
                     <input type="number" id="joinCodeField" name="joinCodeValue" placeholder="ie 5296" required/>
                 </div>
