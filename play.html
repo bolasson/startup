@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Rank It</title>
+        <link rel="icon" href="./images/favicon.ico">
+    </head>
+    <body>
+        <header>
+            <img src="./images/logo.png" alt="Logo" width="75" />
+            <h1>Rank It</h1>
+            <nav>
+                <menu>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="create_or_join.html">Create/Join Game</a></li>
+                    <li><a href="statistics.html">My Statistics</a></li>
+                </menu>
+            </nav>
+            <hr/>
+        </header>
+        <main>
+            <section class="round-details">
+                <p>Player Name: Bryce</p>
+                <h2 class="countdown">Time Remaining: 8s</h2>
+                <span>On a scale of <strong>Ancient</strong> to <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?</span>           
+            </section>
+            <section class="voting-details">
+                <br/>
+                <div class="player-vote">
+                    <span><strong>Jessica</strong>: 3</span>
+                </div>
+                <div class="player-vote">
+                    <span><strong>Wayne</strong>: 7</span>
+                </div>
+                <form class="scale" method="get">
+                    <span class="lower-limit">Ancient</span>
+                    <input type="range" min="1" max="10" value="5" step="1" id="range" name="rangeValue">
+                    <span class="upper-limit">Modern</span>
+                    <br/>
+                    <output for="range" id="rangeOutput">Range Output: 5</output>
+                    <button type="submit">Submit</button>
+                </form>
+            </section>
+            <aside class="leaderboard">
+                <h2>Leaderboard</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Points</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jessica</td>
+                            <td>18</td>
+                        </tr>
+                        <tr>
+                            <td>Kyle</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td>Wayne</td>
+                            <td>11</td>
+                        </tr>
+                        <tr>
+                            <td>Bryce</td>
+                            <td>9</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </aside>
+        </main>
+        <footer>
+            <hr/>
+            <span>Bryce Lasson</span>
+            <a href="https://github.com/bolasson/startup.git" target="_blank">GitHub Repository</a>
+        </footer>
+    </body>
+</html>
