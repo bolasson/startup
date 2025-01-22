@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Rank It</title>
+        <link rel="icon" href="./images/favicon.ico">
+    </head>
+    <body>
+        <header>
+            <img src="./images/logo.png" alt="Logo" width="75" />
+            <h1>Rank It</h1>
+            <nav>
+                <menu>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="create_or_join.html">Create/Join Game</a></li>
+                    <li><a href="statistics.html">My Statistics</a></li>
+                </menu>
+            </nav>
+            <hr/>
+        </header>
+        <main>
+            <!-- Tabs to determine which form is enabled. The join game tab will be enabled by default -->
+            <div class="tab"></div>
+                <!-- When 'Create Game' is clicked, it will generate a code a populate the input field in the form below.  -->
+                <button class="tab-link">Create Game</button>
+                <button class="tab-link">Join Game</button>
+            </div>
+            
+            <!-- Using the get method for now, so I can verify the form is working -->
+            <form class="create-game" method="get" action="play.html">
+                <h2>Create New Game</h2>
+                <p>Head to <a href="https://startup.brycelasson.click" target="_blank">startup.brycelasson.click</a> and use the code below to join my game!</p>
+                <input type="number" id="generatedCodeField" name="generatedCodeValue" value="5296" readonly/>
+                <button type="submit">Start Game</button>
+            </form>
+
+            <!-- Using the get method for now, so I can verify the form is working -->
+            <form class="join-game" method="get" action="play.html">
+                <h2>Join Existing Game</h2>
+                <div class="form-field">
+                    <input type="number" id="joinCodeField" name="joinCodeValue" placeholder="ie 5296" required/>
+                </div>
+                <br/>
+                <button type="submit">Join Game</button>
+            </form>
+        </main>
+        <footer>
+            <hr/>
+            <span>Bryce Lasson</span>
+            <a href="https://github.com/bolasson/startup.git" target="_blank">GitHub Repository</a>
+        </footer>
+    </body>
+</html>
