@@ -1,6 +1,6 @@
-# Nope to Dope  
+# Rank It 
 
-This application allows players to test how well they know their friends’ opinions on fun and unexpected scales. Nope to Dope is a multiplayer guessing game designed for social interaction and engagement. The app allows up to 8 players per game and tracks scores across rounds. It combines creativity, humor, and real-time collaboration, ensuring an entertaining experience for all participants.
+This application allows players to test how well they know their friends’ opinions on fun and unexpected scales. Rank It is a multiplayer guessing game designed for social interaction and engagement. The app allows up to 8 players per game and tracks scores across rounds. It combines creativity, humor, and real-time collaboration, ensuring an entertaining experience for all participants.
 
 [Check out the app's current progress here!](https://brycelasson.click)
 
@@ -9,7 +9,7 @@ This application allows players to test how well they know their friends’ opin
 ## Specification Deliverable  
 
 ### Elevator Pitch 🛗  
-Have you ever wondered how well you know your friends’ niche opinions? Nope to Dope is the ultimate social guessing game where players compete to match their friends’ opinions on dynamic, creative scales. From scales like "disgusting to delicious" to "old-fashioned to modern", Nope to Dope keeps everyone engaged with fun clues, real-time voting, and friendly competition. Create or join a game, and see how well you know each other!
+Have you ever wondered how well you know your friends’ niche opinions? Rank It is the ultimate social guessing game where players compete to match their friends’ opinions on dynamic, creative scales. From scales like "disgusting to delicious" to "old-fashioned to modern", Rank It keeps everyone engaged with fun clues, real-time voting, and friendly competition. Create or join a game, and see how well you know each other!
 
 ### Design
 The app has three primary views:  
@@ -106,6 +106,7 @@ Bryce's comments: I added a Statistics page, but other than that, I stuck to my 
   - Gameplay details (`play.html`).
   - User statistics (`statistics.html`).
 - [x] **Images** - Images such as `logo.png` and `user_black.svg` are used in headers and forms across all pages.
+- [x] **3rd Party API Calls** - Placeholders on (`play.html`) 
 - [x] **DB/Login** - Placeholders for database data are present:
   - Login form with username and password fields in `index.html`.
   - Game-related data like clue scales in `play.html`.
