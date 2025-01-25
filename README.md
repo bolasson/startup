@@ -89,3 +89,26 @@ Stores user accounts, hashed credentials, game data, and tracks used scales for 
 
 **WebSocket**  
 Broadcasts real-time slider updates, locked-in results, and live game events to all players.  
+
+
+## HTML Deliverable
+
+Bryce's comments: I added a Statistics page, but other than that, I stuck to my original plan. Below shows what I implemented.
+
+- [x] **HTML pages** - Four HTML pages were created to represent key components of the application:
+  - `index.html`: Home and login page.
+  - `create_or_join.html`: Page for creating or joining a game.
+  - `play.html`: Gameplay page.
+  - `statistics.html`: Statistics page displaying user game data.
+- [x] **Links** - Navigation links connect all pages via the `<nav>` menu. Links allow seamless transitions between the home, game setup, gameplay (only accessible by joining or creating a game), and statistics pages.
+- [x] **Text** - Informative textual content includes:
+  - Game rules and how-to-play guide (`create_or_join.html`).
+  - Gameplay details (`play.html`).
+  - User statistics (`statistics.html`).
+- [x] **Images** - Images such as `logo.png` and `user_black.svg` are used in headers and forms across all pages.
+- [x] **DB/Login** - Placeholders for database data are present:
+  - Login form with username and password fields in `index.html`.
+  - Game-related data like clue scales in `play.html`.
+  - Player statistics such as games played and total points in `statistics.html`.
+- [x] **WebSocket** - Real-time updates are planned and indicated:
+  - Dynamic clue and vote updates in `play.html` using WebSocket placeholders.
