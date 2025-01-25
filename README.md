@@ -106,7 +106,7 @@ Bryce's comments: I added a Statistics page, but other than that, I stuck to my 
   - Gameplay details (`play.html`).
   - User statistics (`statistics.html`).
 - [x] **Images** - Images such as `logo.png` and `user_black.svg` are used in headers and forms across all pages.
-- [x] **3rd Party API Calls** - Placeholders on (`play.html`) 
+- [x] **3rd Party API Calls** - The API will be called on the clue input field in (`play.html`), and the response will be displayed to everyone. You can check the code for more details by searching for "API".
 - [x] **DB/Login** - Placeholders for database data are present:
   - Login form with username and password fields in `index.html`.
   - Game-related data like clue scales in `play.html`.
