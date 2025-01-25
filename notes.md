@@ -18,7 +18,15 @@ Names of people I've met in this class:
 - Tim Berners-Lee: Created HTML
 - Hakon Wium Lie: Created CSS
 - Brendan Eich: Created Javascript (in a week)
+- Jordan Walke: Created React, originally called F-Bolt, then FaxJS
 
 **HTML**
 - Document Object Model (DOM)
 - ^ A tree like structure, filled with nodes! That makes so much sense!!
+
+**CSS**
+- Selector (p), Declaration Block ({}), Properties (color:), Values ("red")
+p {
+    color: "red";
+}
+- 

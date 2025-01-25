@@ -20,21 +20,28 @@
         <main>
             <p>Player Name: Bryce</p>
             <section class="clue-submission">
-                <h2>Clue Component</h2>
+                <!-- Clue Component -->
                 <p>Enter a clue to help players guess the number <strong>4</strong> on a scale of <strong>Ancient</strong> to <strong>Modern</strong>:</p>
+                <!-- The number will be randomly generated on a scale of 1-10 each round. -->
+                <!-- The opposite sides of the scale, in this case, ancient to modern, will be pulled from the database each round.-->
                 <form class="clue-form" method="get">
                     <label for="clue">Clue:</label>
                     <input type="text" id="clue" name="clue" placeholder="ie. rotary phones" required/>
+                    <!-- The submit button below will make an API call to the profanity filter using the given clue, and return the result. -->
                     <button type="submit">Submit Clue</button>
                 </form>
             </section>
             <section class="round-details">
-                <h2>Details Component</h2>
+                <!-- Round Details Component -->
                 <h4 class="countdown">Time Remaining: 8s</h4>
                 <p>On a scale of <strong>Ancient</strong> to <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?</p>           
+                <!-- The opposite sides of the scale, in this case, ancient to modern, will be pulled from the database each round.-->
+                <!-- The name, in this case, Kyle will be updated each round using websocket. -->
+                <!-- The clue, in this case, rotary phones will be populated with the response from the profanity filter API -->
             </section>
             <section class="voting-details">
-                <h2>Voting Component</h2>
+                <!-- Voting Component -->
+                <!-- The player votes below will update using websocket as people change their votes. -->
                 <div class="other-player-votes">
                     <p><strong>Jessica</strong> voted: 3</p>
                     <p><strong>Wayne</strong> voted: 7</p>
@@ -48,10 +55,12 @@
                     <br/>
                     <output for="range" id="rangeOutput">Range Output: 5</output>
                     <button type="submit">Vote</button>
+                    <!-- Once the player votes, their vote will be broadcast using websocket. -->
                 </form>
             </section>
             <aside class="leaderboard">
-                <h2>Leaderboard Component</h2>
+                <h2>Leaderboard</h2>
+                <!-- At the end, the scores will be sent to the database, associated with the given username. -->
                 <table>
                     <thead>
                         <tr>
