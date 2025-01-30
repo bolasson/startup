@@ -6,10 +6,12 @@ it, unless it is absoultely vital to (it removed my conflict testing history XD)
 
 Names of people I've met in this class:
 
-- Dark hair, glasses, black shoes white soles: Spencer
-- Blonde, cool cyber security guy, black shoes: Issac
+- Dark hair, glasses, black shoes white soles, MCU fan fic/lore sharing platform : Spencer
+- Blonde, cool cyber security guy, black shoes, team to do list: Issac
 - Blonde, glasses, wears all black: Evan 
 - Brunette, somewhat receeding hairline, short hair: Derek
+- Blonde, white shoes, works backend (C) in the engineering programming, recipe sharing site: Orion
+- Ginger, black flip flops, arrow changing game: Josh
 
 **Good quotes:**
 - "Be famous and awesome so I can put you on my slides. But have good quotes" - Lee Jensen
@@ -29,4 +31,6 @@ Names of people I've met in this class:
 p {
     color: "red";
 }
-- 
+
+**JavaScript**
+- Formal name is ECMAScript, because Oracle owns the name JavaScript
