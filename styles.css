@@ -76,21 +76,47 @@ a:visited {
     color: rgb(0, 221, 255);
 }
   
-hr {
-    border: none;
-    border-bottom: 1px solid #555;
-    margin: 1rem 0;
+body li {
+    line-height: 1.75;
+    padding-inline: 1rem;
 }
 
-.transparent-form {
+hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin-block: 1rem;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.tab-link {
+    background: #1B2735;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.tab-link:hover {
+    background: #34495e;
+}
+
+.transparent-form, .intro {
     background: rgba(33, 53, 77, 0.2);
     backdrop-filter: blur(10px);
     border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.2);
     padding: 2rem;
     margin: 1rem auto;
-    max-width: 425px;
+    max-width: 600px;
     color: #fff;
-    border: 1px solid rgba(255,255,255,0.2);
     display: flex;
     flex-direction: column;
     align-items: center;
