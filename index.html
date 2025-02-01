@@ -27,21 +27,24 @@
         </header>
         <main>
             <!-- Using the get method for now, so I can verify the form is working -->
-            <form method="get" action="create_or_join.html">
-                <h2>Login</h2>
+            <form class="transparent-form" method="get" action="create_or_join.html">
+                <h1>Login</h1>
                 <div class="form-field">
-                    <img src="./images/user_black.svg">
+                    <img src="./images/user.svg">
                     <input type="text" id="usernameField" name="usernameValue" placeholder="Username" required/>
+                    <div style="width: 25px;"></div>
                 </div>
                 <br/>
                 <div class="form-field">
-                    <img src="./images/key_black.svg">
+                    <img src="./images/key.svg">
                     <input type="password" id="passwordField" name="passwordValue" placeholder="Password" required/>
-                    <img src="./images/hide_black.svg" width="25" alt="Show"/>
+                    <img src="./images/hide.svg" width="25" alt="Show"/>
                 </div>
                 <br/>
-                <button type="submit">Login</button>
-                <button type="submit">Create Player</button>
+                <div class="button-container">
+                    <button type="submit">Login</button>
+                    <button type="submit">Create Player</button>
+                </div>
             </form>
         </main>
         <footer>
