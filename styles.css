@@ -138,29 +138,28 @@ hr {
 }
 
 table {
-    /* border-collapse: collapse; */
     border-spacing: 0;
     margin-block: 1rem;
     color: #fff;
     table-layout: auto;
     width: auto;
-  }
+}
   
-  table thead {
+table thead {
     background: rgba(255,255,255,0.2);
-  }
+}
   
-  table th, table td {
+table th, table td {
     border: 1px solid rgba(255,255,255,0.2);
     backdrop-filter: blur(10px);
     padding: 1rem;
     text-align: left;
     white-space: nowrap;
-  }
+}
   
-  table tbody tr:nth-child(even) {
+table tbody tr:nth-child(even) {
     background: rgba(255,255,255,0.05);
-  }
+}
 
 .bg {
     position: fixed;
