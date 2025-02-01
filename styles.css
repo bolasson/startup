@@ -8,9 +8,21 @@ html, body {
     height: 100%;
     font-family: Arial, sans-serif;
     color: #fff;
-    overflow: hidden;
-    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
     position: relative;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; 
+    padding: 1rem;  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 header, nav, footer {
@@ -46,12 +58,13 @@ nav menu li a:hover {
 }
 
 footer {
+    flex-shrink: 0;    
+    padding-block: 2rem;
+    background: #1B2735;
+    opacity: 0.95;
     text-align: center;
     color: #ccc;
     font-size: 0.9rem;
-    background: #1B2735;
-    opacity: 0.95;
-    padding-block: 2rem;
 }
 
 a {
@@ -168,8 +181,9 @@ table tbody tr:nth-child(even) {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 0;
+    z-index: -1;
     overflow: hidden;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
 }
 
 .moving-stars {
