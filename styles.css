@@ -49,6 +49,18 @@ footer {
     text-align: center;
     color: #ccc;
     font-size: 0.9rem;
+    background: #1B2735;
+    opacity: 0.95;
+    padding-block: 2rem;
+}
+
+footer a {
+    color: rgb(0, 221, 255);
+    text-decoration: none;
+}
+
+footer a:visited {
+    color: rgb(0, 221, 255);
 }
   
 hr {
@@ -71,7 +83,7 @@ hr {
     align-items: center;
 }
   
-.transparent-form h1 {
+.transparent-form h1, h2 {
     margin-bottom: 2.5rem;
     margin-top: 1.5rem;
     font-weight: 600;
@@ -123,4 +135,73 @@ hr {
   
 .transparent-form button:hover {
     background: #778899;
+}
+
+.bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.moving-stars {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: moveLeft 40s linear infinite;
+}
+
+.moving-stars::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 100vw;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.image1 {
+    animation-duration: 220s;
+    background-image: url('./images/Stars.png');
+}
+
+.image1::after {
+    background-image: url('./images/Stars.png');
+}
+
+.image2 {
+    animation-duration: 205s;
+    background-image: url('./images/Stars2.png');
+}
+
+.image2::after {
+    background-image: url('./images/Stars2.png');
+}
+
+.image3 {
+    animation-duration: 230s;
+    background-image: url('./images/Stars3.png');
+}
+
+.image3::after {
+    background-image: url('./images/Stars3.png');
+}
+
+@keyframes moveLeft {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
