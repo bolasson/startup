@@ -44,3 +44,15 @@ nav menu li a {
 nav menu li a:hover {
     text-decoration: underline;
 }
+
+footer {
+    text-align: center;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+  
+hr {
+    border: none;
+    border-bottom: 1px solid #555;
+    margin: 1rem 0;
+}
