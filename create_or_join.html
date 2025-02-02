@@ -24,9 +24,12 @@
             </nav>
         </header>
         <main>
-            <!-- Tabs to determine which form is enabled. The join game tab will be enabled by default -->
+            <!-- Tabs to determine which form is enabled. The how to play tab will be enabled by default -->
             <h2>Hello Bryce, welcome to Rank It!</h2>
+            <!-- Replace Bryce with the user's username -->
+            <!-- This reperesents the how to play tab of the form -->
             <section class="intro">
+                <h2>How to Play</h2>
                 <div class="tabs">
                     <!-- When 'Create Game' is clicked, it will generate a code and populate the input field in the form below.  -->
                     <!-- When a tab is clicked the corresponding form will pop up.-->
@@ -35,7 +38,6 @@
                     <button class="tab-link">Join Game</button>
                 </div>
                 <hr/>
-                <!-- Replace Bryce with the user's username -->
                 <ol>
                     <li>Each round, a scale of 1 to 10 will be given with a word on each end (e.g., Ancient to Modern).</li>
                     <li>One player will receive a random number and provide a clue that helps the other players guess the number.</li>
@@ -49,21 +51,41 @@
                 </ol>
                 <p>You can create a new game and invite your friends or join an existing game using a code. Once everyone has joined, the host will start the game.</p>
             </section>
-            
-            <!-- Using the get method for now, so I can verify the form is working -->
-            <form class="transparent-form" method="get" action="play.html">
+            <!-- This reperesents the create game tab of the form -->
+            <section class="intro">
                 <h2>Create New Game</h2>
-                <p>Head to <a href="https://startup.brycelasson.click" target="_blank">startup.brycelasson.click</a> and use the assigned code below to join my game!</p>
-                <input type="number" id="generatedCodeField" name="generatedCodeValue" value="5296" readonly/>
-                <p><strong>Number of players</strong>: 4</p>
-                <button type="submit">Start Game</button>
-            </form>
+                <div class="tabs">
+                    <!-- When 'Create Game' is clicked, it will generate a code and populate the input field in the form below.  -->
+                    <!-- When a tab is clicked the corresponding form will pop up.-->
+                    <button class="tab-link">How to Play</button>
+                    <button class="tab-link">Create Game</button>
+                    <button class="tab-link">Join Game</button>
+                </div>
+                <hr/>
+                <!-- Using the get method for now, so I can verify the form is working -->
+                <form class="transparent-form" method="get" action="play.html">
+                    <p>Head to <a href="https://startup.brycelasson.click" target="_blank">startup.brycelasson.click</a> and use the code below to join my game!</p>
+                    <input class="code-input" type="number" id="generatedCodeField" name="generatedCodeValue" value="5296" readonly/>
+                    <!-- Update this list dynamically as players join -->
+                    <ul>
+                        <li style="background: #00D2FF">Bryce (Host)</li>
+                        <li style="background: #0FFF00">Kyle</li>
+                        <li style="background: #7400FF">Jessica</li>
+                        <li style="background: #ffff00">Wayne</li>
+                        <li style="background: #FF9200">Derek</li>
+                        <li style="background: #FF00EC">Emily</li>
+                        <li style="background: #0F00FF">Travis</li>
+                        <li style="background: #FF0010">Nathan</li>
+                    </ul>
+                    <button type="submit">Start Game</button>
+                </form>
+            </section>
 
             <!-- Using the get method for now, so I can verify the form is working -->
             <form class="transparent-form" method="get" action="play.html">
                 <h2>Join Existing Game</h2>
                 <div class="form-field">
-                    <input type="number" id="joinCodeField" name="joinCodeValue" placeholder="ie 5296" required/>
+                    <input class="code-input" type="number" id="joinCodeField" name="joinCodeValue" placeholder="ie 5296" required/>
                 </div>
                 <br/>
                 <button type="submit">Join Game</button>

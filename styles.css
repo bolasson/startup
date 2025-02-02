@@ -68,12 +68,12 @@ footer {
 }
 
 a {
-    color: rgb(0, 221, 255);
+    color: #00ddff;
     text-decoration: none;
 }
 
 a:visited {
-    color: rgb(0, 221, 255);
+    color: #00ddff;
 }
   
 body li {
@@ -91,21 +91,24 @@ hr {
 .tabs {
     display: flex;
     justify-content: center;
-    gap: 1rem;
 }
 
 .tab-link {
     background: #1B2735;
     color: #fff;
-    border: 1px solid #444;
-    padding: 10px 20px;
-    border-radius: 8px;
+    padding: 10px 50px;
     cursor: pointer;
-    transition: background 0.3s ease;
+    white-space: nowrap;
+    transition: background 0.5s ease;
 }
 
 .tab-link:hover {
     background: #34495e;
+}
+
+.tab-link:active {
+    background: #17212d;
+    color: #636363;
 }
 
 .transparent-form, .intro {
@@ -127,6 +130,10 @@ hr {
     margin-top: 1.5rem;
     font-weight: 600;
 }
+
+h2 {
+    margin-bottom: 1.5rem;
+}
   
 .transparent-form input, .transparent-form select, .transparent-form textarea {
     border: none;
@@ -137,6 +144,59 @@ hr {
     border-radius: 9999px;
     background: linear-gradient(135deg, #114b65 0%, #04667e 100%);
     color: #fff;
+}
+
+.transparent-form .code-input {
+    border: none;
+    outline: none;
+    padding: 1rem 0rem;
+    margin: 0.25rem 0;
+    font-size: 1.25rem;
+    text-align: center;
+    border-radius: 9999px;
+    background: linear-gradient(135deg, #114b65 0%, #04667e 100%);
+    color: #fff;    
+}
+
+.transparent-form ul {
+    padding-inline: 0;
+    padding-block: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0rem 1rem;
+    justify-content: center;
+}
+
+.transparent-form li {
+    list-style: none;
+    background: #005562;
+    color: black;
+    font-weight: 700;
+    border-radius: 9999px;
+    margin-block: 1rem;
+}
+
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    appearance: textfield;
+}
+
+.transparent-form p {
+    margin-block: 1rem;
+    max-width: 75%;
+}
+
+.intro {
+    padding-inline: 3rem;
+}
+
+.intro p {
+    margin-block: 2rem;
+    max-width: 87.5%;
 }
   
 ::placeholder {
