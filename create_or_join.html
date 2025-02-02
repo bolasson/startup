@@ -49,7 +49,7 @@
                         </ul>
                     </li>
                 </ol>
-                <p>You can create a new game and invite your friends or join an existing game using a code. Once everyone has joined, the host will start the game.</p>
+                <p>You can create a new game and invite your friends or join an existing game using a code from your host. Once everyone has joined, the host will start the game.</p>
             </section>
             <!-- This reperesents the create game tab of the form -->
             <section class="intro">
@@ -80,16 +80,25 @@
                     <button type="submit">Start Game</button>
                 </form>
             </section>
-
-            <!-- Using the get method for now, so I can verify the form is working -->
-            <form class="transparent-form" method="get" action="play.html">
+            <section class="intro">
                 <h2>Join Existing Game</h2>
-                <div class="form-field">
-                    <input class="code-input" type="number" id="joinCodeField" name="joinCodeValue" placeholder="ie 5296" required/>
+                <div class="tabs">
+                    <!-- When a tab is clicked the corresponding form will pop up.-->
+                    <button class="tab-link">How to Play</button>
+                    <button class="tab-link">Create Game</button>
+                    <button class="tab-link">Join Game</button>
                 </div>
-                <br/>
-                <button type="submit">Join Game</button>
-            </form>
+                <hr/>
+                <!-- Using the get method for now, so I can verify the form is working -->
+                <form class="transparent-form" method="get" action="play.html">
+                    <p>Enter the code from your host to join their game.</p>
+                    <div class="form-field">
+                        <input class="code-input" type="number" id="joinCodeField" name="joinCodeValue" placeholder="ie 5296" required/>
+                    </div>
+                    <br/>
+                    <button type="submit" style="width:auto">Join Game</button>
+                </form>
+            </section>
         </main>
         <footer>
             <span>Bryce Lasson</span>
