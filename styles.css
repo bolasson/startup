@@ -111,6 +111,10 @@ strong {
     color: #00ddff !important;
 }
 
+i { 
+    color: #00ff0d !important;
+}
+
 .tabs {
     display: flex;
     justify-content: center;
@@ -185,7 +189,7 @@ h2 {
     color: #fff;    
 }
 
-.transparent-form ul {
+.transparent-form ul, .play-area ul {
     padding-inline: 0;
     padding-block: 1.25rem;
     display: flex;
@@ -194,7 +198,7 @@ h2 {
     justify-content: center;
 }
 
-.transparent-form li {
+.transparent-form li, .play-area li {
     list-style: none;
     background: #005562;
     color: black;

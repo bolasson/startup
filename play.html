@@ -58,33 +58,32 @@
                 <!-- Clue Component -->
                 <!-- The number will be randomly generated on a scale of 1-10 each round. -->
                 <!-- DATABASE: The opposite sides of the scale, in this case, ancient to modern, will be pulled from the database each round.-->
-                <form class="transparent-form" method="get">
+                <!-- <form class="transparent-form" method="get">
                     <p>Enter a clue to help players guess the number <strong>4</strong> on a scale of <strong>Ancient</strong> to <strong>Modern</strong>:</p>
                     <input class="user-input" type="text" id="clue" name="clue" placeholder="ie. rotary phones" required/>
-                    <!-- API: The submit button below will make an API call to the profanity filter using the given clue, and return the result. -->
+                    API: The submit button below will make an API call to the profanity filter using the given clue, and return the result.
                     <button type="submit">Submit Clue</button>
-                </form>
+                </form> -->
                 <section>
                     <!-- Round Details Component -->
                     <h4 class="countdown">Time Remaining: 8s</h4>
-                    <p>On a scale of <strong>Ancient</strong> to <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?</p>           
+                    <h2 style="text-align: center; line-height: 2rem;">On a scale of <strong>Ancient</strong> to <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?</h2>           
                     <!-- DATABASE: The opposite sides of the scale, in this case, ancient to modern, will be pulled from the database each round.-->
                     <!-- WEBSOCKET: The name, in this case, Kyle will be updated each round -->
                     <!-- API: The clue, in this case, rotary phones will be populated with the response from the profanity filter API -->
-                </section>
-                <section class="voting-details">
                     <!-- Voting Component -->
                     <!-- WEBSOCKET: The player votes below will update using websocket as people change their votes. -->
-                    <div class="other-player-votes">
-                        <p><strong>Jessica</strong> voted: 3</p>
-                        <p><strong>Wayne</strong> voted: 7</p>
-                    </div>
+                    <ul player-votes>
+                        <li style="background: #00D2FF">You</li>
+                        <li style="background: #a545ff">Jessica</li>
+                        <li style="background: #ffff00">Wayne</li>
+                    </ul>
                     <form class="scale-form" method="get">
                         <label for="range">1 2 3 4 5 6 7 8 9 10</label>
                         <br/>
-                        <span class="lower-limit">Ancient</span>
+                        <strong class="lower-limit">Ancient</strong>
                         <input type="range" min="1" max="10" value="5" step="1" id="range" name="rangeValue">
-                        <span class="upper-limit">Modern</span>
+                        <strong class="upper-limit">Modern</strong>
                         <br/>
                         <output for="range" id="rangeOutput">Range Output: 5</output>
                         <button type="submit">Vote</button>
