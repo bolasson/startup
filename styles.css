@@ -135,6 +135,11 @@ i {
     color: #636363;
 }
 
+.tab-link:disabled {
+    background: #17212d;
+    color: #636363;
+}
+
 .transparent-form, section, .leaderboard {
     background: rgba(33, 53, 77, 0.2);
     backdrop-filter: blur(10px);
