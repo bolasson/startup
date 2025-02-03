@@ -44,16 +44,13 @@ aside {
     padding: 1rem;
 }
 
-header, nav, footer {
-    padding: 1rem;
-}
-
 header {
     display: flex;
     align-items: center;
     gap: 1rem;
     background: #1B2735;
     opacity: 0.875;
+    padding-left: 1rem;
 }
 
 header h1 {
@@ -78,7 +75,7 @@ nav menu li a:hover {
 
 footer {
     flex-shrink: 0;    
-    padding-block: 2rem;
+    padding-block: 1.5rem;
     background: #1B2735;
     opacity: 0.95;
     text-align: center;
@@ -198,13 +195,18 @@ h2 {
     justify-content: center;
 }
 
-.transparent-form li, .play-area li {
+.transparent-form li, .leaderboard li {
     list-style: none;
     background: #005562;
     color: black;
     font-weight: 700;
     border-radius: 9999px;
     margin-block: 1rem;
+    text-align: center;
+}
+
+.leaderboard li {
+    margin: 0;
 }
 
 input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
@@ -252,7 +254,7 @@ section p, .leaderboard p {
     width: 100%;
 }
   
-.transparent-form button, .user-submission {
+.transparent-form button, .user-submission, .submit-vote {
     background: #556677;
     width: 40%;
     font-size: 1rem;
@@ -262,6 +264,10 @@ section p, .leaderboard p {
     padding: 0.75rem 1rem;
     cursor: pointer;
     margin-top: 1rem;
+}
+
+.submit-vote {
+    width: auto;
 }
   
 .transparent-form button:hover {
@@ -362,46 +368,95 @@ table tbody tr:nth-child(even) {
     }
 }
 
-input[type="range"] {
+.scale-ends {
     width: 100%;
-    -webkit-appearance: none;
-    appearance: none;
-    background: transparent;
-    position: relative;
-    z-index: 2;
+    margin-block: 1rem;
+    display: flex;
+    justify-content: space-between;
 }
 
-input[type="range"]::-webkit-slider-runnable-track {
-    height: 8px;
-    background: linear-gradient(to right, #00D2FF, #007ACC);
-    border-radius: 4px;
+.slider-labels, .player-votes {
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    table-layout: fixed;
 }
 
-input[type="range"]::-moz-range-track {
-    height: 8px;
-    background: linear-gradient(to right, #00D2FF, #007ACC);
-    border-radius: 4px;
+.slider-labels td, .player-votes td {
+    width: 10%;
+    border: none;
+    background: none;
+    text-align: center;
+    backdrop-filter: none;
+    justify-content: center;
 }
 
-input[type="range"]::-webkit-slider-thumb {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #fff;
-    border: 2px solid #007ACC;
+.player-votes td:not(:empty) {
+    padding: 0;
+    position: relative; 
+}
+
+.player-votes span {
     border-radius: 50%;
-    margin-top: -6px;
+    color: black;
+    font-weight: 700;
+    width: 60%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    max-height: 60%;
+    margin: auto;
+    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.player-votes tr {
+    background: transparent !important;
+}
+
+#sliderContainer {
     position: relative;
-    z-index: 3;
+    display: inline-block;
+    width: 100%;
+}
+
+table.slider {
+    width: 100%;
+    margin: 0;
+    border-collapse: separate;
+    border:solid black 1px;
+    border-radius:6px;
+    overflow: hidden;
+}
+
+table.slider td {
+    width: 10%;
+    height: 30px;
+    border: none;
+    text-align: center;
+    vertical-align: middle;
+}
+  
+table.slider td.active {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+table.slider td.partial {
+    background: linear-gradient(to right, #4CAF50 50%, transparent 50%);
+}
+
+#sliderKnob {
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 25%;
+    border: 4px solid #00D2FF;
     cursor: pointer;
-}
-
-input[type="range"]::-moz-range-thumb {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #fff;
-    border: 2px solid #007ACC;
-    border-radius: 50%;
-    cursor: copy;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 2;
 }

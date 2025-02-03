@@ -1,115 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Rank It</title>
-        <link rel="icon" href="./images/favicon.ico">
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <div class="bg">
-            <div class="moving-stars image1"></div>
-            <div class="moving-stars image2"></div>
-            <div class="moving-stars image3"></div>
-        </div>
-        <header>
-            <img src="./images/logo.png" alt="Logo" width="75" />
-            <h1>Rank It</h1>
-            <nav>
-                <menu>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="create_or_join.html">Create/Join Game</a></li>
-                    <li><a href="statistics.html">My Stats</a></li>
-                </menu>
-            </nav>
-        </header>
-        <main class="play">
-            <aside class="leaderboard">
-                <h2>Leaderboard</h2>
-                <!-- DATABASE: At the end, the scores will be sent to the database, associated with the given username. -->
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Player</th>
-                            <th>Points</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Jessica</td>
-                            <td>18</td>
-                        </tr>
-                        <tr>
-                            <td>Kyle</td>
-                            <td>15</td>
-                        </tr>
-                        <tr>
-                            <td>Wayne</td>
-                            <td>11</td>
-                        </tr>
-                        <tr>
-                            <td>Bryce</td>
-                            <td>9</td>
-                        </tr>
-                    </tbody>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Rank It</title>
+    <link rel="icon" href="./images/favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="bg">
+        <div class="moving-stars image1"></div>
+        <div class="moving-stars image2"></div>
+        <div class="moving-stars image3"></div>
+    </div>
+    <header>
+        <img src="./images/logo.png" alt="Logo" width="75" />
+        <h1>Rank It</h1>
+        <nav>
+            <menu>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="create_or_join.html">Create/Join Game</a></li>
+                <li><a href="statistics.html">My Stats</a></li>
+            </menu>
+        </nav>
+    </header>
+    <main class="play">
+        <aside class="leaderboard">
+            <!-- Only the top five scores will be shown -->
+            <h2>Leaderboard</h2>
+            <!-- DATABASE: At the end, the scores will be sent to the database, associated with the given username. -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><li style="background: #a545ff">Jessica</li></td>
+                        <td>18</td>
+                    </tr>
+                    <tr>
+                        <td><li style="background: #0FFF00">Kyle</li></td>
+                        <td>15</td>
+                    </tr>
+                    <tr>
+                        <td><li style="background: #FF00EC">Emily</li></td>
+                        <td>14</td>
+                    </tr>
+                    <tr>
+                        <td><li style="background: #ffff00">Wayne</li></td>
+                        <td>11</td>
+                    </tr>
+                    <tr>
+                        <td><li style="background: #00D2FF">Bryce</li></td>
+                        <td>9</td>
+                    </tr>
+                </tbody>
+            </table>
+        </aside>
+        <div class="play-area">
+            <!-- Clue Component -->
+            <!-- The number will be randomly generated on a scale of 1-10 each round. -->
+            <!-- DATABASE: The opposite sides of the scale, in this case, ancient to modern, will be pulled from the database each round.-->
+            <form class="transparent-form" method="get">
+                <p>Enter a clue to help players guess the number <strong>4</strong> on a scale of <strong>Ancient</strong> to <strong>Modern</strong>:</p>
+                <input class="user-input" type="text" id="clue" name="clue" placeholder="ie. rotary phones" required/>
+                <!-- WEBSOCKET: The name, in this case, Kyle will be updated each round -->
+                <!-- API: The submit button below will make an API call to the profanity filter using the given clue, and return the result. -->
+                <button type="submit">Submit Clue</button>
+            </form>
+            <section>
+                <h2 style="text-align: center; line-height: 2rem;">On a scale of <strong>Ancient</strong> to
+                    <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?
+                </h2>
+                <h4 class="countdown">Time Remaining: 8s</h4>
+                <!-- Voting Component -->
+                <!-- WEBSOCKET: The player votes below will update using websocket as people change their votes. -->
+                <!-- The table is so that the votes line up with the values on the slider below. Each row makes it so multiple people can be shown on the same voting value. -->
+                <table class="player-votes">
+                    <tr>
+                        <td></td><td></td><td></td><td></td><td></td>
+                        <td></td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td></td><td></td><td></td><td></td><td></td>
+                        <td></td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td></td><td><span style="background: #665bff">T</span></td><td></td><td></td><td></td>
+                        <td></td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td></td><td><span style="background: #FF9200">D</span></td><td></td><td></td><td></td>
+                        <td></td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td></td><td><span style="background: #a545ff">J</span></td><td></td><td></td><td></td>
+                        <td><span style="background: #FF0010">N</span></td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr>
+                        <td></td><td><span style="background: #00D2FF">B</span></td><td><span style="background: #FF00EC">E</span></td><td></td><td></td>
+                        <td><span style="background: #ffff00">W</span></td><td></td><td></td><td></td><td></td>
+                    </tr>
                 </table>
-            </aside>
-            <div class="play-area">
-                <!-- Clue Component -->
-                <!-- The number will be randomly generated on a scale of 1-10 each round. -->
-                <!-- DATABASE: The opposite sides of the scale, in this case, ancient to modern, will be pulled from the database each round.-->
-                <!-- <form class="transparent-form" method="get">
-                    <p>Enter a clue to help players guess the number <strong>4</strong> on a scale of <strong>Ancient</strong> to <strong>Modern</strong>:</p>
-                    <input class="user-input" type="text" id="clue" name="clue" placeholder="ie. rotary phones" required/>
-                    API: The submit button below will make an API call to the profanity filter using the given clue, and return the result.
-                    <button type="submit">Submit Clue</button>
-                </form> -->
-                <section>
-                    <!-- Round Details Component -->
-                    <h4 class="countdown">Time Remaining: 8s</h4>
-                    <h2 style="text-align: center; line-height: 2rem;">On a scale of <strong>Ancient</strong> to <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?</h2>           
-                    <!-- DATABASE: The opposite sides of the scale, in this case, ancient to modern, will be pulled from the database each round.-->
-                    <!-- WEBSOCKET: The name, in this case, Kyle will be updated each round -->
-                    <!-- API: The clue, in this case, rotary phones will be populated with the response from the profanity filter API -->
-                    <!-- Voting Component -->
-                    <!-- WEBSOCKET: The player votes below will update using websocket as people change their votes. -->
-                    <ul player-votes>
-                        <li style="background: #00D2FF">You</li>
-                        <li style="background: #a545ff">Jessica</li>
-                        <li style="background: #ffff00">Wayne</li>
-                    </ul>
-                    <!-- 
-                    <form class="scale-form" method="get">
-                        <label for="range">1 2 3 4 5 6 7 8 9 10</label>
-                        <br/>
-                        <strong class="lower-limit">Ancient</strong>
-                        <input type="range" min="1" max="10" value="5" step="1" id="range" name="rangeValue">
-                        <strong class="upper-limit">Modern</strong>
-                        <br/>
-                        <output for="range" id="rangeOutput">Range Output: 5</output>
-                        <button type="submit">Vote</button>
-                        WEBSOCKET: Once the player votes, their vote will be broadcast using websocket.
-                    </form> -->
-                    <!-- Voting form -->
-                    <input type="range" class="voting-slider" id="votingSlider" list="sliderValues" min="1" max="10" value="5" step="1">
-                    <datalist id="sliderValues">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </datalist>
-                </section>
-            </div>
-        </main>
-        <footer>
-            <span>Bryce Lasson</span>
-            <a href="https://github.com/bolasson/startup.git" target="_blank">GitHub Repository</a>
-        </footer>
-    </body>
+                <!-- The Table-Based Slider (patent pending) -->
+                <!-- This eldritch abomination of a slider is because the regular input range slider didn't have the custimization I wanted, and capabillites for perfectly lining up other elements with the tickmarks. The obvious solution? Build an entirely new type of input component that will be a glorious combination of the table element, CSS, and JavaScript. I will document it well. -->
+                <div class="slider-container">
+                    <!-- This table contains the labels to match up with the slider. It is optional-->
+                    <table class="slider-labels">
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>9</td>
+                            <td>10</td>
+                        </tr>
+                    </table>
+                    <!-- This div is the input range slider replacement. Each td represents a possible value on the slider, and the div is the knob used to control it. -->
+                    <div id="sliderContainer">
+                        <table class="slider">
+                            <tr>
+                                <td data-value="1"></td>
+                                <td data-value="2"></td>
+                                <td data-value="3"></td>
+                                <td data-value="4"></td>
+                                <td data-value="5"></td>
+                                <td data-value="6"></td>
+                                <td data-value="7"></td>
+                                <td data-value="8"></td>
+                                <td data-value="9"></td>
+                                <td data-value="10"></td>
+                            </tr>
+                        </table>
+                        <div id="sliderKnob"></div>
+                    </div>
+                </div>
+                <div class="scale-ends">
+                    <strong>Ancient</strong>
+                    <!-- WEBSOCKET: Once the player votes, their vote will be broadcast using websocket. -->
+                    <form id="voteForm" method="get">
+                        <input type="hidden" id="sliderValue" name="voteValue" value="5">
+                        <button class="submit-vote" type="submit">Submit Vote</button>
+                    </form>
+                    <strong>Modern</strong>
+                </div>
+                <script>
+                    const sliderContainer = document.getElementById('sliderContainer');
+                    const sliderTable = document.querySelector('table.slider');
+                    const sliderKnob = document.getElementById('sliderKnob');
+                    const sliderCells = document.querySelectorAll('table.slider td');
+                    const sliderValue = document.getElementById('sliderValue');
+
+                    const totalCells = sliderCells.length;
+                    let tableWidth, cellWidth, minX, maxX;
+                    const startValue = 5;
+
+                    // Update dimensions based on the table's actual width.
+                    // Now the knob should be allowed from the right border of cell 1 (cellWidth) to the right border of cell 10 (tableWidth).
+                    function updateDimensions() {
+                        tableWidth = sliderTable.offsetWidth;
+                        cellWidth = tableWidth / totalCells;
+                        minX = cellWidth;         // Right border of the first cell.
+                        maxX = tableWidth;        // Right border of the last cell.
+                    }
+
+                    /**
+                     * Updates the slider based on an x-coordinate (relative to the table's left edge).
+                     * The knob snaps to the nearest border (i.e. at x = value * cellWidth).
+                     */
+                    function updateSliderFromPosition(x) {
+                        updateDimensions();  // In case the table has resized
+
+                        // Clamp x to the range [minX, maxX]
+                        if (x < minX) x = minX;
+                        if (x > maxX) x = maxX;
+
+                        // The borders are at multiples of cellWidth. Round the relative position to determine the cell value.
+                        let value = Math.round(x / cellWidth);
+                        // Ensure the value stays within [1, totalCells].
+                        value = Math.max(1, Math.min(totalCells, value));
+
+                        // Calculate the snapped position so that the knob's center is exactly on the cell's right border.
+                        const snappedX = value * cellWidth - cellWidth / 2;
+                        sliderKnob.style.left = snappedX + 'px';
+
+                        // Update cell highlighting.
+                        sliderCells.forEach(cell => {
+                            cell.classList.remove('active', 'partial');
+                            const cellValue = parseInt(cell.getAttribute('data-value'), 10);
+                            if (cellValue < value) {
+                                cell.classList.add('active');
+                            } else if (cellValue === value) {
+                                cell.classList.add('partial');
+                            }
+                        });
+
+                        // Update the displayed slider value.
+                        sliderValue.value = value;
+                    }
+
+                    let dragging = false;
+
+                    // Begin dragging when the knob is pressed.
+                    sliderKnob.addEventListener('mousedown', function (e) {
+                        dragging = true;
+                        e.preventDefault();  // Prevent text selection.
+                    });
+
+                    // Update the knob's position as the mouse moves.
+                    document.addEventListener('mousemove', function (e) {
+                        if (!dragging) return;
+                        // Compute the x-coordinate relative to the table's left edge.
+                        const tableRect = sliderTable.getBoundingClientRect();
+                        const x = e.clientX - tableRect.left;
+                        updateSliderFromPosition(x);
+                    });
+
+                    // End dragging on mouseup.
+                    document.addEventListener('mouseup', function () {
+                        dragging = false;
+                    });
+
+                    // Allow clicking on any cell to jump the knob to that cell's right border.
+                    sliderCells.forEach(cell => {
+                        cell.addEventListener('click', function () {
+                            const value = parseInt(this.getAttribute('data-value'), 10);
+                            // Compute the x-coordinate corresponding to the right border of that cell.
+                            updateSliderFromPosition(value * cellWidth);
+                        });
+                    });
+
+                    // Initialize the slider at the first border when the page loads.
+                    window.addEventListener('load', function () {
+                        updateDimensions();
+                        updateSliderFromPosition((startValue - 0.5) * cellWidth);  // cellWidth equals the right border of cell 1.
+                    });
+
+                    // Recalculate dimensions and reposition the knob on window resize.
+                    window.addEventListener('resize', function () {
+                        updateDimensions();
+                        const currentValue = parseInt(sliderValue.value, 10) || startValue;
+                        sliderKnob.style.left = (currentValue * cellWidth) + 'px';
+                    });
+                </script>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <span>Bryce Lasson</span>
+        <a href="https://github.com/bolasson/startup.git" target="_blank">GitHub Repository</a>
+    </footer>
+</body>
+
 </html>
