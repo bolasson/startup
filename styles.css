@@ -209,6 +209,7 @@ h2 {
 
 input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
+    appearance: none;
     margin: 0;
 }
 
@@ -359,4 +360,48 @@ table tbody tr:nth-child(even) {
     100% {
         transform: translateX(0);
     }
+}
+
+input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    position: relative;
+    z-index: 2;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 8px;
+    background: linear-gradient(to right, #00D2FF, #007ACC);
+    border-radius: 4px;
+}
+
+input[type="range"]::-moz-range-track {
+    height: 8px;
+    background: linear-gradient(to right, #00D2FF, #007ACC);
+    border-radius: 4px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 2px solid #007ACC;
+    border-radius: 50%;
+    margin-top: -6px;
+    position: relative;
+    z-index: 3;
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 2px solid #007ACC;
+    border-radius: 50%;
+    cursor: copy;
 }

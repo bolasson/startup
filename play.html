@@ -78,6 +78,7 @@
                         <li style="background: #a545ff">Jessica</li>
                         <li style="background: #ffff00">Wayne</li>
                     </ul>
+                    <!-- 
                     <form class="scale-form" method="get">
                         <label for="range">1 2 3 4 5 6 7 8 9 10</label>
                         <br/>
@@ -87,8 +88,22 @@
                         <br/>
                         <output for="range" id="rangeOutput">Range Output: 5</output>
                         <button type="submit">Vote</button>
-                        <!-- WEBSOCKET: Once the player votes, their vote will be broadcast using websocket. -->
-                    </form>
+                        WEBSOCKET: Once the player votes, their vote will be broadcast using websocket.
+                    </form> -->
+                    <!-- Voting form -->
+                    <input type="range" class="voting-slider" id="votingSlider" list="sliderValues" min="1" max="10" value="5" step="1">
+                    <datalist id="sliderValues">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </datalist>
                 </section>
             </div>
         </main>
