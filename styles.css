@@ -286,9 +286,11 @@ table {
     table-layout: auto;
     width: auto;
 }
-  
-table thead {
-    background: #114b65;
+
+table.rounded-table {
+    border-radius: 10px; 
+    border: 1px solid rgba(255,255,255,0.2); 
+    overflow: hidden;
 }
   
 table th, table td {
@@ -298,9 +300,13 @@ table th, table td {
     text-align: left;
     white-space: nowrap;
 }
+
+table td {
+    text-align: center;
+}
   
 table tbody tr:nth-child(even) {
-    background: rgba(255,255,255,0.05);
+    background: #ffffff0d;
 }
 
 .bg {
