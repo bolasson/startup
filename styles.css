@@ -410,7 +410,7 @@ table tbody tr:nth-child(even) {
 }
 
 .image1 {
-    animation-duration: 220s;
+    animation-duration: 210s;
     background-image: url('./images/Stars.png');
 }
 
@@ -419,7 +419,7 @@ table tbody tr:nth-child(even) {
 }
 
 .image2 {
-    animation-duration: 205s;
+    animation-duration: 175s;
     background-image: url('./images/Stars2.png');
 }
 
@@ -428,7 +428,7 @@ table tbody tr:nth-child(even) {
 }
 
 .image3 {
-    animation-duration: 190s;
+    animation-duration: 140s;
     background-image: url('./images/Stars3.png');
 }
 
