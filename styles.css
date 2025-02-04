@@ -676,8 +676,13 @@ table.slider td.partial {
         word-wrap: break-word;
     }
 
-    table.slider td {
-        /* 25px → 1.5625rem */
+    table.slider td, table.slider-labels td  {
+        padding: 0.25rem;
         height: 1.5625rem;
+    }
+
+    #sliderKnob {
+        width: 2rem;
+        height: 2rem;
     }
 }
