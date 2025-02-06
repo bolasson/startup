@@ -113,3 +113,14 @@ Bryce's comments: I added a Statistics page, but other than that, I stuck to my 
   - Player statistics such as games played and total points in `statistics.html`.
 - [x] **WebSocket** - Real-time updates are planned and indicated:
   - Dynamic clue and vote updates in `play.html` using WebSocket placeholders.
+
+## CSS Deliverable
+
+I properly styled the application to achieve its final appearance. It included some changes to the HTML as well.
+
+- [x] **Header, footer, and main content body** - Ensured consistent styling across the application’s layout.
+- [x] **Navigation elements** - Customized anchor element colors to match my startup's theme.
+- [x] **Responsive to window resizing** - The app is fully responsive, providing an optimal experience on all window sizes and devices.
+- [x] **Application elements** - Applied good contrast and whitespace to enhance readability and visual hierarchy.
+- [x] **Application text content** - Maintained consistent font usage for a cohesive design, and used proper headings.
+- [x] **Application images** - Styled the icon images to maintain their size and move accordingly, and animated the stars images.
