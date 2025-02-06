@@ -21,6 +21,7 @@ Names of people I've met in this class:
 - Hakon Wium Lie: Created CSS
 - Brendan Eich: Created Javascript (in a week)
 - Jordan Walke: Created React, originally called F-Bolt, then FaxJS
+- Evan Yu: Created Vite
 
 **HTML**
 - Document Object Model (DOM)
