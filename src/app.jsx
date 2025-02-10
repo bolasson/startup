@@ -18,7 +18,7 @@ export default function App() {
                 </div>
                 <header>
                     <div className="logo-container">
-                        <img src="../images/logo.png" alt="Logo" width="75" />
+                        <img src="/logo.png" alt="Logo" width="75" />
                         <h1>Rank It</h1>
                     </div>
                     <nav>

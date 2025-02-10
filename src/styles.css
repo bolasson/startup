@@ -410,29 +410,29 @@ table tbody tr:nth-child(even) {
 
 .image1 {
     animation-duration: 210s;
-    background-image: url('../images/Stars.png');
+    background-image: url('/Stars.png');
 }
 
 .image1::after {
-    background-image: url('../images/Stars.png');
+    background-image: url('/Stars.png');
 }
 
 .image2 {
     animation-duration: 175s;
-    background-image: url('../images/Stars2.png');
+    background-image: url('/Stars2.png');
 }
 
 .image2::after {
-    background-image: url('../images/Stars2.png');
+    background-image: url('/Stars2.png');
 }
 
 .image3 {
     animation-duration: 140s;
-    background-image: url('../images/Stars3.png');
+    background-image: url('/Stars3.png');
 }
 
 .image3::after {
-    background-image: url('../images/Stars3.png');
+    background-image: url('/Stars3.png');
 }
 
 @keyframes moveLeft {
