@@ -8,7 +8,7 @@ export default function Play() {
     const sliderContainerRef = useRef(null);
     const sliderKnobRef = useRef(null);
     const sliderCellsRef = useRef([]);
-    
+
     let tableWidth, cellWidth, minX, maxX;
     const totalCells = 10;
 
@@ -59,20 +59,20 @@ export default function Play() {
 
     function updateSliderFromPosition(x) {
         updateDimensions();
-        
+
         if (x < minX) x = minX;
         if (x > maxX) x = maxX;
-        
+
         let value = Math.round((x - minX) / cellWidth) + 1;
         value = Math.max(1, Math.min(totalCells, value));
-        
+
         const snappedX = (value - 1) * cellWidth + minX;
         if (sliderKnobRef.current) {
             sliderKnobRef.current.style.left = `${snappedX}px`;
         }
-        
+
         setSliderValue(value);
-        
+
         if (sliderCellsRef.current.length > 0) {
             sliderCellsRef.current.forEach(cell => {
                 cell.classList.remove("active", "partial");

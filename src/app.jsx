@@ -30,14 +30,14 @@ export default function App() {
                     </nav>
                 </header>
                 <Routes>
-                    <Route path='/' element={<Login />}  exact/>
+                    <Route path='/' element={<Login />} exact />
                     <Route path='home' element={<Home />} />
                     <Route path='play' element={<Play />} />
                     <Route path='stats' element={<Stats />} />
                     <Route path='*' element={<NotFound />} />
                 </Routes>
                 <footer>
-                    <span style={{ marginRight: '1rem'}}>Bryce Lasson</span>
+                    <span style={{ marginRight: '1rem' }}>Bryce Lasson</span>
                     <a href="https://github.com/bolasson/startup.git" target="_blank">GitHub Repository</a>
                 </footer>
             </div>

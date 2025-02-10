@@ -7,7 +7,10 @@
     box-sizing: border-box;
 }
 
-html, body, .body, #root{
+html,
+body,
+.body,
+#root {
     height: 100%;
     font-family: Arial, sans-serif;
     color: #fff;
@@ -675,7 +678,8 @@ table.slider td.partial {
         word-wrap: break-word;
     }
 
-    table.slider td, table.slider-labels td  {
+    table.slider td,
+    table.slider-labels td {
         padding: 0.25rem;
         height: 1.5625rem;
     }
