@@ -42,21 +42,21 @@ export default function Home() {
                 </div>
                 <hr />
                 {/* <!-- Using the get method for now, so I can verify the form is working --> */}
-                <form className="transparent-form" method="get" action="play.html">
+                <form className="transparent-form" method="get" action="play">
                     <p>Head to <a href="https://startup.brycelasson.click" target="_blank">startup.brycelasson.click</a> and use the code below to join my game!</p>
                     <input className="user-input" type="number" id="generatedCodeField" name="generatedCodeValue" value="5296" readonly />
                     {/* <!-- Update this list dynamically as players join --> */}
                     <ul>
-                        <li style="background: #00D2FF">Bryce (Host)</li>
-                        <li style="background: #0FFF00">Kyle</li>
-                        <li style="background: #a545ff">Jessica</li>
-                        <li style="background: #ffff00">Wayne</li>
-                        <li style="background: #FF9200">Derek</li>
-                        <li style="background: #FF00EC">Emily</li>
-                        <li style="background: #665bff">Travis</li>
-                        <li style="background: #FF0010">Nathan</li>
+                        <li style={{ background: '#00D2FF' }}>Bryce (Host)</li>
+                        <li style={{ background: '#0FFF00' }}>Kyle</li>
+                        <li style={{ background: '#a545ff' }}>Jessica</li>
+                        <li style={{ background: '#ffff00' }}>Wayne</li>
+                        <li style={{ background: '#FF9200' }}>Derek</li>
+                        <li style={{ background: '#FF00EC' }}>Emily</li>
+                        <li style={{ background: '#665bff' }}>Travis</li>
+                        <li style={{ background: '#FF0010' }}>Nathan</li>
                     </ul>
-                    <button type="submit" style="width:auto">Start Game</button>
+                    <button type="submit" style={{ width: 'auto' }} >Start Game</button>
                 </form>
             </section>
             <section>
@@ -69,13 +69,13 @@ export default function Home() {
                 </div>
                 <hr />
                 {/* <!-- Using the get method for now, so I can verify the form is working --> */}
-                <form className="transparent-form" method="get" action="play.html">
+                <form className="transparent-form" method="get" action="play">
                     <p>Enter the code from your host to join their game.</p>
                     <div className="form-field">
                         <input className="user-input" type="number" id="joinCodeField" name="joinCodeValue" placeholder="ie 5296" required />
                     </div>
                     <br />
-                    <button type="submit" style="width:auto">Join Game</button>
+                    <button type="submit" style={{ width: 'auto' }}>Join Game</button>
                 </form>
             </section>
         </main>

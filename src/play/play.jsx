@@ -18,31 +18,31 @@ export default function Play() {
                     <tbody>
                         <tr>
                             <td>
-                                <li style="background: #a545ff">Jessica</li>
+                                <li style={{background: '#a545ff'}}>Jessica</li>
                             </td>
                             <td>18</td>
                         </tr>
                         <tr>
                             <td>
-                                <li style="background: #0FFF00">Kyle</li>
+                                <li style={{background: '#0FFF00'}}>Kyle</li>
                             </td>
                             <td>15</td>
                         </tr>
                         <tr>
                             <td>
-                                <li style="background: #FF00EC">Emily</li>
+                                <li style={{background: '#FF00EC'}}>Emily</li>
                             </td>
                             <td>14</td>
                         </tr>
                         <tr>
                             <td>
-                                <li style="background: #ffff00">Wayne</li>
+                                <li style={{background: '#FFFF00'}}>Wayne</li>
                             </td>
                             <td>11</td>
                         </tr>
                         <tr>
                             <td>
-                                <li style="background: #00D2FF">Bryce</li>
+                                <li style={{background: '#00D2FF'}}>Bryce</li>
                             </td>
                             <td>9</td>
                         </tr>
@@ -61,8 +61,8 @@ export default function Play() {
                     <button type="submit">Submit Clue</button>
                 </form> -->*/}
                 <section class="play-section">
-                    <h2 style="text-align: center; line-height: 2rem;">On a scale of <strong>Ancient</strong> to
-                        <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?
+                    <h2 style={{'text-align': 'center', 'line-height': '2rem'}}>
+                        On a scale of <strong>Ancient</strong> to <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?
                     </h2>
                     <h4 class="countdown">Time Remaining: 8s</h4>
                     {/* <!-- Voting Component -->*/}
@@ -96,7 +96,7 @@ export default function Play() {
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><span style="background: #665bff">T</span></td>
+                                <td><span style={{background: '#665BFF'}}>T</span></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -108,7 +108,7 @@ export default function Play() {
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><span style="background: #FF9200">D</span></td>
+                                <td><span style={{background: '#FF9200'}}>D</span></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -120,11 +120,11 @@ export default function Play() {
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><span style="background: #a545ff">J</span></td>
+                                <td><span style={{background: '#A545FF'}}>J</span></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td><span style="background: #FF0010">N</span></td>
+                                <td><span style={{background: '#FF0010'}}>N</span></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -132,11 +132,11 @@ export default function Play() {
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><span style="background: #00D2FF">B</span></td>
-                                <td><span style="background: #FF00EC">E</span></td>
+                                <td><span style={{background: '#00D2FF'}}>B</span></td>
+                                <td><span style={{background: '#FF00EC'}}>E</span></td>
                                 <td></td>
                                 <td></td>
-                                <td><span style="background: #ffff00">W</span></td>
+                                <td><span style={{background: '#FFFF00'}}>W</span></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

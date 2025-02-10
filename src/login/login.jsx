@@ -9,7 +9,7 @@ export default function Login() {
                 <div className="form-field">
                     <img src="./images/user.svg" />
                     <input type="text" id="usernameField" name="usernameValue" placeholder="Username" required />
-                    <div style="width: 25px;"></div>
+                    <div style={{width: '25px'}}></div>
                 </div>
                 <div className="form-field">
                     <img src="./images/key.svg" />

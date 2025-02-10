@@ -1,34 +1,44 @@
 import React from 'react';
 import './styles.css';
+import Login from './login/login.jsx';
+import Home from './home/home.jsx';
+import Play from './play/play.jsx';
+import Stats from './stats/stats.jsx';
+import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 
 export default function App() {
     return (
-        <div className='body bg-dark text-light'>
-            <div className="bg">
-                <div className="moving-stars image1"></div>
-                <div className="moving-stars image2"></div>
-                <div className="moving-stars image3"></div>
-            </div>
-            <header>
-                <div className="logo-container">
-                    <img src="../images/logo.png" alt="Logo" width="75" />
-                    <h1>Rank It</h1>
+        <BrowserRouter>
+            <div className='body text-light'>
+                <div className="bg">
+                    <div className="moving-stars image1"></div>
+                    <div className="moving-stars image2"></div>
+                    <div className="moving-stars image3"></div>
                 </div>
-                <nav>
-                    <menu>
-                        <li><a href="./login/login.html">Home</a></li>
-                        <li><a href="./home/create_or_join.html">Create/Join Game</a></li>
-                        <li><a href="./stats/statistics.html">My Stats</a></li>
-                    </menu>
-                </nav>
-            </header>
-
-            <main>App components go here</main>
-
-            <footer>
-                <span>Bryce Lasson</span>
-                <a href="https://github.com/bolasson/startup.git" target="_blank">GitHub Repository</a>
-            </footer>
-        </div>
+                <header>
+                    <div className="logo-container">
+                        <img src="../images/logo.png" alt="Logo" width="75" />
+                        <h1>Rank It</h1>
+                    </div>
+                    <nav>
+                        <menu>
+                            <li><NavLink className='nav-link' to='/'>Login</NavLink></li>
+                            <li><NavLink className='nav-link' to='home'>Home</NavLink></li>
+                            <li><NavLink className='nav-link' to='stats'>My Stats</NavLink></li>
+                        </menu>
+                    </nav>
+                </header>
+                <Routes>
+                    <Route path='/' element={<Login />}  exact/>
+                    <Route path='home' element={<Home />} />
+                    <Route path='play' element={<Play />} />
+                    <Route path='stats' element={<Stats />} />
+                </Routes>
+                <footer>
+                    <span>Bryce Lasson</span>
+                    <a href="https://github.com/bolasson/startup.git" target="_blank">GitHub Repository</a>
+                </footer>
+            </div>
+        </BrowserRouter>
     );
 }
