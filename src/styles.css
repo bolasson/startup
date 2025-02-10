@@ -7,15 +7,14 @@
     box-sizing: border-box;
 }
 
-html,
-body {
+html, .body {
     height: 100%;
     font-family: Arial, sans-serif;
     color: #fff;
     position: relative;
 }
 
-body {
+.body {
     display: flex;
     flex-direction: column;
 }
@@ -111,7 +110,7 @@ a:visited {
 /* ==========================================================================
      General Elements
      ========================================================================== */
-body li {
+.body li {
     line-height: 1.75;
     padding-inline: 1rem;
 }
@@ -411,29 +410,29 @@ table tbody tr:nth-child(even) {
 
 .image1 {
     animation-duration: 210s;
-    background-image: url('./images/Stars.png');
+    background-image: url('../images/Stars.png');
 }
 
 .image1::after {
-    background-image: url('./images/Stars.png');
+    background-image: url('../images/Stars.png');
 }
 
 .image2 {
     animation-duration: 175s;
-    background-image: url('./images/Stars2.png');
+    background-image: url('../images/Stars2.png');
 }
 
 .image2::after {
-    background-image: url('./images/Stars2.png');
+    background-image: url('../images/Stars2.png');
 }
 
 .image3 {
     animation-duration: 140s;
-    background-image: url('./images/Stars3.png');
+    background-image: url('../images/Stars3.png');
 }
 
 .image3::after {
-    background-image: url('./images/Stars3.png');
+    background-image: url('../images/Stars3.png');
 }
 
 @keyframes moveLeft {
@@ -603,17 +602,17 @@ table.slider td.partial {
         text-align: center;
     }
 
-    body ol {
+    .body ol {
         gap: 1rem;
         display: flex;
         flex-direction: column;
     }
 
-    body ol li {
+    .body ol li {
         list-style: none;
     }
 
-    body ul li {
+    .body ul li {
         list-style: circle;
     }
 
