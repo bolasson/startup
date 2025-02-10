@@ -37,7 +37,7 @@ export default function App() {
                     <Route path='*' element={<NotFound />} />
                 </Routes>
                 <footer>
-                    <span>Bryce Lasson</span>
+                    <span style={{ marginRight: '1rem'}}>Bryce Lasson</span>
                     <a href="https://github.com/bolasson/startup.git" target="_blank">GitHub Repository</a>
                 </footer>
             </div>
