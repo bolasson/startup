@@ -4,7 +4,7 @@ import "../styles.css";
 export default function Login() {
     return (
         <main>
-            <form className="transparent-form" method="get" action="create_or_join.html">
+            <form className="transparent-form" method="get" action="home">
                 <h1>Login</h1>
                 <div className="form-field">
                     <img src="/user.svg" />

@@ -23,19 +23,27 @@ export default function Play() {
             updateSliderFromPosition(x);
         };
 
+        const handleTouchMove = (e) => {
+            if (!dragging) return;
+            e.preventDefault();
+            const tableRect = sliderContainerRef.current.querySelector("table.slider").getBoundingClientRect();
+            const x = e.touches[0].clientX - tableRect.left;
+            updateSliderFromPosition(x);
+        };
+
         const handleMouseUp = () => {
             setDragging(false);
         };
 
         document.addEventListener("mousemove", handleMouseMove);
         document.addEventListener("mouseup", handleMouseUp);
-        document.addEventListener("touchmove", handleMouseMove, { passive: false });
+        document.addEventListener("touchmove", handleTouchMove, { passive: false });
         document.addEventListener("touchend", handleMouseUp);
 
         return () => {
             document.removeEventListener("mousemove", handleMouseMove);
             document.removeEventListener("mouseup", handleMouseUp);
-            document.removeEventListener("touchmove", handleMouseMove);
+            document.removeEventListener("touchmove", handleTouchMove);
             document.removeEventListener("touchend", handleMouseUp);
         };
     }, [dragging]);
