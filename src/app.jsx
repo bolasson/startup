@@ -4,6 +4,7 @@ import Login from './login/login.jsx';
 import Home from './home/home.jsx';
 import Play from './play/play.jsx';
 import Stats from './stats/stats.jsx';
+import NotFound from './404/not_found.jsx';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
                     <Route path='home' element={<Home />} />
                     <Route path='play' element={<Play />} />
                     <Route path='stats' element={<Stats />} />
+                    <Route path='*' element={<NotFound />} />
                 </Routes>
                 <footer>
                     <span>Bryce Lasson</span>

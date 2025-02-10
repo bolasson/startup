@@ -61,7 +61,7 @@ export default function Play() {
                     <button type="submit">Submit Clue</button>
                 </form> -->*/}
                 <section class="play-section">
-                    <h2 style={{'text-align': 'center', 'line-height': '2rem'}}>
+                    <h2 style={{textAlign: 'center', lineHeight: '2rem'}}>
                         On a scale of <strong>Ancient</strong> to <strong>Modern</strong>, where does <i>Kyle</i> place <strong>rotary phones</strong>?
                     </h2>
                     <h4 class="countdown">Time Remaining: 8s</h4>
