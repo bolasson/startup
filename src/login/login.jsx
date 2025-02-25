@@ -21,7 +21,7 @@ export default function Login() {
                 <h1>Login</h1>
                 <div className="form-field">
                     <img src="/user.svg" />
-                    <input type="text" id="usernameField" name="usernameValue" placeholder="Username" required />
+                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" required />
                     <div style={{ width: '25px' }}></div>
                 </div>
                 <div className="form-field">
