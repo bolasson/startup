@@ -1,15 +1,25 @@
 import React from 'react';
-import useTimer from '../custom_hooks/use_timer';
+import useSlider from '../custom_hooks/use_slider.jsx';
+import '../styles.css';
 
 export default function Dev() {
-    const { time, startTimer, pauseTimer, resetTimer } = useTimer(10);
+    const { value, handleChange } = useSlider(5);
 
     return (
-        <div>
-            <h1>Timer: {time} seconds</h1>
-            <button onClick={startTimer}>Start</button>
-            <button onClick={pauseTimer}>Pause</button>
-            <button onClick={resetTimer}>Reset</button>
+        <div style={{ margin: '20px' }}>
+            <h2>Slider Value: {value}</h2>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <span style={{ marginRight: '10px' }}>Ancient</span>
+                <input
+                    type="range"
+                    min="1"
+                    max="10"
+                    value={value}
+                    onChange={handleChange}
+                    style={{ flex: 1 }}
+                />
+                <span style={{ marginLeft: '10px' }}>Modern</span>
+            </div>
         </div>
     );
 }

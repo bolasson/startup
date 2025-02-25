@@ -1,90 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
+import useSlider from "../custom_hooks/use_slider.jsx";
 import "../styles.css";
 
 export default function Play() {
 
-    const [sliderValue, setSliderValue] = useState(5);
-    const [dragging, setDragging] = useState(false);
-    const sliderContainerRef = useRef(null);
-    const sliderKnobRef = useRef(null);
-    const sliderCellsRef = useRef([]);
-
-    let tableWidth, cellWidth, minX, maxX;
-    const totalCells = 10;
-
-    useEffect(() => {
-        updateDimensions();
-        updateSliderFromPosition((sliderValue - 0.5) * cellWidth);
-
-        const handleMouseMove = (e) => {
-            if (!dragging) return;
-            const tableRect = sliderContainerRef.current.querySelector("table.slider").getBoundingClientRect();
-            const x = e.clientX - tableRect.left;
-            updateSliderFromPosition(x);
-        };
-
-        const handleTouchMove = (e) => {
-            if (!dragging) return;
-            e.preventDefault();
-            const tableRect = sliderContainerRef.current.querySelector("table.slider").getBoundingClientRect();
-            const x = e.touches[0].clientX - tableRect.left;
-            updateSliderFromPosition(x);
-        };
-
-        const handleMouseUp = () => {
-            setDragging(false);
-        };
-
-        document.addEventListener("mousemove", handleMouseMove);
-        document.addEventListener("mouseup", handleMouseUp);
-        document.addEventListener("touchmove", handleTouchMove, { passive: false });
-        document.addEventListener("touchend", handleMouseUp);
-
-        return () => {
-            document.removeEventListener("mousemove", handleMouseMove);
-            document.removeEventListener("mouseup", handleMouseUp);
-            document.removeEventListener("touchmove", handleTouchMove);
-            document.removeEventListener("touchend", handleMouseUp);
-        };
-    }, [dragging]);
-
-    function updateDimensions() {
-        if (!sliderContainerRef.current) return;
-        const sliderTable = sliderContainerRef.current.querySelector("table.slider");
-        tableWidth = sliderTable.offsetWidth;
-        cellWidth = tableWidth / totalCells;
-        minX = cellWidth / 2;
-        maxX = tableWidth - cellWidth / 2;
-    }
-
-    function updateSliderFromPosition(x) {
-        updateDimensions();
-
-        if (x < minX) x = minX;
-        if (x > maxX) x = maxX;
-
-        let value = Math.round((x - minX) / cellWidth) + 1;
-        value = Math.max(1, Math.min(totalCells, value));
-
-        const snappedX = (value - 1) * cellWidth + minX;
-        if (sliderKnobRef.current) {
-            sliderKnobRef.current.style.left = `${snappedX}px`;
-        }
-
-        setSliderValue(value);
-
-        if (sliderCellsRef.current.length > 0) {
-            sliderCellsRef.current.forEach(cell => {
-                cell.classList.remove("active", "partial");
-                const cellValue = parseInt(cell.getAttribute("data-value"), 10);
-                if (cellValue < value) {
-                    cell.classList.add("active");
-                } else if (cellValue === value) {
-                    cell.classList.add("partial");
-                }
-            });
-        }
-    }
+    const { value: sliderValue, handleChange } = useSlider(5);
 
     return (
         <main className="play">
@@ -227,49 +147,33 @@ export default function Play() {
                                     <td></td>
                                     <td></td>
                                 </tr>
+                                <br />
+                                <tr>
+                                    {[...Array(10)].map((_, i) => (
+                                        <td key={i}>{i + 1}</td>
+                                    ))}
+                                </tr>
                             </tbody>
                         </table>
-                        {/* <!-- The Table-Based Slider (patent pending) -->*/}
-                        {/* <!-- This eldritch abomination of a slider is because the regular input range slider didn't have the custimization I wanted, and capabillites for perfectly lining up other elements with the tickmarks. The obvious solution? Build an entirely new type of input component that will be a glorious combination of the table element, CSS, and JavaScript. I will document it well. -->*/}
-                        <div className="slider-container" ref={sliderContainerRef}>
-                            {/* <!-- This table contains the labels to match up with the slider. It is optional-->*/}
-                            <table className="slider-labels">
-                                <tbody>
-                                    <tr>
-                                        {[...Array(10)].map((_, i) => (
-                                            <td key={i}>{i + 1}</td>
-                                        ))}
-                                    </tr>
-                                </tbody>
-                            </table>
-                            {/* <!-- This div is the input range slider replacement. Each td represents a possible value on the slider, and the div is the knob used to control it. -->*/}
-                            <div id="sliderContainer">
-                                <table className="slider">
-                                    <tbody>
-                                        <tr>
-                                            {[...Array(10)].map((_, i) => (
-                                                <td
-                                                    key={i}
-                                                    data-value={i + 1}
-                                                    ref={el => sliderCellsRef.current[i] = el}
-                                                ></td>
-                                            ))}
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div id="sliderKnob" ref={sliderKnobRef} onMouseDown={() => setDragging(true)} onTouchStart={() => setDragging(true)}></div>
-                            </div>
-                        </div>
                     </div>
-                    <div className="scale-ends">
-                        <strong>Ancient</strong>
-                        {/* <!-- WEBSOCKET: Once the player votes, their vote will be broadcast using websocket. -->*/}
-                        <form id="voteForm" method="get">
-                            <input type="hidden" id="sliderValue" name="voteValue" value="5" />
-                            <button className="submit-vote" type="submit">Submit Vote</button>
-                        </form>
-                        <strong>Modern</strong>
+                    <h2>Slider Value: {sliderValue}</h2>
+                    {/* <!-- WEBSOCKET: Once the player votes, their vote will be broadcast using websocket. -->*/}
+                    <div style={{ display: 'flex', width: '100%', alignItems: 'center' }}>
+                        <span style={{ marginRight: '10px' }}><strong>Ancient</strong></span>
+                        <input
+                            type="range"
+                            min="1"
+                            max="10"
+                            value={sliderValue}
+                            onChange={handleChange}
+                            style={{ flex: 1 }}
+                        />
+                        <span style={{ marginLeft: '10px' }}><strong>Modern</strong></span>
                     </div>
+                    <form id="voteForm" method="get">
+                        <input type="hidden" id="sliderValue" name="voteValue" value={sliderValue} />
+                        <button className="submit-vote" type="submit">Submit Vote</button>
+                    </form>
                 </section>
             </div>
         </main>
