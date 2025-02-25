@@ -1,10 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
+import { useGame } from "../customContext/gameContext.jsx";
+import { useNavigate } from "react-router-dom";
 import "../styles.css";
 
 export default function Login() {
+
+    const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+    const { login } = useGame();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        login(username);
+        navigate('/home');
+    };
+
     return (
         <main>
-            <form className="transparent-form" method="get" action="home">
+            <form className="transparent-form" onSubmit={handleSubmit}>
                 <h1>Login</h1>
                 <div className="form-field">
                     <img src="/user.svg" />

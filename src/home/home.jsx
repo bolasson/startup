@@ -44,7 +44,7 @@ export default function Home() {
                 {/* <!-- Using the get method for now, so I can verify the form is working --> */}
                 <form className="transparent-form" method="get" action="play">
                     <p>Head to <a href="https://startup.brycelasson.click" target="_blank">startup.brycelasson.click</a> and use the code below to join my game!</p>
-                    <input className="user-input" type="number" id="generatedCodeField" name="generatedCodeValue" value="5296" readonly />
+                    <input className="user-input" type="number" id="generatedCodeField" name="generatedCodeValue" value="5296" readOnly />
                     {/* <!-- Update this list dynamically as players join --> */}
                     <ul>
                         <li style={{ background: '#00D2FF' }}>Bryce (Host)</li>

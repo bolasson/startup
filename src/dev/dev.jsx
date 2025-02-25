@@ -1,5 +1,5 @@
 import React from 'react';
-import useSlider from '../custom_hooks/use_slider.jsx';
+import useSlider from '../customHooks/useSlider.jsx';
 import '../styles.css';
 
 export default function Dev() {
