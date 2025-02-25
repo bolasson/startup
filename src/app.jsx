@@ -4,6 +4,7 @@ import Login from './login/login.jsx';
 import Home from './home/home.jsx';
 import Play from './play/play.jsx';
 import Stats from './stats/stats.jsx';
+import Dev from './dev/dev.jsx';
 import NotFound from './404/not_found.jsx';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ export default function App() {
                     </div>
                     <nav>
                         <menu>
+                            <li><NavLink className='nav-link' to='dev'>Dev</NavLink></li>
                             <li><NavLink className='nav-link' to='/'>Login</NavLink></li>
                             <li><NavLink className='nav-link' to='home'>Home</NavLink></li>
                             <li><NavLink className='nav-link' to='stats'>My Stats</NavLink></li>
@@ -31,6 +33,7 @@ export default function App() {
                 </header>
                 <Routes>
                     <Route path='/' element={<Login />} exact />
+                    <Route path='dev' element={<Dev />} exact />
                     <Route path='home' element={<Home />} />
                     <Route path='play' element={<Play />} />
                     <Route path='stats' element={<Stats />} />
