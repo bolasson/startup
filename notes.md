@@ -12,6 +12,7 @@ Names of people I've met in this class:
 - Brunette, somewhat receeding hairline, short hair: Derek
 - Blonde, white shoes, works backend (C) in the engineering programming, recipe sharing site: Orion
 - Ginger, black flip flops, arrow changing game: Josh
+- Toby, the otterpop man.
 
 **Good quotes:**
 - "Be famous and awesome so I can put you on my slides. But have good quotes" - Lee Jensen
