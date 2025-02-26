@@ -3,43 +3,58 @@ import { useGame } from '../customContext/gameContext.jsx';
 
 export default function useGameLogic() {
     const { user, game, setGame, leaderboard, setLeaderboard } = useGame();
+    const [connectedGames, setConnectedGames] = useState({});
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Create a game and initialize round management.
     const createGame = useCallback(() => {
-        
         setIsProcessing(true);
-        
         const gameCode = Math.floor(1000 + Math.random() * 9000).toString();
         
         const newGame = {
             code: gameCode,
-            players: user ? [user] : [],
             clueTarget: Math.floor(Math.random() * 10) + 1,
             currentRound: 1,
             currentItIndex: 0,
         };
 
-        setTimeout(() => {
-            setGame(newGame);
-            setIsProcessing(false);
-        }, 1000);
-        
+        const hostUser = user ? { ...user, username: `${user.username} (Host)` } : null;
+
+        setConnectedGames((prev) => ({
+            ...prev,
+            [gameCode]: hostUser ? [hostUser] : [],
+        }));
+
+        setGame(newGame);
+        setIsProcessing(false);
+
         return gameCode;
     }, [user, setGame]);
 
     // Simulate joining an existing game by verifying the code and adding the new player.
-    const joinGame = (code, newPlayer) => {
-
+    const joinGame = useCallback((gameId, newPlayer) => {
+    
         setIsProcessing(true);
+    
+        setConnectedGames((prev) => {
+            const existing = prev[gameId] || [];
 
-        setTimeout(() => {
-            if (game && game.code === code) {
-                setGame({ ...game, players: [...game.players, newPlayer] });
+            if (!existing.some((p) => p.username === newPlayer.username)) {
+                return {
+                    ...prev,
+                    [gameId]: [...existing, newPlayer],
+                };
             }
-            setIsProcessing(false);
-        }, 1000);
-    };
+            return prev;
+        });
+
+        if (game && game.code === gameId) {
+            setGame({ ...game, players: [...(game.players || []), newPlayer] });
+        }
+
+        setIsProcessing(false);
+    
+    }, [game, setGame]);
 
     // Process all votes once every player (except the clue giver) has voted.
     // Each vote object is expected to be: { username, voteValue }
@@ -99,5 +114,11 @@ export default function useGameLogic() {
         }, 500);
     };
 
-    return { createGame, joinGame, processVotes, nextRound, isProcessing };
+    const getConnectedUsers = useCallback((gameId) => {
+        return new Promise((resolve) => {
+            resolve(connectedGames[gameId] || []);
+        });
+    }, [connectedGames]);
+
+    return { createGame, getConnectedUsers, joinGame, processVotes, nextRound, isProcessing };
 }
