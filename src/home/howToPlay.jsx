@@ -1,7 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function HowToPlay() {
+    const navigate = useNavigate();
+
     return (
         <main>
             <section>
@@ -24,8 +26,8 @@ export default function HowToPlay() {
                     You can create a new game and invite your friends or join an existing game using a code from your host. Once everyone has joined, the host will start the game.
                 </p>
                 <div style={{ display: 'flex', gap: '2rem' }}>
-                    <Link className="submit-vote" style={{ color: '#fff' }} to="/home/create-game">Create Game</Link>
-                    <Link className="submit-vote" style={{ color: '#fff' }} to="/home/join-game">Join Game</Link>
+                    <button onClick={() => { navigate("/home/create-game") }} className="submit-vote" style={{ color: '#fff' }}>Create Game</button>
+                    <button onClick={() => { navigate("/home/join-game") }} className="submit-vote" style={{ color: '#fff' }}>Join Game</button>
                 </div>
             </section>
         </main>

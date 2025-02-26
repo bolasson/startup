@@ -11,7 +11,18 @@ const playerColors = [
     '#FF0010',
 ];
 
-export default function PlayerList({ players }) {
+const samplePlayers = [
+    { username: 'Alice' },
+    { username: 'Bob' },
+    { username: 'Charlie' },
+    { username: 'David' },
+    { username: 'Eve' },
+    { username: 'Frank' },
+    { username: 'Grace' },
+    { username: 'Hank' },
+]
+
+export default function PlayerList({ players=samplePlayers }) {
     return (
         <ul style={{ width: '75%', padding: 0, marginBlock: '1rem' }}>
             {players.map((player, index) => (

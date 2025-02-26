@@ -8,8 +8,9 @@ import NotFound from './404/not_found.jsx';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { GameProvider } from './customContext/gameContext.jsx';
 import HowToPlay from './home/howToPlay.jsx';
-import CreateGame from './home/createGame.jsx';
+import CreateGame from './home/createNewGame.jsx';
 import JoinGame from './home/joinGame.jsx';
+import WaitingRoom from './home/waitingRoom.jsx';
 
 export default function App() {
     return (
@@ -37,9 +38,10 @@ export default function App() {
                     </header>
                     <Routes>
                         <Route path='/' element={<Login />} exact />
-                        <Route path='dev' element={<Dev />} exact />
+                        <Route path='dev' element={<Dev />} />
                         <Route path='home/create-game' element={<CreateGame />} />
-                        <Route paht='home/join-game' element={<JoinGame />} />
+                        <Route path='home/join-game' element={<JoinGame />} />
+                        <Route path='home/waiting-room' element={<WaitingRoom />} />
                         <Route path='home' element={<HowToPlay />} />
                         <Route path='play' element={<Play />} />
                         <Route path='stats' element={<Stats />} />

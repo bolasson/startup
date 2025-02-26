@@ -147,7 +147,6 @@ export default function Play() {
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                <br />
                                 <tr>
                                     {[...Array(10)].map((_, i) => (
                                         <td key={i}>{i + 1}</td>

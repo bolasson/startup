@@ -12,7 +12,7 @@ export default function JoinGame() {
                     <input className="user-input" type="number" id="joinCodeField" name="joinCodeValue" placeholder="ie 5296" required />
                 </div>
                 <br />
-                <button className="submit-vote" onClick={() => { navigate('/play') }} style={{ width: 'auto' }}>Join Game</button>
+                <button className="submit-vote" onClick={() => { navigate('/home/waiting-room') }} style={{ width: 'auto' }}>Join Game</button>
             </section>
         </main>
     )

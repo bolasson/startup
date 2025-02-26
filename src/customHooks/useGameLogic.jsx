@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useGame } from '../customContext/gameContext.jsx';
 
 export default function useGameLogic() {
@@ -6,9 +6,10 @@ export default function useGameLogic() {
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Create a game and initialize round management.
-    const createGame = () => {
+    const createGame = useCallback(() => {
         
         setIsProcessing(true);
+        
         const gameCode = Math.floor(1000 + Math.random() * 9000).toString();
         
         const newGame = {
@@ -18,20 +19,20 @@ export default function useGameLogic() {
             currentRound: 1,
             currentItIndex: 0,
         };
-        
+
         setTimeout(() => {
             setGame(newGame);
             setIsProcessing(false);
         }, 1000);
         
         return gameCode;
-    };
+    }, [user, setGame]);
 
     // Simulate joining an existing game by verifying the code and adding the new player.
     const joinGame = (code, newPlayer) => {
 
         setIsProcessing(true);
-        
+
         setTimeout(() => {
             if (game && game.code === code) {
                 setGame({ ...game, players: [...game.players, newPlayer] });
@@ -43,9 +44,9 @@ export default function useGameLogic() {
     // Process all votes once every player (except the clue giver) has voted.
     // Each vote object is expected to be: { username, voteValue }
     const processVotes = (votes) => {
-        
+
         setIsProcessing(true);
-        
+
         setTimeout(() => {
             setLeaderboard((prev) => {
                 const updated = [...prev];
@@ -76,11 +77,11 @@ export default function useGameLogic() {
     // - Update the clueTarget to a new random value.
     // This simulates that each round a new clue giver is chosen and a new target is set.
     const nextRound = () => {
-        
+
         setIsProcessing(true);
-        
+
         setTimeout(() => {
-            
+
             setGame((prevGame) => {
                 if (!prevGame || !prevGame.players || prevGame.players.length === 0) return prevGame;
                 const numPlayers = prevGame.players.length;
@@ -93,7 +94,7 @@ export default function useGameLogic() {
                     clueTarget: Math.floor(Math.random() * 10) + 1,
                 };
             });
-            
+
             setIsProcessing(false);
         }, 500);
     };
