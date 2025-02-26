@@ -258,6 +258,7 @@ section p,
 
 /* List styling inside forms or play areas */
 .transparent-form ul,
+.player-list ul,
 .play-area ul {
     padding-inline: 0;
     padding-block: 1.25rem;
@@ -267,20 +268,24 @@ section p,
     justify-content: center;
 }
 
-/* List items in forms vs. leaderboard (override margins where needed) */
-.transparent-form li,
+/* List items in forms vs. leaderboard (override margins where need ed) */
+.transparent-form li, 
+.player-list li,
 .leaderboard li {
     list-style: none;
     background: #005562;
     color: black;
     font-weight: 700;
-    /* 9999px → 9999rem */
     border-radius: 9999rem;
     text-align: center;
 }
 
 .transparent-form li {
     margin-block: 1rem;
+}
+
+.player-list li {
+    margin-block: 0.5rem;
 }
 
 .leaderboard li {
