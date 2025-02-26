@@ -171,17 +171,27 @@ section,
     background: rgba(33, 53, 77, 0.2);
     backdrop-filter: blur(10px);
     border-radius: 0.5rem;
-    /* 8px → 0.5rem */
     border: 0.0625rem solid rgba(255, 255, 255, 0.2);
-    /* 1px → 0.0625rem */
     padding: 2rem;
     margin: 1rem auto;
     max-width: 37.5rem;
-    /* 600px → 37.5rem */
     color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.error {
+    background: rgba(33, 53, 77, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 0.5rem;
+    border: 0.0625rem solid rgba(255, 255, 255, 0.2);
+    padding: 2rem;
+    margin: 1rem auto;
+    max-width: 20rem;
+    align-items: center;
+    color: #ff0033;
+    font-weight: 700;
 }
 
 /* Additional adjustments for sections & leaderboards */
@@ -687,5 +697,9 @@ table.slider td.partial {
     #sliderKnob {
         width: 2rem;
         height: 2rem;
+    }
+
+    .error {
+        font-size: 0.75rem;
     }
 }
