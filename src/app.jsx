@@ -1,13 +1,15 @@
 import React from 'react';
 import './styles.css';
 import Login from './login/login.jsx';
-import Home from './home/home.jsx';
 import Play from './play/play.jsx';
 import Stats from './stats/stats.jsx';
 import Dev from './dev/dev.jsx';
 import NotFound from './404/not_found.jsx';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { GameProvider } from './customContext/gameContext.jsx';
+import HowToPlay from './home/howToPlay.jsx';
+import CreateGame from './home/createGame.jsx';
+import JoinGame from './home/joinGame.jsx';
 
 export default function App() {
     return (
@@ -36,7 +38,9 @@ export default function App() {
                     <Routes>
                         <Route path='/' element={<Login />} exact />
                         <Route path='dev' element={<Dev />} exact />
-                        <Route path='home' element={<Home />} />
+                        <Route path='home/create-game' element={<CreateGame />} />
+                        <Route paht='home/join-game' element={<JoinGame />} />
+                        <Route path='home' element={<HowToPlay />} />
                         <Route path='play' element={<Play />} />
                         <Route path='stats' element={<Stats />} />
                         <Route path='*' element={<NotFound />} />
