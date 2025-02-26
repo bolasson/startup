@@ -2,13 +2,25 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "../customContext/gameContext";
 import useGameLogic from "../customHooks/useGameLogic";
+import CreateGame from "./createNewGame";
 
 export default function JoinGame() {
     const navigate = useNavigate();
     const [joinCode, setJoinCode] = useState("");
     const [error, setError] = useState(null);
-    const { joinGame, isProcessing } = useGameLogic();
+    const { createGame, gameExists, joinGame, isProcessing } = useGameLogic();
     const { user } = useGame();
+
+    const waitForJoinToFinish = () => {
+        return new Promise((resolve) => {
+            const interval = setInterval(() => {
+                if (!isProcessing) {
+                    clearInterval(interval);
+                    resolve();
+                }
+            }, 100);
+        });
+    };
 
     const handleJoin = () => {
         const codeString = joinCode.toString();
@@ -17,12 +29,25 @@ export default function JoinGame() {
             setError("Please enter a valid 4-digit code.");
             return;
         }
-        
+
         setError(null);
-        
-        joinGame(joinCode, user);
-        
-        navigate("/home/waiting-room");
+
+        if (gameExists(joinCode)) {
+            joinGame(joinCode, user);
+            waitForJoinToFinish()
+                .then(() => navigate("/home/waiting-room"));
+        } else {
+            createGame(joinCode);
+            waitForJoinToFinish()
+                .then(() => {
+                    joinGame(joinCode, user);
+                    return waitForJoinToFinish();
+                })
+                .then(() => {
+                    navigate("/home/waiting-room")
+                    return waitForJoinToFinish();
+                });
+        }
     };
 
     return (

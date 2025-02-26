@@ -31,6 +31,8 @@ export function GameProvider({ children }) {
 
     // Temporary data for database login replication 
     const [users, setUsers] = useState(dummyUserData);
+    
+    const [usersToGames, setUsersToGames] = useState({});
 
 
     const [loginError, setLoginError] = useState(null);
@@ -85,6 +87,8 @@ export function GameProvider({ children }) {
         setUser,
         game,
         setGame,
+        usersToGames,
+        setUsersToGames,
         leaderboard,
         setLeaderboard,
         login,
