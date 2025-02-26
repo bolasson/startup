@@ -44,9 +44,9 @@ export function GameProvider({ children }) {
         if (!password) {
             return "A password is required.";
         }
-        const usernameRegex = /^[a-zA-Z0-9._]+$/;
+        const usernameRegex = /^[a-zA-Z0-9._ ]+$/;
         if (!usernameRegex.test(username)) {
-            return "Username may only contain numbers, letters, periods, and/or underscores.";
+            return "Username may only contain numbers, letters, periods, spaces, and/or underscores.";
         }
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         if (!passwordRegex.test(password)) {

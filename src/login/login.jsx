@@ -26,16 +26,16 @@ export default function Login() {
                 <h1>Login</h1>
                 <div className="form-field">
                     <img src="/user.svg" />
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
+                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" autoComplete="name"/>
                     <div style={{ width: '25px' }}></div>
                 </div>
                 <div className="form-field">
                     <img src="/key.svg" />
-                    <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" />
+                    <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" autoComplete="current-password"/>
                     <img
                         src={showPassword ? "/show.svg" : "/hide.svg"}
                         width="25"
-                        alt={showPassword ? "Hide" : "Show"}
+                        alt={showPassword ? "Show" : "Hide"}
                         onClick={() => setShowPassword(prev => !prev)}
                         style={{ cursor: "pointer" }}
                     />
