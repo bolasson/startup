@@ -71,7 +71,7 @@ export function GameProvider({ children }) {
                 resolve({ error: validationError });
             } else {
                 const newUserID = getNextUserID();
-                const newUser = { userID: newUserID, username: username, password: password, name: name };
+                const newUser = { userID: newUserID, username: username.toLowerCase(), password: password, name: name };
                 setActiveUser(newUser);
                 addUser(newUser);
                 resolve({ success: "New user created" });
@@ -81,7 +81,7 @@ export function GameProvider({ children }) {
 
     function loginUser(username, password) {
         return new Promise((resolve) => {
-            const user = users.find((u) => u.username === username && u.password === password);
+            const user = users.find((u) => u.username === username.toLowerCase() && u.password === password);
             if (user) {
                 setActiveUser(user);
                 addUser(user);
@@ -101,7 +101,7 @@ export function GameProvider({ children }) {
 
     function deleteUser(username = null, userID = null) {
         if (username) {
-            setUsers((prevUsers) => prevUsers.filter((u) => u.username !== username));
+            setUsers((prevUsers) => prevUsers.filter((u) => u.username !== username.toLowerCase()));
         } else if (userID) {
             setUsers((prevUsers) => prevUsers.filter((u) => u.userID !== userID));
         }
@@ -129,7 +129,7 @@ export function GameProvider({ children }) {
                 }],
                 currentRound: 0,
                 currentItIndex: 0,
-                clueTarget: 0
+                clueTarget: Math.floor(Math.random() * 10) + 1
             };
             setActiveGame(newGame);
             addGame(newGame);
@@ -268,15 +268,19 @@ function validateCredentials(username, password, name) {
         return "Your name is required.";
     }
 
-    const usernameRegex = /^[a-zA-Z0-9._ ]+$/;
-    if (!usernameRegex.test(username)) {
-        return "Username may only contain numbers, letters, periods, spaces, and/or underscores.";
+    const nameRegex = /^[a-zA-Z0-9._]+$/;
+    if (!nameRegex.test(name)) {
+        return "Display name may only contain numbers, letters, periods, and/or underscores.";
+    }
+    
+    if (!nameRegex.test(username)) {
+        return "Username may only contain numbers, letters, periods, and/or underscores.";
     }
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
         return "Password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
-    
+
     return null;
 }
