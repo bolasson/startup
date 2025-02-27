@@ -58,14 +58,14 @@ export function GameProvider({ children }) {
         return highestUserID + 1;
     }
 
-    function createUser(username, password, name = '') {
+    function createUser(username, password, name) {
         return new Promise((resolve) => {
 
             if (users.some((u) => u.username === username)) {
                 resolve({ error: "Username is already taken" });
             }
 
-            const validationError = validateCredentials(username, password);
+            const validationError = validateCredentials(username, password, name);
 
             if (validationError) {
                 resolve({ error: validationError });
@@ -254,20 +254,29 @@ export function useGame() {
     return useContext(GameContext);
 }
 
-function validateCredentials(username, password) {
+function validateCredentials(username, password, name) {
+    
     if (!username) {
         return "A username is required.";
     }
+
     if (!password) {
         return "A password is required.";
     }
+
+    if (!name) {
+        return "Your name is required.";
+    }
+
     const usernameRegex = /^[a-zA-Z0-9._ ]+$/;
     if (!usernameRegex.test(username)) {
         return "Username may only contain numbers, letters, periods, spaces, and/or underscores.";
     }
+
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
         return "Password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
+    
     return null;
 }
