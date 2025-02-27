@@ -24,6 +24,7 @@ export default function JoinGame() {
 
     const handleJoin = () => {
         const codeString = joinCode.toString();
+        const targetUser = user || { username: "Guest" };
 
         if (codeString.length !== 4) {
             setError("Please enter a valid 4-digit code.");
@@ -33,14 +34,14 @@ export default function JoinGame() {
         setError(null);
 
         if (gameExists(joinCode)) {
-            joinGame(joinCode, user);
+            joinGame(joinCode, targetUser);
             waitForJoinToFinish()
                 .then(() => navigate("/home/waiting-room"));
         } else {
             createGame(joinCode);
             waitForJoinToFinish()
                 .then(() => {
-                    joinGame(joinCode, user);
+                    joinGame(joinCode, targetUser, 2);
                     return waitForJoinToFinish();
                 })
                 .then(() => {

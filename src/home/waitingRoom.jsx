@@ -16,7 +16,7 @@ const predefinedUsers = [
 
 export default function WaitingRoom() {
     const navigate = useNavigate();
-    const { game } = useGame();
+    const { game, setGame } = useGame();
     const { joinGame, getConnectedUsers } = useGameLogic();
     const [loadingText, setLoadingText] = useState('');
     const [startingGame, setStartingGame] = useState(false);
@@ -59,6 +59,7 @@ export default function WaitingRoom() {
     if (players.length === 8 && !startingGame) {
         setStartingGame(true);
         setTimeout(() => {
+            setGame({ code: game.code, players });
             navigate(`/play`);
         }, 3000);
     }
@@ -67,7 +68,7 @@ export default function WaitingRoom() {
         <main>
             <form className="transparent-form">
                 <h2>Game ID: {game?.code || "(Loading...)"} | Hosted by {host}</h2>
-                <p>Waiting for the host to start the game{loadingText}</p>
+                {!startingGame && <p>Waiting for the host to start the game{loadingText}</p>}
                 {startingGame && <p>Starting game{loadingText}</p>}
                 <PlayerList players={players}/>
             </form>

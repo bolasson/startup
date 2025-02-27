@@ -2,26 +2,39 @@ import { useState, useCallback } from 'react';
 import { useGame } from '../customContext/gameContext.jsx';
 
 const predefinedHost = { username: 'Bryce' };
+const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
 
 export default function useGameLogic() {
     const { user, game, setGame, usersToGames, setUsersToGames, leaderboard, setLeaderboard } = useGame();
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Create a game and initialize round management.
-    const createGame = useCallback((gameId = 0) => {
+    const createGame = useCallback((gameID = 0) => {
+        
         setIsProcessing(true);
-        const gameCode = gameId != 0 ? gameId : Math.floor(1000 + Math.random() * 9000).toString();
+        
+        let gameCode;
+        do {
+            gameCode = gameID != 0 ? gameID : Math.floor(1000 + Math.random() * 9000).toString();
+        } while (usersToGames[gameCode]);
+
+        const hostSource = (user && gameID == 0) ? user : predefinedHost;
+        const hostUser = {
+            playerID: 1,
+            username: `${hostSource.username} (Host)`,
+            gameID: gameCode,
+            playerColor: playerColors[0],
+            score: 0,
+            isHost: true,
+        };
 
         const newGame = {
             code: gameCode,
             clueTarget: Math.floor(Math.random() * 10) + 1,
             currentRound: 1,
             currentItIndex: 0,
+            players: [hostUser],
         };
-
-        const hostUser = (user && gameId == 0) ?
-            { ...user, username: `${user.username} (Host)` } :
-            { ...user, username: `${predefinedHost.username} (Host)` };
 
         setUsersToGames((prev) => ({
             ...prev,
@@ -34,29 +47,40 @@ export default function useGameLogic() {
         return gameCode;
     }, [user, setGame]);
 
-    const gameExists = useCallback((gameId) => {
-        return Boolean(game && game.code === gameId);
+    const gameExists = useCallback((gameID) => {
+        return Boolean(game && game.code === gameID);
     }, [game]);
 
     // Simulate joining an existing game by verifying the code and adding the new player.
-    const joinGame = useCallback((gameId, newPlayer) => {
+    const joinGame = useCallback((gameID, newPlayer, assignedPlayerID=0) => {
 
         setIsProcessing(true);
 
-        setUsersToGames((prev) => {
-            const existing = prev[gameId] || [];
+        const currentPlayers = usersToGames[gameID] || [];
+        const playerID = assignedPlayerID != 0 ? assignedPlayerID : getNextPlayerID(gameID);
+        const playerObj = {
+            gameID: gameID,
+            username: newPlayer.username,
+            playerID: playerID,
+            playerColor: playerColors[playerID-1],
+            score: 0,
+            isHost: false,
+        };
 
-            if (!existing.some((p) => p.username === newPlayer.username)) {
+        setUsersToGames((prev) => {
+            const existing = prev[gameID] || [];
+
+            if (!existing.some((p) => p.username === playerObj.username)) {
                 return {
                     ...prev,
-                    [gameId]: [...existing, newPlayer],
+                    [gameID]: [...existing, playerObj],
                 };
             }
             return prev;
         });
 
-        if (game && game.code === gameId) {
-            setGame({ ...game, players: [...(game.players || []), newPlayer] });
+        if (game && game.code === gameID) {
+            setGame({ ...game, players: [...(game.players || []), playerObj] });
         }
 
         setIsProcessing(false);
@@ -117,15 +141,36 @@ export default function useGameLogic() {
                 };
             });
 
+            updateLeaderboard(game.code);
+
             setIsProcessing(false);
         }, 500);
     };
 
-    const getConnectedUsers = useCallback((gameId) => {
+    const updateLeaderboard = (gameID) => {
+        const players = usersToGames[gameID] || [];
+        const newLeaderboard = players.map((player) => {
+            return { username: player.username, score: player.score, color: player.playerColor };
+        });
+        setLeaderboard(newLeaderboard);
+    };
+
+    const getConnectedUsers = useCallback((gameID) => {
         return new Promise((resolve) => {
-            resolve(usersToGames[gameId] || []);
+            resolve(usersToGames[gameID] || []);
         });
     }, [usersToGames]);
+
+    const getNextPlayerID = useCallback((gameID) => {
+        const players = usersToGames[gameID] || [];
+        let highestID = 0;
+        for (let player of players) {
+            if (player.playerID > highestID) {
+                highestID = player.playerID;
+            }
+        }
+        return highestID + 1;
+    }, [game]);
 
     return { createGame, gameExists, getConnectedUsers, joinGame, processVotes, nextRound, isProcessing };
 }
