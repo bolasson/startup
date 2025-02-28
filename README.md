@@ -133,3 +133,10 @@ I used React to build out the components and structure of my application from my
 - [x] **Created Components** - I created React components containing the HTML and CSS for each of my 4 main pages.
       - Note, the play page is only accessible by joining or creating a game on the home page.
 - [x] **React Router** - Implemented BrowserRouter and a Route for each page. Also updated the form logic to navigate between pages properly.
+
+## React Phase 2: Reactivity deliverable
+
+For this deliverable I used React so that the application completely works for a single user. I also added placeholders for future technology, that use randomization and occasional timed updates to look realistic.
+
+- [x] **All functionality implemented or mocked out** - Everything is working! Votes stored in local storage. `setInterval` used to simulate other player voting.
+- [x] **Hooks** - Used `useState` and `useEffect` for each page, and created a custom hook/context useGame.
