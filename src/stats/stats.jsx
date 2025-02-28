@@ -1,34 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useGame } from "../customContext/gameContext";
 import "../styles.css";
 
+const statsDatasets = [
+    {
+        "Games Played": 50,
+        "Games Won": 20,
+        "Total Points Scored": 1200,
+        "Date Joined": "01-23-2025"
+    },
+    {
+        "Games Played": 75,
+        "Games Won": 30,
+        "Total Points Scored": 1800,
+        "Date Joined": "12-15-2024",
+        "Last Played": "02-10-2025"
+    },
+    {
+        "Games Won": 45,
+        "Date Joined": "11-05-2024",
+        "Last Played": "02-15-2025"
+    }
+];
+
 export default function Stats() {
+    const { activeUser } = useGame();
+    const [currentDatasetIndex, setCurrentDatasetIndex] = useState(0);
+
+    // Cycle through datasets every 4 seconds to show that stats are updated from the database.
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentDatasetIndex((prevIndex) => (prevIndex + 1) % statsDatasets.length);
+        }, 4000);
+        return () => clearInterval(intervalId);
+    }, [statsDatasets.length]);
+
+    const currentStats = statsDatasets[currentDatasetIndex];
+
     return (
         <main>
             <section className="intro">
-                <h2>Statistics for Bryce</h2>
+                <h2>Statistics for {activeUser?.name || "User"}</h2>
                 <table className="rounded-table">
                     <tbody>
-                        {/* <!-- This will be populated with data from the database. --> */}
-                        <tr>
-                            <td>Games Played</td>
-                            <td>50</td>
-                        </tr>
-                        <tr>
-                            <td>Games Won</td>
-                            <td>20</td>
-                        </tr>
-                        <tr>
-                            <td>Total Points Scored</td>
-                            <td>1,200</td>
-                        </tr>
-                        <tr>
-                            <td>Date Joined</td>
-                            <td>01-23-2025</td>
-                        </tr>
-                        <tr>
-                            <td>Last Played</td>
-                            <td>02-01-2025</td>
-                        </tr>
+                        {Object.entries(currentStats).map(([stat, value], index) => (
+                            <tr key={index}>
+                                <td>{stat}</td>
+                                <td>{value}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
             </section>

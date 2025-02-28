@@ -21,6 +21,7 @@ export default function HowToPlay() {
                             <li><strong>1 point</strong> for being 1 away from the correct answer.</li>
                         </ul>
                     </li>
+                    <li>Play for as long or as short as you want!</li>
                 </ol>
                 <p>
                     You can create a new game and invite your friends or join an existing game using a code from your host. Once everyone has joined, the host will start the game.
