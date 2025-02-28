@@ -29,7 +29,7 @@ export default function App() {
                         </div>
                         <nav>
                             <menu>
-                                <li><NavLink className='nav-link' to='dev'>Dev</NavLink></li>
+                                {/* <li><NavLink className='nav-link' to='dev'>Dev</NavLink></li> */}
                                 <li><NavLink className='nav-link' to='/'>Login</NavLink></li>
                                 <li><NavLink className='nav-link' to='home'>Home</NavLink></li>
                                 <li><NavLink className='nav-link' to='stats'>My Stats</NavLink></li>
@@ -38,7 +38,7 @@ export default function App() {
                     </header>
                     <Routes>
                         <Route path='/' element={<Login />} exact />
-                        <Route path='dev' element={<Dev />} />
+                        {/* <Route path='dev' element={<Dev />} /> */}
                         <Route path='home/create-game' element={<CreateGame />} />
                         <Route path='home/join-game' element={<JoinGame />} />
                         <Route path='home/waiting-room' element={<WaitingRoom />} />

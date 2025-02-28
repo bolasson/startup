@@ -21,7 +21,7 @@ export default function useGameLogic() {
         const hostSource = (user && gameID == 0) ? user : predefinedHost;
         const hostUser = {
             playerID: 1,
-            username: `${hostSource.username} (Host)`,
+            username: `${hostSource.username}`,
             gameID: gameCode,
             playerColor: playerColors[0],
             score: 0,

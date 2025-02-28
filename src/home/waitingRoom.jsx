@@ -52,7 +52,7 @@ export default function WaitingRoom() {
     return (
         <main>
             <form className="transparent-form">
-                <h2>Game ID: {activeGame?.gameID || "(Loading...)"} | Hosted by {activeGame ? getUser(activeGame?.players[0].userID).name + ' (Host)' : '(Loading...)'}</h2>
+                <h2>Game ID: {activeGame?.gameID || "(Loading...)"} | Hosted by {activeGame ? getUser(activeGame?.players[0].userID).name : '(Loading...)'}</h2>
                 {!startingGame && <p>Waiting for the host to start the game{loadingText}</p>}
                 {startingGame && <p>Starting game{loadingText}</p>}
                 <PlayerList players={activeGame?.players || []} />

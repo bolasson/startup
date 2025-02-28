@@ -15,7 +15,7 @@ export default function PlayerList({ players }) {
                         listStyle: 'none',
                     }}
                 >
-                    {getUser(player.userID).name}
+                    {getUser(player.userID).name + (player.playerID === 1 ? " (Host)" : "")}
                 </li>
             ))}
         </ul>
