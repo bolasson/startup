@@ -141,7 +141,6 @@ export function GameProvider({ children }) {
     });
 
     const joinGame = useCallback((gameID, user) => {
-        console.log("Joining game: ", gameID, ' with ', user, " at ", Date.now());
         return new Promise((resolve) => {
             const game = games.find((g) => g.gameID === gameID);
             if (game) {
