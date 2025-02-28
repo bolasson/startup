@@ -58,7 +58,7 @@ export function GameProvider({ children }) {
         return highestUserID + 1;
     }
 
-    function getUser (userID) {
+    function getUser(userID) {
         return users.find((u) => u.userID === userID);
     };
 
@@ -128,7 +128,7 @@ export function GameProvider({ children }) {
             const newGame = {
                 gameID: newGameID,
                 players: [
-                    { userID: host.userID, playerID: 1, playerColor: playerColors[0], score: 0, isHost: true }
+                    { userID: host.userID, playerID: 1, playerColor: playerColors[0], score: 0, activeVote: 0, isHost: true }
                 ],
                 currentRound: 0,
                 currentItIndex: 0,
@@ -149,6 +149,7 @@ export function GameProvider({ children }) {
                     playerID: game.players.length + 1,
                     playerColor: playerColors[game.players.length],
                     score: 0,
+                    activeVote: 0,
                     isHost: false
                 };
                 if (game.players.some((p) => p.userID === newPlayer.userID)) {
@@ -239,8 +240,53 @@ export function GameProvider({ children }) {
             game.currentRound = game.currentRound + 1;
             game.clueTarget = Math.floor(Math.random() * 10) + 1;
             game.currentItIndex = (game.currentItIndex + 1) % game.players.length;
+            game.players.forEach((player) => {
+                if (player.userID === game.players[game.currentItIndex].userID) {
+                    player.activeVote = game.clueTarget;
+                } else {
+                    player.activeVote = 0;
+                }
+            });
             updateGame(game);
         }
+    }
+
+    function submitVote(gameID, userID, voteValue) {
+        const game = games.find((g) => g.gameID === gameID);
+        if (!game) return;
+        const updatedPlayers = game.players.map((player) => {
+            if (player.userID === userID) {
+                return { ...player, activeVote: voteValue };
+            }
+            return player;
+        });
+        const updatedGame = { ...game, players: updatedPlayers };
+        updateGame(updatedGame);
+        setActiveGame(updatedGame);
+    }
+
+    function scoreVotes(gameID) {
+        const game = games.find((g) => g.gameID === gameID);
+        if (!game) return;
+        const itPlayer = game.players[game.currentItIndex];
+        const correctVote = itPlayer.activeVote;
+        const scores = {};
+        game.players.forEach((player) => {
+            if (player.userID === itPlayer.userID) {
+                scores[player.userID] = 0;
+            } else {
+                const voteDifference = Math.abs(correctVote - player.activeVote);
+                if (voteDifference === 0) {
+                    scores[player.userID] = 3;
+                } else if (voteDifference === 1) {
+                    scores[player.userID] = 1;
+                } else {
+                    scores[player.userID] = 0;
+                }
+            }
+        });
+        updateGameScores(gameID, scores);
+        startNextGameRound(gameID);
     }
 
     const contextValue = {
@@ -262,6 +308,8 @@ export function GameProvider({ children }) {
         getGameUsers,
         updateGameScores,
         startNextGameRound,
+        submitVote,
+        scoreVotes
     };
 
     return (

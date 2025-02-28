@@ -8,7 +8,7 @@ export default function WaitingRoom() {
     const { users, getUser, activeGame, joinGame, getGameUsers } = useGame();
     const [loadingText, setLoadingText] = useState('');
     const [startingGame, setStartingGame] = useState(false);
-    
+
     useEffect(() => {
         const interval = setInterval(() => {
             setLoadingText((prev) => (prev.length === 3 ? "" : prev + "."));
@@ -39,12 +39,15 @@ export default function WaitingRoom() {
         return () => clearInterval(interval);
     }, [activeGame, users, joinGame, getGameUsers]);
 
-    if (activeGame?.players.length === 8 && !startingGame) {
-        setStartingGame(true);
-        setTimeout(() => {
-            navigate(`/play`);
-        }, 4000);
-    }
+    useEffect(() => {
+        if (activeGame?.players.length === 8 && !startingGame) {
+            setStartingGame(true);
+            setTimeout(() => {
+                navigate("/play");
+            }, 4000);
+        }
+    }, [activeGame?.players, startingGame, navigate]);
+
 
     return (
         <main>
