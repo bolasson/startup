@@ -14,7 +14,6 @@ export default function CreateGame() {
         createGame(activeUser).then((response) => {
             if (response?.success) {
                 setGameID(response.gameID);
-                console.log('Game created successfully:', response.gameID);
             } else if (response?.error) {
                 console.error('500: An unexpected error occurred while creating a new game.', response.error);
                 setError(response.error);

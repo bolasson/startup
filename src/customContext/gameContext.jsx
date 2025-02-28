@@ -47,7 +47,7 @@ export function GameProvider({ children }) {
 
     const [users, setUsers] = useState(dummyUserData);
 
-    const [activeGame, setActiveGame] = useState(null);
+    const [activeGame, setActiveGame] = useState(dummyGamesData[0]);
     const [games, setGames] = useState(dummyGamesData);
 
     // Global state for the logged-in user
