@@ -20,26 +20,28 @@ const dummyGamesData = [
     {
         gameID: 1234,
         players: [
-            { userID: 1, playerID: 1, playerColor: "#00D2FF", score: 0, isHost: true },
-            { userID: 3, playerID: 2, playerColor: "#0FFF00", score: 0, isHost: false },
-            { userID: 5, playerID: 3, playerColor: "#a545ff", score: 0, isHost: false },
-            { userID: 7, playerID: 4, playerColor: "#ffff00", score: 0, isHost: false },
+            { userID: 1, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
+            { userID: 3, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
+            { userID: 5, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
+            { userID: 7, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
         ],
         currentRound: 1,
         currentItIndex: 0,
-        clueTarget: 4
+        clueTarget: 4,
+        clue: '',
     },
     {
         gameID: 5678,
         players: [
-            { userID: 2, playerID: 1, playerColor: "#FF9200", score: 0, isHost: true },
-            { userID: 4, playerID: 2, playerColor: "#FF00EC", score: 0, isHost: false },
-            { userID: 6, playerID: 3, playerColor: "#665bff", score: 0, isHost: false },
-            { userID: 8, playerID: 4, playerColor: "#FF0010", score: 0, isHost: false },
+            { userID: 2, playerID: 1, playerColor: "#FF9200", score: 0, activeVote: 4, isHost: true },
+            { userID: 4, playerID: 2, playerColor: "#FF00EC", score: 0, activeVote: 8, isHost: false },
+            { userID: 6, playerID: 3, playerColor: "#665bff", score: 0, activeVote: 5, isHost: false },
+            { userID: 8, playerID: 4, playerColor: "#FF0010", score: 0, activeVote: 8, isHost: false },
         ],
         currentRound: 1,
         currentItIndex: 0,
-        clueTarget: 7
+        clueTarget: 7,
+        clue: '',
     }
 ];
 
@@ -132,7 +134,8 @@ export function GameProvider({ children }) {
                 ],
                 currentRound: 0,
                 currentItIndex: 0,
-                clueTarget: Math.floor(Math.random() * 10) + 1
+                clueTarget: Math.floor(Math.random() * 10) + 1,
+                clue: ''
             };
             setActiveGame(newGame);
             addGame(newGame);
@@ -231,6 +234,7 @@ export function GameProvider({ children }) {
                 player.score += scores[player.userID] || 0;
             });
             updateGame(game);
+            setActiveGame(game);
         }
     }
 
@@ -240,15 +244,26 @@ export function GameProvider({ children }) {
             game.currentRound = game.currentRound + 1;
             game.clueTarget = Math.floor(Math.random() * 10) + 1;
             game.currentItIndex = (game.currentItIndex + 1) % game.players.length;
+            game.clue = "";
             game.players.forEach((player) => {
                 if (player.userID === game.players[game.currentItIndex].userID) {
                     player.activeVote = game.clueTarget;
                 } else {
-                    player.activeVote = 0;
+                    // placeholder to simulate random votes
+                    player.activeVote = Math.floor(Math.random() * 10) + 1;
                 }
             });
             updateGame(game);
+            setActiveGame(game);
         }
+    }
+
+    function submitClue(gameID, clue) {
+        const game = games.find((g) => g.gameID === gameID);
+        if (!game) return;
+        const updatedGame = { ...game, clue };
+        updateGame(updatedGame);
+        setActiveGame(updatedGame);
     }
 
     function submitVote(gameID, userID, voteValue) {
@@ -309,7 +324,8 @@ export function GameProvider({ children }) {
         updateGameScores,
         startNextGameRound,
         submitVote,
-        scoreVotes
+        submitClue,
+        scoreVotes,
     };
 
     return (
