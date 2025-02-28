@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 
 const GameContext = createContext();
 
@@ -58,23 +58,27 @@ export function GameProvider({ children }) {
         return highestUserID + 1;
     }
 
+    function getUser (userID) {
+        return users.find((u) => u.userID === userID);
+    };
+
     function createUser(username, password, name) {
         return new Promise((resolve) => {
 
             if (users.some((u) => u.username === username)) {
-                resolve({ error: "Username is already taken" });
+                return resolve({ error: "Username is already taken" });
             }
 
             const validationError = validateCredentials(username, password, name);
 
             if (validationError) {
-                resolve({ error: validationError });
+                return resolve({ error: validationError });
             } else {
                 const newUserID = getNextUserID();
                 const newUser = { userID: newUserID, username: username.toLowerCase(), password: password, name: name };
                 setActiveUser(newUser);
                 addUser(newUser);
-                resolve({ success: "New user created" });
+                return resolve({ success: "New user created" });
             }
         });
     }
@@ -85,9 +89,9 @@ export function GameProvider({ children }) {
             if (user) {
                 setActiveUser(user);
                 addUser(user);
-                resolve({ success: "Login successful" });
+                return resolve({ success: "Login successful" });
             } else {
-                resolve({ error: "Invalid credentials" });
+                return resolve({ error: "Invalid credentials" });
             }
         });
     }
@@ -115,29 +119,29 @@ export function GameProvider({ children }) {
         return newGameID;
     }
 
-    function createGame(host) {
+    const createGame = useCallback((host) => {
         return new Promise((resolve) => {
+            if (!host) {
+                return resolve({ error: "You must be signed in to host a game." });
+            }
             const newGameID = getNewGameID();
             const newGame = {
                 gameID: newGameID,
-                players: [{
-                    userID: host.userID,
-                    playerID: 1,
-                    playerColor: playerColors[0],
-                    score: 0,
-                    isHost: true
-                }],
+                players: [
+                    { userID: host.userID, playerID: 1, playerColor: playerColors[0], score: 0, isHost: true }
+                ],
                 currentRound: 0,
                 currentItIndex: 0,
                 clueTarget: Math.floor(Math.random() * 10) + 1
             };
             setActiveGame(newGame);
             addGame(newGame);
-            resolve({ success: `Created Game ${newGameID}` });
+            return resolve({ success: `Created new game with ID ${newGameID}`, gameID: newGameID });
         });
-    }
+    });
 
-    function joinGame(gameID, user) {
+    const joinGame = useCallback((gameID, user) => {
+        console.log("Joining game: ", gameID, ' with ', user, " at ", Date.now());
         return new Promise((resolve) => {
             const game = games.find((g) => g.gameID === gameID);
             if (game) {
@@ -149,17 +153,23 @@ export function GameProvider({ children }) {
                     isHost: false
                 };
                 if (game.players.some((p) => p.userID === newPlayer.userID)) {
-                    resolve({ error: "User is already in the game" });
+                    return resolve({ warning: "User is already in the game" });
                 }
-                game.players.push(newPlayer);
-                updateGame(game);
-                setActiveGame(game);
-                resolve({ success: `Joined Game ${game.gameID}` });
+                if (game.players.length >= 8) {
+                    return resolve({ warning: "Game is full" });
+                }
+                const updatedGame = {
+                    ...game,
+                    players: [...game.players, newPlayer]
+                };
+                updateGame(updatedGame);
+                setActiveGame(updatedGame);
+                return resolve({ success: `Joined game with ID ${game.gameID}`, gameID: game.gameID });
             } else {
-                resolve({ error: "Game not found" });
+                return resolve({ error: "Game not found" });
             }
         });
-    }
+    });
 
     function leaveGame(gameID, userID) {
         return new Promise((resolve) => {
@@ -189,6 +199,16 @@ export function GameProvider({ children }) {
     function updateGame(updatedGame) {
         setGames((prevGames) => prevGames.map((g) => g.gameID === updatedGame.gameID ? updatedGame : g));
     }
+
+    const getGameUsers = useCallback((gameID) => {
+        const game = games.find((g) => g.gameID === gameID);
+        if (game) {
+            return game.players;
+        } else {
+            return [];
+        }
+    });
+
 
     function getGameScores(gameID) {
         const game = games.find((g) => g.gameID === gameID);
@@ -228,6 +248,7 @@ export function GameProvider({ children }) {
         activeUser,
         users,
         dummyUserData,
+        getUser,
         createUser,
         loginUser,
         deleteUser,
@@ -239,6 +260,7 @@ export function GameProvider({ children }) {
         leaveGame,
         deleteGame,
         getGameScores,
+        getGameUsers,
         updateGameScores,
         startNextGameRound,
     };
@@ -255,7 +277,7 @@ export function useGame() {
 }
 
 function validateCredentials(username, password, name) {
-    
+
     if (!username) {
         return "A username is required.";
     }
@@ -272,7 +294,7 @@ function validateCredentials(username, password, name) {
     if (!nameRegex.test(name)) {
         return "Display name may only contain numbers, letters, periods, and/or underscores.";
     }
-    
+
     if (!nameRegex.test(username)) {
         return "Username may only contain numbers, letters, periods, and/or underscores.";
     }

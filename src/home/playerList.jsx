@@ -1,41 +1,21 @@
 import React from 'react';
+import { useGame } from '../customContext/gameContext.jsx';
 
-const playerColors = [
-    '#00D2FF',
-    '#0FFF00',
-    '#a545ff',
-    '#ffff00',
-    '#FF9200',
-    '#FF00EC',
-    '#665bff',
-    '#FF0010',
-];
-
-const samplePlayers = [
-    { username: 'Alice' },
-    { username: 'Bob' },
-    { username: 'Charlie' },
-    { username: 'David' },
-    { username: 'Eve' },
-    { username: 'Frank' },
-    { username: 'Grace' },
-    { username: 'Hank' },
-]
-
-export default function PlayerList({ players=samplePlayers }) {
+export default function PlayerList({ players }) {
+    const { getUser } = useGame();
     return (
         <ul style={{ width: '75%', padding: 0, marginBlock: '1rem' }}>
             {players.map((player, index) => (
                 <li
                     key={index}
                     style={{
-                        background: playerColors[index % playerColors.length],
+                        background: player.playerColor,
                         padding: '0.25rem 1rem',
                         margin: '0.5rem 0',
                         listStyle: 'none',
                     }}
                 >
-                    {player.username ? player.username : player}
+                    {getUser(player.userID).name}
                 </li>
             ))}
         </ul>

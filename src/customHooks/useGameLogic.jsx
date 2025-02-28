@@ -52,40 +52,40 @@ export default function useGameLogic() {
     }, [game]);
 
     // Simulate joining an existing game by verifying the code and adding the new player.
-    const joinGame = useCallback((gameID, newPlayer, assignedPlayerID=0) => {
+    // const joinGame = useCallback((gameID, newPlayer, assignedPlayerID=0) => {
 
-        setIsProcessing(true);
+    //     setIsProcessing(true);
 
-        const currentPlayers = usersToGames[gameID] || [];
-        const playerID = assignedPlayerID != 0 ? assignedPlayerID : getNextPlayerID(gameID);
-        const playerObj = {
-            gameID: gameID,
-            username: newPlayer.username,
-            playerID: playerID,
-            playerColor: playerColors[playerID-1],
-            score: 0,
-            isHost: false,
-        };
+    //     const currentPlayers = usersToGames[gameID] || [];
+    //     const playerID = assignedPlayerID != 0 ? assignedPlayerID : getNextPlayerID(gameID);
+    //     const playerObj = {
+    //         gameID: gameID,
+    //         username: newPlayer.username,
+    //         playerID: playerID,
+    //         playerColor: playerColors[playerID-1],
+    //         score: 0,
+    //         isHost: false,
+    //     };
 
-        setUsersToGames((prev) => {
-            const existing = prev[gameID] || [];
+    //     setUsersToGames((prev) => {
+    //         const existing = prev[gameID] || [];
 
-            if (!existing.some((p) => p.username === playerObj.username)) {
-                return {
-                    ...prev,
-                    [gameID]: [...existing, playerObj],
-                };
-            }
-            return prev;
-        });
+    //         if (!existing.some((p) => p.username === playerObj.username)) {
+    //             return {
+    //                 ...prev,
+    //                 [gameID]: [...existing, playerObj],
+    //             };
+    //         }
+    //         return prev;
+    //     });
 
-        if (game && game.code === gameID) {
-            setGame({ ...game, players: [...(game.players || []), playerObj] });
-        }
+    //     if (game && game.code === gameID) {
+    //         setGame({ ...game, players: [...(game.players || []), playerObj] });
+    //     }
 
-        setIsProcessing(false);
+    //     setIsProcessing(false);
 
-    }, [game, setGame]);
+    // }, [game, setGame]);
 
     // Process all votes once every player (except the clue giver) has voted.
     // Each vote object is expected to be: { username, voteValue }

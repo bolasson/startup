@@ -1,68 +1,63 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import useGameLogic from "../customHooks/useGameLogic";
 import { useGame } from "../customContext/gameContext";
+import { useNavigate } from "react-router-dom";
 import PlayerList from "./playerList";
-
-// Used to simulate players joining the game until websocket connections are implemented.
-const predefinedUsers = [
-    { username: 'Alice' },
-    { username: 'Bob' },
-    { username: 'Charlie' },
-    { username: 'David' },
-    { username: 'Eve' },
-    { username: 'Frank' },
-    { username: 'Grace' },
-];
 
 export default function CreateGame() {
     const navigate = useNavigate();
-    const { createGame, joinGame, getConnectedUsers, isProcessing } = useGameLogic();
-    const [gameCode, setGameCode] = useState('');
-    const { setGame } = useGame();
-    const [joinPlayerAtIndex, setJoinPlayerAtIndex] = useState(0);
-    const [players, setPlayers] = useState([]);
+    const [gameID, setGameID] = useState('');
+    const [error, setError] = useState(null);
+    const { activeUser, users, activeGame, createGame, joinGame, getGameUsers } = useGame();
 
     useEffect(() => {
-        const code = createGame();
-        setGameCode(code);
-    }, [createGame]);
-
-
-    useEffect(() => {
-        if (!gameCode) return;
-        const joinInterval = setInterval(() => {
-            if (joinPlayerAtIndex < predefinedUsers.length) {
-                joinGame(gameCode, predefinedUsers[joinPlayerAtIndex]);
-                getConnectedUsers(gameCode).then((playersList) => {
-                    setPlayers(playersList);
-                });
-                setJoinPlayerAtIndex((prev) => prev + 1);
-            } else {
-                getConnectedUsers(gameCode).then((playersList) => {
-                    setPlayers(playersList);
-                });
-                setJoinPlayerAtIndex((prev) => prev + 1);
-                clearInterval(joinInterval);
+        if (!activeUser) return;
+        createGame(activeUser).then((response) => {
+            if (response?.success) {
+                setGameID(response.gameID);
+                console.log('Game created successfully:', response.gameID);
+            } else if (response?.error) {
+                console.error('500: An unexpected error occurred while creating a new game.', response.error);
+                setError(response.error);
             }
-        }, 1000);
-        return () => clearInterval(joinInterval);
-    }, [gameCode, joinGame, getConnectedUsers]);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (!activeGame) return;
+
+        const interval = setInterval(() => {
+            const remainingUsers = users.filter(
+                (u) => !activeGame.players.some((p) => p.userID === u.userID)
+            );
+            if (remainingUsers.length > 0 && activeGame.players.length < 8) {
+                const userToAdd = remainingUsers[0];
+                joinGame(activeGame.gameID, userToAdd).then((response) => {
+                    if (response?.success) {
+                    } else if (response?.error) {
+                        console.error("Error adding user to game:", response.error);
+                    }
+                });
+            } else {
+                clearInterval(interval);
+            }
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [activeGame, users, joinGame, getGameUsers]);
+
 
     const startGame = () => {
-        if (setGame) {
-            setGame({ gameCode, players });
-            navigate('/play');
-        }
+        navigate('/play');
     }
 
     return (
         <main>
             <form className="transparent-form">
                 <p>Head to <a href="https://startup.brycelasson.click" target="_blank">startup.brycelasson.click</a> and use the code below to join my game!</p>
-                <input className="user-input" type="number" id="generatedCodeField" name="generatedCodeValue" value={gameCode} readOnly />
-                <PlayerList players={players} />
-                <button onClick={startGame} style={{ width: 'auto' }} disabled={isProcessing || players.length < 2}>Start Game</button>
+                <input className="user-input" type="number" id="generatedCodeField" name="generatedCodeValue" value={gameID} readOnly />
+                {error && <p className="error">{error}</p>}
+                <PlayerList players={activeGame?.players || []} />
+                <button onClick={startGame} style={{ width: 'auto' }} disabled={activeGame?.players.length < 2}>Start Game</button>
             </form>
         </main>
     )
