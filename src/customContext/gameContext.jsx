@@ -362,9 +362,8 @@ function validateCredentials(username, password, name) {
         return "Username may only contain numbers, letters, periods, and/or underscores.";
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!passwordRegex.test(password)) {
-        return "Password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    if (password.length < 12) {
+        return "Password must be at least 12 characters long.";
     }
 
     return null;

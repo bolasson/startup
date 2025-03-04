@@ -8,11 +8,12 @@ Names of people I've met in this class:
 
 - Dark hair, glasses, black shoes white soles, MCU fan fic/lore sharing platform : Spencer
 - Blonde, cool cyber security guy, black shoes, team to do list: Issac
-- Blonde, glasses, wears all black: Evan 
+- Blonde, glasses, often wears all black: Evan 
 - Brunette, somewhat receeding hairline, short hair: Derek
 - Blonde, white shoes, works backend (C) in the engineering programming, recipe sharing site: Orion
 - Ginger, black flip flops, arrow changing game: Josh
-- Toby, the otterpop man.
+- The guy who is building an otterpop website: Toby
+- Cool guy who built a custom keyboard, : Ethan
 
 **Good quotes:**
 - "Be famous and awesome so I can put you on my slides. But have good quotes" - Lee Jensen
@@ -36,3 +37,4 @@ p {
 
 **JavaScript**
 - Formal name is ECMAScript, because Oracle owns the name JavaScript
+

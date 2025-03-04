@@ -104,12 +104,17 @@ export default function Play() {
                         <>
                             {isIt ? (
                                 <form className="transparent-form" onSubmit={handleClueSubmit} style={{ textAlign: 'center' }}>
+                                    <h2 style={{ textAlign: 'center', lineHeight: '2rem' }}>
+                                        For a scale of <strong>{scaleLabels.low}</strong> to <strong>{scaleLabels.high}</strong>, submit a clue to help players guess the number <strong>{activeGame.clueTarget}</strong>.
+                                    </h2>
+                                    <br />
                                     <input
                                         type="text"
                                         placeholder="Enter your clue..."
                                         value={clueInput}
                                         onChange={(e) => setClueInput(e.target.value)}
                                     />
+                                    <br />
                                     <button type="submit">Submit Clue</button>
                                 </form>
                             ) : (
