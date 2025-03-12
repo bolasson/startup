@@ -127,10 +127,10 @@ export default function Play() {
                     {activeGame && activeGame.clue && (
                         <>
                             <h4 className="countdown" style={{ marginBottom: '2rem' }}>Time Remaining: {time}s</h4>
-                            <PlayerVotes players={activeGame?.players || []} />
-                            <h2>Slider Value: {sliderValue}</h2>
+                            <PlayerVotes players={activeGame?.players.filter(player => player.userID !== activeGame.players[activeGame.currentItIndex].userID) || []} />
+                            {!isIt && <><h2>Slider Value: {sliderValue}</h2>
                             <div style={{ display: 'flex', width: '100%', alignItems: 'center', marginBottom: '2rem' }}>
-                                <span style={{ marginRight: '10px' }}><strong>Ancient</strong></span>
+                                <span style={{ marginRight: '10px' }}><strong>{scaleLabels.low}</strong></span>
                                 <input
                                     type="range"
                                     min="1"
@@ -139,12 +139,12 @@ export default function Play() {
                                     onChange={handleChange}
                                     style={{ flex: 1 }}
                                 />
-                                <span style={{ marginLeft: '10px' }}><strong>Modern</strong></span>
+                                <span style={{ marginLeft: '10px' }}><strong>{scaleLabels.high}</strong></span>
                             </div>
                             <form id="voteForm" onSubmit={handleVoteSubmit}>
                                 <input type="hidden" id="sliderValue" name="voteValue" value={sliderValue} />
                                 <button className="submit-vote" type="submit">Submit Vote</button>
-                            </form>
+                            </form></>}
                         </>)}
                 </section>
             </div>
