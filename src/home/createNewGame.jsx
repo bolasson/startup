@@ -11,6 +11,7 @@ export default function CreateGame() {
 
     useEffect(() => {
         if (!activeUser) return;
+        if (activeGame != null) return;
         createGame(activeUser).then((response) => {
             if (response?.success) {
                 setGameID(response.gameID);
@@ -19,7 +20,7 @@ export default function CreateGame() {
                 setError(response.error);
             }
         });
-    }, []);
+    }, [activeUser, activeGame]);
 
     useEffect(() => {
         if (!activeGame) return;
@@ -42,7 +43,7 @@ export default function CreateGame() {
         }, 2000);
 
         return () => clearInterval(interval);
-    }, [activeGame, users, joinGame, getGameUsers]);
+    }, [activeGame, users, joinGame, getGameUsers, gameID]);
 
 
     const startGame = (e) => {
