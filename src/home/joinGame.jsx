@@ -6,9 +6,10 @@ export default function JoinGame() {
     const navigate = useNavigate();
     const [joinCode, setJoinCode] = useState("");
     const [error, setError] = useState(null);
-    const { user, users, joinGame } = useGame();
+    const { activeUser, users, joinGame } = useGame();
 
-    const handleJoin = () => {
+    const handleJoin = (e) => {
+        e.preventDefault();
         const codeString = joinCode.toString();
         if (codeString.length !== 4) {
             setError("Please enter a valid 4-digit code.");
@@ -17,11 +18,17 @@ export default function JoinGame() {
         setError(null);
 
         // This is a place holder until websocket connections are fully implemented. But the right logic is in place.
-        const presetCode = "1234";
-        const targetUser = user || users[0];
+        const code = parseInt(joinCode, 10);
+        const targetUser = activeUser || users[0];
 
-        joinGame(presetCode, targetUser)
-            .then(() => navigate("/home/waiting-room"));
+        joinGame(code, targetUser)
+            .then((response) => {
+                if (response?.success) {
+                    navigate("/home/waiting-room");
+                } else {
+                    setError(response.error || response.warning);
+                }
+            });
     };
 
     return (

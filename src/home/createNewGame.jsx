@@ -30,7 +30,7 @@ export default function CreateGame() {
             );
             if (remainingUsers.length > 0 && activeGame.players.length < 8) {
                 const userToAdd = remainingUsers[0];
-                joinGame(activeGame.gameID, userToAdd).then((response) => {
+                joinGame(gameID, userToAdd).then((response) => {
                     if (response?.success) {
                     } else if (response?.error) {
                         console.error("Error adding user to game:", response.error);
@@ -45,7 +45,8 @@ export default function CreateGame() {
     }, [activeGame, users, joinGame, getGameUsers]);
 
 
-    const startGame = () => {
+    const startGame = (e) => {
+        e.preventDefault();
         navigate('/play');
     }
 

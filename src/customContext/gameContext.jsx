@@ -33,10 +33,10 @@ const dummyGamesData = [
     {
         gameID: 5678,
         players: [
-            { userID: 2, playerID: 1, playerColor: "#FF9200", score: 0, activeVote: 4, isHost: true },
-            { userID: 4, playerID: 2, playerColor: "#FF00EC", score: 0, activeVote: 8, isHost: false },
-            { userID: 6, playerID: 3, playerColor: "#665bff", score: 0, activeVote: 5, isHost: false },
-            { userID: 8, playerID: 4, playerColor: "#FF0010", score: 0, activeVote: 8, isHost: false },
+            { userID: 2, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
+            { userID: 4, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
+            { userID: 6, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
+            { userID: 8, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 8, isHost: false },
         ],
         currentRound: 1,
         currentItIndex: 0,
