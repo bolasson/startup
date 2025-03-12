@@ -7,6 +7,7 @@ import Dev from './dev/dev.jsx';
 import NotFound from './404/not_found.jsx';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { GameProvider } from './customContext/gameContext.jsx';
+import GameExitHandler from './gameExitHandler.jsx';
 import HowToPlay from './home/howToPlay.jsx';
 import CreateGame from './home/createNewGame.jsx';
 import JoinGame from './home/joinGame.jsx';
@@ -16,6 +17,7 @@ export default function App() {
     return (
         <GameProvider>
             <BrowserRouter>
+                <GameExitHandler />
                 <div className='body text-light'>
                     <div className="bg">
                         <div className="moving-stars image1"></div>
