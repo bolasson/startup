@@ -15,7 +15,7 @@ export default function Login() {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        loginUser(username, password).then((result) => {
+        loginUser(username.toLowerCase(), password).then((result) => {
             if (result.success) {
                 navigate('/home');
             } else if (result.error) {
@@ -26,7 +26,7 @@ export default function Login() {
 
     const handleCreateAccount = (e) => {
         e.preventDefault();
-        createUser(username, password, name).then((result) => {
+        createUser(username.toLowerCase(), password, name).then((result) => {
             if (result.success) {
                 navigate('/home');
             } else if (result.error) {

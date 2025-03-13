@@ -19,9 +19,9 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 // Default route
-app.get('*', (_req, res) => {
-    res.send({ msg: 'Backend service is running.' });
-});
+// app.get('*', (_req, res) => {
+//     res.send({ msg: 'Backend service is running.' });
+// });
 
 // Helper functions
 function setAuthCookie(res, token) {
@@ -41,7 +41,7 @@ async function findUser(field, value) {
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-// Endpoints
+// Login endpoints
 apiRouter.post('/auth/create', async (req, res) => {
     const { username, password, name } = req.body;
     
@@ -74,7 +74,28 @@ apiRouter.post('/auth/create', async (req, res) => {
 
     res.send({ userID: newUser.userID, username: newUser.username, name: newUser.name });
 });
+
+apiRouter.post('/auth/login', async (req, res) => {
+    const { username, password } = req.body;
   
+    if (!username || !password) {
+        return res.status(400).send({ msg: 'Missing required fields: username and password.' });
+    }
+
+    const lowercaseUsername = username.toLowerCase();
+    const user = await findUser('username', lowercaseUsername);
+
+    if (user && await bcrypt.compare(password, user.password)) {
+        user.token = uuid.v4();
+        setAuthCookie(res, user.token);
+        return res.send({
+            userID: user.userID,
+            username: user.username,
+            name: user.name,
+        });
+    }
+    return res.status(401).send({ msg: 'Invalid Credentials' });
+});
 
 app.use((_req, res) => {
     res.sendFile('index.html', { root: 'public' });

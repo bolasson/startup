@@ -1,17 +1,17 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const GameContext = createContext();
 
 const dummyUserData = [
-    { userID: 0, username: 'guest', password: 'Gu3st!!!', name: 'Guest' },
-    { userID: 1, username: 'cs240', password: 'Cs240!!!', name: 'CS 240' },
-    { userID: 2, username: 'lindsey', password: 'Linds3y!', name: 'Lindsey' },
-    { userID: 3, username: 'kyle', password: 'Kyl3!!!!', name: 'Kyle' },
-    { userID: 4, username: 'jessica', password: 'J3ssica!', name: 'Jessica' },
-    { userID: 5, username: 'nathan', password: 'N4than!!', name: 'Nathan' },
-    { userID: 6, username: 'katelyn', password: 'K4telyn!', name: 'Katelyn' },
-    { userID: 7, username: 'heidi', password: 'H3idi!!!', name: 'Heidi' },
-    { userID: 8, username: 'travis', password: 'Tr4vis!!', name: 'Travis' },
+    { userID: 5, username: 'guest', password: 'Gu3st!!!', name: 'Guest' },
+    { userID: 6, username: 'cs240', password: 'Cs240!!!', name: 'CS 240' },
+    { userID: 7, username: 'lindsey', password: 'Linds3y!', name: 'Lindsey' },
+    { userID: 8, username: 'kyle', password: 'Kyl3!!!!', name: 'Kyle' },
+    { userID: 9, username: 'jessica', password: 'J3ssica!', name: 'Jessica' },
+    { userID: 10, username: 'nathan', password: 'N4than!!', name: 'Nathan' },
+    { userID: 11, username: 'katelyn', password: 'K4telyn!', name: 'Katelyn' },
+    { userID: 12, username: 'heidi', password: 'H3idi!!!', name: 'Heidi' },
+    { userID: 13, username: 'travis', password: 'Tr4vis!!', name: 'Travis' },
 ];
 
 const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
@@ -20,10 +20,10 @@ const dummyGamesData = [
     {
         gameID: 1234,
         players: [
-            { userID: 1, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
-            { userID: 3, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
-            { userID: 5, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
-            { userID: 7, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
+            { userID: 5, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
+            { userID: 7, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
+            { userID: 9, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
+            { userID: 11, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
         ],
         currentRound: 1,
         currentItIndex: 0,
@@ -33,10 +33,10 @@ const dummyGamesData = [
     {
         gameID: 5678,
         players: [
-            { userID: 2, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
-            { userID: 4, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
-            { userID: 6, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
-            { userID: 8, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 8, isHost: false },
+            { userID: 6, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
+            { userID: 7, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
+            { userID: 8, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
+            { userID: 9, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 8, isHost: false },
         ],
         currentRound: 1,
         currentItIndex: 0,
@@ -48,12 +48,9 @@ const dummyGamesData = [
 export function GameProvider({ children }) {
 
     const [users, setUsers] = useState(dummyUserData);
-
-    const [activeGame, setActiveGame] = useState(dummyGamesData[0]);
+    const [activeUser, setActiveUser] = useState(dummyUserData[0]);
     const [games, setGames] = useState(dummyGamesData);
-
-    // Global state for the logged-in user
-    const [activeUser, setActiveUser] = useState(users[0]);
+    const [activeGame, setActiveGame] = useState(dummyGamesData[0]);
 
     function getNextUserID() {
         const highestUserID = users.reduce((maxID, user) => Math.max(maxID, user.userID), 0);
@@ -71,30 +68,38 @@ export function GameProvider({ children }) {
             credentials: 'include',
             body: JSON.stringify({ username, password, name }),
         })
-        .then((response) => {
-            if (!response.ok) {
-                return response.json().then((data) => ({ error: data.msg }));
-            }
-            return response.json()
-                .then((data) => {
-                    setActiveUser({ userID: data.userID, username: data.username, name: data.name });
-                    return { success: 'New user created' };
-                });
-        })
-        .catch((error) => ({ error: error.message }));
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then((data) => ({ error: data.msg }));
+                }
+                return response.json()
+                    .then((data) => {
+                        setActiveUser({ userID: data.userID, username: data.username, name: data.name });
+                        addUser({ userID: data.userID, username: data.username, name: data.name });
+                        return { success: 'New user created' };
+                    });
+            })
+            .catch((error) => ({ error: error.message }));
     }
 
     function loginUser(username, password) {
-        return new Promise((resolve) => {
-            const user = users.find((u) => u.username === username.toLowerCase() && u.password === password);
-            if (user) {
-                setActiveUser(user);
-                addUser(user);
-                return resolve({ success: "Login successful" });
-            } else {
-                return resolve({ error: "Invalid credentials" });
-            }
-        });
+        return fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ username, password }),
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    return response.json().then((data) => ({ error: data.msg }));
+                }
+                return response.json().then((data) => {
+                    setActiveUser({ userID: data.userID, username: data.username, name: data.name });
+                    addUser({ userID: data.userID, username: data.username, name: data.name });
+                    return { success: 'Login successful' };
+                });
+            })
+            .catch((error) => ({ error: error.message }));
     }
 
     function addUser(user) {
