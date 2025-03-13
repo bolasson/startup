@@ -65,24 +65,23 @@ export function GameProvider({ children }) {
     };
 
     function createUser(username, password, name) {
-        return new Promise((resolve) => {
-
-            if (users.some((u) => u.username === username)) {
-                return resolve({ error: "Username is already taken" });
+        return fetch('/api/auth/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ username, password, name }),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                return response.json().then((data) => ({ error: data.msg }));
             }
-
-            const validationError = validateCredentials(username, password, name);
-
-            if (validationError) {
-                return resolve({ error: validationError });
-            } else {
-                const newUserID = getNextUserID();
-                const newUser = { userID: newUserID, username: username.toLowerCase(), password: password, name: name };
-                setActiveUser(newUser);
-                addUser(newUser);
-                return resolve({ success: "New user created" });
-            }
-        });
+            return response.json()
+                .then((data) => {
+                    setActiveUser({ userID: data.userID, username: data.username, name: data.name });
+                    return { success: 'New user created' };
+                });
+        })
+        .catch((error) => ({ error: error.message }));
     }
 
     function loginUser(username, password) {
