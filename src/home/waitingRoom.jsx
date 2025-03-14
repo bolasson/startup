@@ -48,7 +48,6 @@ export default function WaitingRoom() {
         }
     }, [activeGame?.players, startingGame, navigate]);
 
-
     return (
         <main>
             <form className="transparent-form">

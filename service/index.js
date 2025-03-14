@@ -32,6 +32,19 @@ function setAuthCookie(res, token) {
     });
 }
 
+const verifyAuth = async (req, res, next) => {
+    const token = req.cookies[authCookieName];
+    if (!token) {
+        return res.status(401).send({ msg: 'Unauthorized' });
+    }
+    const user = await findUser('token', token);
+    if (user) {
+        next();
+    } else {
+        return res.status(401).send({ msg: 'Unauthorized' });
+    }
+};
+
 async function findUser(field, value) {
     if (!value) return null;
     return users.find((u) => u[field] === value);
@@ -67,11 +80,17 @@ apiRouter.post('/auth/create', async (req, res) => {
         password: passwordHash,
         name,
         token: uuid.v4(),
+        stats: {
+            "Games Played": 0,
+            "Games Won": 0,
+            "Total Points Scored": 0,
+            "Date Joined": new Date().toLocaleDateString(),
+            "Last Played": new Date().toLocaleDateString(),
+        },
     };
     
     users.push(newUser);
     setAuthCookie(res, newUser.token);
-
     res.send({ userID: newUser.userID, username: newUser.username, name: newUser.name });
 });
 
@@ -87,6 +106,9 @@ apiRouter.post('/auth/login', async (req, res) => {
 
     if (user && await bcrypt.compare(password, user.password)) {
         user.token = uuid.v4();
+        if (user.stats) {
+            user.stats["Last Played"] = new Date().toLocaleDateString();
+        }
         setAuthCookie(res, user.token);
         return res.send({
             userID: user.userID,
@@ -95,6 +117,16 @@ apiRouter.post('/auth/login', async (req, res) => {
         });
     }
     return res.status(401).send({ msg: 'Invalid Credentials' });
+});
+
+// Stats endpoints
+apiRouter.get('/stats', verifyAuth, async (req, res) => {
+    const token = req.cookies[authCookieName];
+    const user = await findUser('token', token);
+    if (!user) {
+        return res.status(401).send({ msg: 'Unauthorized' });
+    }
+    res.send(user.stats);
 });
 
 app.use((_req, res) => {

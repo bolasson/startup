@@ -1,49 +1,59 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useGame } from "../customContext/gameContext";
 import "../styles.css";
 
-const statsDatasets = [
-    {
-        "Games Played": 50,
-        "Games Won": 20,
-        "Total Points Scored": 1200,
-        "Date Joined": "01-23-2025"
-    },
-    {
-        "Games Played": 75,
-        "Games Won": 30,
-        "Total Points Scored": 1800,
-        "Date Joined": "12-15-2024",
-        "Last Played": "02-10-2025"
-    },
-    {
-        "Games Won": 45,
-        "Date Joined": "11-05-2024",
-        "Last Played": "02-15-2025"
-    }
-];
-
 export default function Stats() {
+    const navigate = useNavigate();
     const { activeUser } = useGame();
-    const [currentDatasetIndex, setCurrentDatasetIndex] = useState(0);
+    const [stats, setStats] = useState(null);
+    const [error, setError] = useState(null);
 
-    // Cycle through datasets every 4 seconds to show that stats are updated from the database.
+    if (!activeUser) {
+        navigate('/');
+    }
+
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCurrentDatasetIndex((prevIndex) => (prevIndex + 1) % statsDatasets.length);
-        }, 4000);
-        return () => clearInterval(intervalId);
-    }, [statsDatasets.length]);
+        fetch('/api/stats', {
+            credentials: 'include',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to fetch stats");
+                }
+                return response.json();
+            })
+            .then(data => setStats(data))
+            .catch(err => setError(err.message));
+    }, []);
 
-    const currentStats = statsDatasets[currentDatasetIndex];
+    if (error) {
+        return (
+            <main>
+                <section>
+                    <p>Error: {error}</p>
+                </section>
+            </main>
+        );
+    }
+
+    if (!stats) {
+        return (
+            <main>
+                <section>
+                    <p>Loading stats...</p>
+                </section>
+            </main>
+        );
+    }
 
     return (
         <main>
             <section className="intro">
-                <h2>Statistics for {activeUser?.name || "User"}</h2>
+                <h2>Statistics for {activeUser?.name}</h2>
                 <table className="rounded-table">
                     <tbody>
-                        {Object.entries(currentStats).map(([stat, value], index) => (
+                        {Object.entries(stats).map(([stat, value], index) => (
                             <tr key={index}>
                                 <td>{stat}</td>
                                 <td>{value}</td>

@@ -48,7 +48,7 @@ const dummyGamesData = [
 export function GameProvider({ children }) {
 
     const [users, setUsers] = useState(dummyUserData);
-    const [activeUser, setActiveUser] = useState(dummyUserData[0]);
+    const [activeUser, setActiveUser] = useState(null);
     const [games, setGames] = useState(dummyGamesData);
     const [activeGame, setActiveGame] = useState(dummyGamesData[0]);
 
