@@ -34,8 +34,8 @@ const presetClues = [
 
 export default function Play() {
     const { value: sliderValue, handleChange } = useSlider(5);
-    const { activeGame, activeUser, getUser, submitVote, scoreVotes, submitClue } = useGame();
-    const { time, startTimer, pauseTimer, resetTimer } = useTimer(25);
+    const { activeGame, activeUser, getUser, submitVote, scoreVotes, submitScore, submitClue } = useGame();
+    const { time, startTimer, pauseTimer, resetTimer } = useTimer(2);
     const [clueInput, setClueInput] = useState("");
     const [scaleLabels, setScaleLabels] = useState(presetScales[0]);
 
@@ -71,7 +71,11 @@ export default function Play() {
 
     useEffect(() => {
         if (time === 0 && activeGame) {
-            scoreVotes(activeGame.gameID);
+            let scores = scoreVotes(activeGame.gameID);
+            submitScore(scores[activeUser.userID])
+                .catch(error => {
+                    console.error('Error submitting score:', error);
+                });
             resetTimer();
             startTimer();
         }

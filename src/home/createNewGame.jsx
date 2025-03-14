@@ -12,11 +12,10 @@ export default function CreateGame() {
     useEffect(() => {
         if (!activeUser) return;
         if (activeGame != null) return;
-        createGame(activeUser).then((response) => {
+        createGame().then((response) => {
             if (response?.success) {
-                setGameID(response.gameID);
+                setGameID(response.game.gameID);
             } else if (response?.error) {
-                console.error('500: An unexpected error occurred while creating a new game.', response.error);
                 setError(response.error);
             }
         });

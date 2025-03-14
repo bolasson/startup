@@ -125,27 +125,24 @@ export function GameProvider({ children }) {
         return newGameID;
     }
 
-    const createGame = useCallback((host) => {
-        return new Promise((resolve) => {
-            if (!host) {
-                return resolve({ error: "You must be signed in to host a game." });
-            }
-            const newGameID = getNewGameID();
-            const newGame = {
-                gameID: newGameID,
-                players: [
-                    { userID: host.userID, playerID: 1, playerColor: playerColors[0], score: 0, activeVote: 0, isHost: true }
-                ],
-                currentRound: 0,
-                currentItIndex: 0,
-                clueTarget: Math.floor(Math.random() * 10) + 1,
-                clue: ''
-            };
-            setActiveGame(newGame);
-            addGame(newGame);
-            return resolve({ success: `Created new game with ID ${newGameID}`, gameID: newGameID });
-        });
-    });
+    const createGame = useCallback(() => {
+        return fetch('/api/game/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => ({ error: data.msg }));
+                }
+                return response.json().then(newGame => {
+                    setActiveGame(newGame);
+                    addGame(newGame);
+                    return { success: `Created new game with ID ${newGame.gameID}`, game: newGame };
+                });
+            })
+            .catch(error => ({ error: error.message }));
+    }, [setActiveGame]);
 
     const joinGame = useCallback((gameID, user) => {
         return new Promise((resolve) => {
@@ -306,6 +303,29 @@ export function GameProvider({ children }) {
         });
         updateGameScores(gameID, scores);
         startNextGameRound(gameID);
+        return scores;
+    }
+
+    function submitScore(score) {
+        return fetch('/api/score', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ score }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => ({ error: data.msg }));
+                }
+                return response.json().then(updatedStats => {
+                    setActiveUser(prevUser => ({
+                        ...prevUser,
+                        stats: updatedStats,
+                    }));
+                    return { success: 'Player stats updated', stats: updatedStats };
+                });
+            })
+            .catch(error => ({ error: error.message }));
     }
 
     const contextValue = {
@@ -330,6 +350,7 @@ export function GameProvider({ children }) {
         submitVote,
         submitClue,
         scoreVotes,
+        submitScore,
     };
 
     return (
