@@ -2,9 +2,8 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 
 const GameContext = createContext();
 
+// Dummy data until websocket is implemented
 const dummyUserData = [
-    { userID: 5, username: 'guest', password: 'Gu3st!!!', name: 'Guest' },
-    { userID: 6, username: 'cs240', password: 'Cs240!!!', name: 'CS 240' },
     { userID: 7, username: 'lindsey', password: 'Linds3y!', name: 'Lindsey' },
     { userID: 8, username: 'kyle', password: 'Kyl3!!!!', name: 'Kyle' },
     { userID: 9, username: 'jessica', password: 'J3ssica!', name: 'Jessica' },
@@ -14,34 +13,20 @@ const dummyUserData = [
     { userID: 13, username: 'travis', password: 'Tr4vis!!', name: 'Travis' },
 ];
 
-const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
-
 const dummyGamesData = [
-    {
-        gameID: 1234,
-        players: [
+    { gameID: 1234, players: [
             { userID: 5, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
             { userID: 7, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
             { userID: 9, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
             { userID: 11, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
-        ],
-        currentRound: 1,
-        currentItIndex: 0,
-        clueTarget: 4,
-        clue: '',
+        ], currentRound: 1, currentItIndex: 0, clueTarget: 4, clue: '',
     },
-    {
-        gameID: 5678,
-        players: [
-            { userID: 6, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
+    { gameID: 5678, players: [
+            { userID: 12, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
             { userID: 7, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
             { userID: 8, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
             { userID: 9, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 8, isHost: false },
-        ],
-        currentRound: 1,
-        currentItIndex: 0,
-        clueTarget: 7,
-        clue: '',
+        ], currentRound: 1, currentItIndex: 0, clueTarget: 7, clue: '',
     }
 ];
 
@@ -50,7 +35,7 @@ export function GameProvider({ children }) {
     const [users, setUsers] = useState(dummyUserData);
     const [activeUser, setActiveUser] = useState(null);
     const [games, setGames] = useState(dummyGamesData);
-    const [activeGame, setActiveGame] = useState(dummyGamesData[0]);
+    const [activeGame, setActiveGame] = useState();
 
     function getNextUserID() {
         const highestUserID = users.reduce((maxID, user) => Math.max(maxID, user.userID), 0);
@@ -144,36 +129,43 @@ export function GameProvider({ children }) {
             .catch(error => ({ error: error.message }));
     }, [setActiveGame]);
 
-    const joinGame = useCallback((gameID, user) => {
-        return new Promise((resolve) => {
-            const game = games.find((g) => g.gameID === gameID);
-            if (game) {
-                const newPlayer = {
-                    userID: user.userID,
-                    playerID: game.players.length + 1,
-                    playerColor: playerColors[game.players.length],
-                    score: 0,
-                    activeVote: 0,
-                    isHost: false
-                };
-                if (game.players.some((p) => p.userID === newPlayer.userID)) {
-                    return resolve({ warning: "User is already in the game" });
+    const joinGame = useCallback((gameID) => {
+        return fetch('/api/game/join', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ gameID })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => ({ error: data.msg || data.warning }));
                 }
-                if (game.players.length >= 8) {
-                    return resolve({ warning: "Game is full" });
+                return response.json().then(updatedGame => {
+                    setActiveGame(updatedGame);
+                    return { success: `Joined game with ID ${updatedGame.gameID}`, game: updatedGame };
+                });
+            })
+            .catch(error => ({ error: error.message }));
+    }, [setActiveGame]);
+
+    const joinDummyGame = useCallback((gameID) => {
+        return fetch('/api/game/join/dummy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ gameID }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => ({ error: data.msg || data.warning }));
                 }
-                const updatedGame = {
-                    ...game,
-                    players: [...game.players, newPlayer]
-                };
-                updateGame(updatedGame);
-                setActiveGame(updatedGame);
-                return resolve({ success: `Joined game with ID ${game.gameID}`, gameID: game.gameID });
-            } else {
-                return resolve({ error: "Game not found" });
-            }
-        });
-    });
+                return response.json().then(updatedGame => {
+                    setActiveGame(updatedGame);
+                    return { success: `Dummy user added to game ${updatedGame.gameID}`, game: updatedGame };
+                });
+            })
+            .catch(error => ({ error: error.message }));
+    }, [setActiveGame]);
 
     function leaveGame(gameID, userID) {
         return new Promise((resolve) => {
@@ -331,16 +323,15 @@ export function GameProvider({ children }) {
     const contextValue = {
         activeUser,
         users,
-        dummyUserData,
         getUser,
         createUser,
         loginUser,
         deleteUser,
         activeGame,
         games,
-        dummyGamesData,
         createGame,
         joinGame,
+        joinDummyGame,
         leaveGame,
         deleteGame,
         getGameScores,

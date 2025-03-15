@@ -7,7 +7,7 @@ export default function CreateGame() {
     const navigate = useNavigate();
     const [gameID, setGameID] = useState('');
     const [error, setError] = useState(null);
-    const { activeUser, users, activeGame, createGame, joinGame, getGameUsers } = useGame();
+    const { activeUser, users, activeGame, createGame, joinGame, joinDummyGame, getGameUsers } = useGame();
 
     useEffect(() => {
         if (!activeUser) return;
@@ -23,27 +23,15 @@ export default function CreateGame() {
 
     useEffect(() => {
         if (!activeGame) return;
-
         const interval = setInterval(() => {
-            const remainingUsers = users.filter(
-                (u) => !activeGame.players.some((p) => p.userID === u.userID)
-            );
-            if (remainingUsers.length > 0 && activeGame.players.length < 8) {
-                const userToAdd = remainingUsers[0];
-                joinGame(gameID, userToAdd).then((response) => {
-                    if (response?.success) {
-                    } else if (response?.error) {
-                        console.error("Error adding user to game:", response.error);
-                    }
-                });
-            } else {
-                clearInterval(interval);
-            }
+            joinDummyGame(activeGame.gameID).then((response) => {
+                if (response?.error) {
+                    console.error("Error adding dummy user:", response.error);
+                }
+            });
         }, 2000);
-
         return () => clearInterval(interval);
-    }, [activeGame, users, joinGame, getGameUsers, gameID]);
-
+    }, [activeGame, joinDummyGame]);
 
     const startGame = (e) => {
         e.preventDefault();

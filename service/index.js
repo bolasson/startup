@@ -8,6 +8,44 @@ const path = require('path');
 let users = [];
 let games = [];
 const authCookieName = 'authToken';
+const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
+
+// Dummy data until websocket is implemented
+const dummyUserData = [
+    { userID: 7, username: 'lindsey', password: 'Linds3y!', name: 'Lindsey' },
+    { userID: 8, username: 'kyle', password: 'Kyl3!!!!', name: 'Kyle' },
+    { userID: 9, username: 'jessica', password: 'J3ssica!', name: 'Jessica' },
+    { userID: 10, username: 'nathan', password: 'N4than!!', name: 'Nathan' },
+    { userID: 11, username: 'katelyn', password: 'K4telyn!', name: 'Katelyn' },
+    { userID: 12, username: 'heidi', password: 'H3idi!!!', name: 'Heidi' },
+    { userID: 13, username: 'travis', password: 'Tr4vis!!', name: 'Travis' },
+];
+
+dummyUserData.forEach(user => {
+    user.password = bcrypt.hashSync(user.password, 10);
+    users.push(user);
+});
+
+const dummyGamesData = [
+    { gameID: 1234, players: [
+            { userID: 5, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
+            { userID: 7, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
+            { userID: 9, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
+            { userID: 11, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
+        ], currentRound: 1, currentItIndex: 0, clueTarget: 4, clue: '',
+    },
+    { gameID: 5678, players: [
+            { userID: 12, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
+            { userID: 7, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
+            { userID: 8, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
+            { userID: 9, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 8, isHost: false },
+        ], currentRound: 1, currentItIndex: 0, clueTarget: 7, clue: '',
+    }
+];
+
+dummyGamesData.forEach(game => {
+    games.push(game);
+});
 
 const app = express();
 
@@ -180,6 +218,72 @@ apiRouter.post('/game/create', verifyAuth, async (req, res) => {
 
     games.push(newGame);
     res.send(newGame);
+});
+
+apiRouter.post('/game/join', verifyAuth, async (req, res) => {
+    const { gameID } = req.body;
+    const token = req.cookies[authCookieName];
+    const user = await findUser('token', token);
+    if (!user) {
+        return res.status(401).send({ msg: 'Unauthorized' });
+    }
+
+    const game = games.find(g => g.gameID === gameID);
+    if (!game) {
+        return res.status(404).send({ msg: 'Game not found' });
+    }
+
+    if (game.players.some(p => p.userID === user.userID)) {
+        return res.status(400).send({ error: "User is already in the game", game });
+    }
+
+    if (game.players.length >= 8) {
+        return res.status(400).send({ error: "Game is full" });
+    }
+
+    const newPlayer = {
+        userID: user.userID,
+        playerID: game.players.length + 1,
+        playerColor: playerColors[game.players.length % playerColors.length],
+        score: 0,
+        activeVote: 0,
+        isHost: false
+    };
+
+    game.players.push(newPlayer);
+    res.send(game);
+});
+
+apiRouter.post('/game/join/dummy', verifyAuth, async (req, res) => {
+    const { gameID } = req.body;
+    const game = games.find(g => g.gameID === gameID);
+    if (!game) {
+        return res.status(404).send({ msg: 'Game not found' });
+    }
+
+    const availableDummy = dummyUserData.find(
+        (dummy) => !game.players.some(p => p.userID === dummy.userID)
+    );
+
+    if (game.players.length >= 8) {
+        return res.status(400).send({ msg: 'Game is full' });
+    }
+
+    if (!availableDummy) {
+        return res.status(400).send({ msg: 'No available dummy users to add.' });
+    }
+
+    const newPlayer = {
+        userID: availableDummy.userID,
+        playerID: game.players.length + 1,
+        playerColor: playerColors[game.players.length % playerColors.length],
+        score: 0,
+        activeVote: 0,
+        isHost: false,
+    };
+
+    game.players.push(newPlayer);
+    res.send(game);
 });
 
 app.use((_req, res) => {

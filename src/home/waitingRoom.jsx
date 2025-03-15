@@ -5,7 +5,7 @@ import { useGame } from "../customContext/gameContext.jsx";
 
 export default function WaitingRoom() {
     const navigate = useNavigate();
-    const { users, getUser, activeGame, joinGame, getGameUsers } = useGame();
+    const { getUser, activeGame, joinDummyGame } = useGame();
     const [loadingText, setLoadingText] = useState('');
     const [startingGame, setStartingGame] = useState(false);
 
@@ -18,26 +18,15 @@ export default function WaitingRoom() {
 
     useEffect(() => {
         if (!activeGame) return;
-
         const interval = setInterval(() => {
-            const remainingUsers = users.filter(
-                (u) => !activeGame.players.some((p) => p.userID === u.userID)
-            );
-            if (remainingUsers.length > 0 && activeGame.players.length < 8) {
-                const userToAdd = remainingUsers[0];
-                joinGame(activeGame.gameID, userToAdd).then((response) => {
-                    if (response?.success) {
-                    } else if (response?.error) {
-                        console.error("Error adding user to game:", response.error);
-                    }
-                });
-            } else {
-                clearInterval(interval);
-            }
+            joinDummyGame(activeGame.gameID).then((response) => {
+                if (response?.error) {
+                    console.error("Error adding dummy user:", response.error);
+                }
+            });
         }, 2000);
-
         return () => clearInterval(interval);
-    }, [activeGame, users, joinGame, getGameUsers]);
+    }, [activeGame, joinDummyGame]);
 
     useEffect(() => {
         if (activeGame?.players.length === 8 && !startingGame) {

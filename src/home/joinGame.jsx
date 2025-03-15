@@ -6,7 +6,7 @@ export default function JoinGame() {
     const navigate = useNavigate();
     const [joinCode, setJoinCode] = useState("");
     const [error, setError] = useState(null);
-    const { activeUser, users, joinGame } = useGame();
+    const { joinGame } = useGame();
 
     const handleJoin = (e) => {
         e.preventDefault();
@@ -16,12 +16,8 @@ export default function JoinGame() {
             return;
         }
         setError(null);
-
-        // This is a place holder until websocket connections are fully implemented. But the right logic is in place.
         const code = parseInt(joinCode, 10);
-        const targetUser = activeUser || users[0];
-
-        joinGame(code, targetUser)
+        joinGame(code)
             .then((response) => {
                 if (response?.success) {
                     navigate("/home/waiting-room");
