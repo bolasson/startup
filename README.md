@@ -140,3 +140,14 @@ For this deliverable I used React so that the application works, and I also adde
 
 - [x] **All functionality implemented or mocked out** - Everything is working! Users and games are stored in a global context. `setInterval` used to simulate other player voting.
 - [x] **Hooks** - Used `useState` and `useEffect` for each page, and created a custom hook/context useGame.
+
+## Service deliverable
+
+For this deliverable I added backend endpoints that create games, join players to games, and manage user stats.
+
+- [x] **Node.js/Express HTTP service** - done!
+- [x] **Static middleware for frontend** - done!
+- [ ] **Calls to third party endpoints** - I didn't have time to implement this.
+- [x] **Backend service endpoints** - Placeholders for login that stores the current user in the app context. Endpoints for game creation and joining.
+- [x] **Frontend calls service endpoints** - I did this using the fetch function.
+- [ ] **Supports registration, login, logout, and restricted endpoint** - Supports registration and login, but not logging out. Restriction is applied to the endpoints, but not the user's ability to see the pages.
