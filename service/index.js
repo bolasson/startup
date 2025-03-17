@@ -11,6 +11,8 @@ app.use(express.static('public'));
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
+
 // Data storage
 let users = [];
 /* User Structure
@@ -24,7 +26,7 @@ let games = [];
     // Player structure:
     { username: string, playerID: int, playerColor: string, score: int, activeVote: int, isHost: bool }
 */
-const authCookieName = 'token';
+const authCookieName = 'authToken';
 const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
 
 // Dummy data until websocket is implemented
@@ -44,54 +46,29 @@ dummyUserData.forEach(user => {
 });
 
 const dummyGamesData = [
-    {
-        gameID: 1234, players: [
-            { username: "lindsey", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
-            { username: "kyle", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
-            { username: "jessica", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
-            { username: "nathan", playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
-        ], currentRound: 0, currentItIndex: 0, clueTarget: 4, clue: '',
-    },
-    {
-        gameID: 5678, players: [
-            { username: "katelyn", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
-            { username: "heidi", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
-            { username: "travis", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
-        ], currentRound: 0, currentItIndex: 0, clueTarget: 7, clue: '',
-    }
+    { gameID: 1234, players: [
+        { username: "lindsey", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
+        { username: "kyle", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
+        { username: "jessica", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
+        { username: "nathan", playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
+    ], currentRound: 0, currentItIndex: 0, clueTarget: 4, clue: '' },
+    { gameID: 5678, players: [
+        { username: "katelyn", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
+        { username: "heidi", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
+        { username: "travis", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
+    ], currentRound: 0, currentItIndex: 0, clueTarget: 7, clue: '' },
 ];
 
 dummyGamesData.forEach(game => {
     games.push(game);
 });
 
-const port = process.argv.length > 2 ? process.argv[2] : 4000;
-
-// Default route
-// app.get('*', (_req, res) => {
-//     res.send({ msg: 'Backend service is running.' });
-// });
-
-// Helper functions
-// function setAuthCookie(res, token) {
-//     res.cookie(authCookieName, token, {
-//         secure: false,
-//         httpOnly: true,
-//         sameSite: 'strict',
-//     });
-// }
-
-async function findUser(field, value) {
-    if (!value) return null;
-    return users.find((u) => u[field] === value);
-}
-
 /* AUTH & COOKIES */
 // Helper functions
 function setAuthCookie(res, user) {
     user.token = uuid.v4();
 
-    res.cookie('token', user.token, {
+    res.cookie(authCookieName, user.token, {
         secure: true,
         httpOnly: true,
         sameSite: 'strict',
@@ -99,7 +76,8 @@ function setAuthCookie(res, user) {
 }
 
 const verifyAuth = async (req, res, next) => {
-    const user = await findUser(req.cookies['token'], 'token');
+    const token = req.cookies[authCookieName];
+    const user = await getUser(token, 'token');
     if (user) {
         next();
     } else {
@@ -109,7 +87,7 @@ const verifyAuth = async (req, res, next) => {
 
 function clearAuthCookie(res, user) {
     delete user.token;
-    res.clearCookie('token');
+    res.clearCookie(authCookieName);
 }
 
 /* USER */
@@ -177,7 +155,7 @@ apiRouter.put('/user', async (req, res) => {
 });
 
 apiRouter.delete('/user', async (req, res) => {
-    const token = req.cookies['token'];
+    const token = req.cookies[authCookieName];
     const user = await getUser(token, 'token');
     if (user) {
         clearAuthCookie(res, user);
@@ -186,7 +164,7 @@ apiRouter.delete('/user', async (req, res) => {
 });
 
 apiRouter.get('/user/me', async (req, res) => {
-    const token = req.cookies['token'];
+    const token = req.cookies[authCookieName];
     const user = await getUser(token, 'token');
     if (user) {
         res.send({ username: user.username, name: user.name, stats: user.stats });
@@ -194,6 +172,91 @@ apiRouter.get('/user/me', async (req, res) => {
         res.status(401).send({ msg: 'Unauthorized' });
     }
 });
+
+/* GAME */
+// Helper functions
+function getGame(gameID) {
+    return games.find((game) => game.gameID === gameID);
+}
+
+async function createGame() {
+    let newGameID;
+    do {
+        newGameID = Math.floor(1000 + Math.random() * 9000);
+    } while (getGame(newGameID));
+    const game = {
+        gameID: newGameID,
+        players: [],
+        currentRound: 1,
+        currentItIndex: 0,
+        clueTarget: Math.floor(Math.random() * 10) + 1,
+        clue: '',
+    };
+    games.push(game);
+    return game;
+}
+
+async function joinGame(gameID, user) {
+    const game = getGame(gameID);
+    if (game) {
+        if (game.players.length < 8) {
+            game.players.push({
+                username: user.username,
+                playerID: game.players.length + 1,
+                playerColor: playerColors[game.players.length % playerColors.length],
+                score: 0,
+                activeVote: 0,
+                isHost: game.players.length === 0,
+            });
+            return game;
+        } else {
+            throw new Error('Game is full');
+        }
+    } else {
+        throw new Error('No game with ID ' + gameID + ' found');
+    }
+}
+
+async function calculateScores(game) {
+    if (!game) {
+        throw new Error('No game provided to score');
+    }
+    const it = game.players[game.currentItIndex];
+    game.players.forEach((player) => {
+        const user = getUser(player.username);
+        if (!user) {
+            throw new Error(`User with username '${player.username}' not found`);
+        }
+        if (player !== it) {
+            let score = 0;
+            if (player.activeVote === game.clueTarget) {
+                score = 3;
+            } else if (player.activeVote === game.clueTarget + 1 || player.activeVote === game.clueTarget - 1) {
+                score = 1;
+            }
+            player.score += score;
+            user.stats["Total Points Scored"] += score;
+        }
+        user.stats["Rounds Played"] += 1;
+    });
+    return game;
+}
+
+async function startNextRound(gameID) {
+    const game = getGame(gameID);
+    if (!game) {
+        throw new Error('No game with ID ' + gameID + ' found');
+    }
+    await calculateScores(game);
+    game.currentRound += 1;
+    game.currentItIndex = (game.currentItIndex + 1) % game.players.length;
+    game.clueTarget = Math.floor(Math.random() * 10) + 1;
+    game.clue = '';
+    game.players.forEach((player) => {
+        player.activeVote = 0;
+    });
+    return game;
+}
 
 // Login endpoints
 apiRouter.post('/auth/create', async (req, res) => {
@@ -262,7 +325,7 @@ apiRouter.post('/auth/login', async (req, res) => {
 // Stats endpoints
 apiRouter.get('/stats', verifyAuth, async (req, res) => {
     const token = req.cookies[authCookieName];
-    const user = await findUser('token', token);
+    const user = await findUser(authCookieName, token);
     if (!user) {
         return res.status(401).send({ msg: 'Unauthorized' });
     }
@@ -271,7 +334,7 @@ apiRouter.get('/stats', verifyAuth, async (req, res) => {
 
 apiRouter.post('/score', verifyAuth, async (req, res) => {
     const token = req.cookies[authCookieName];
-    const user = await findUser('token', token);
+    const user = await findUser(authCookieName, token);
     if (!user) {
         return res.status(401).send({ msg: 'Unauthorized' });
     }
@@ -296,7 +359,7 @@ apiRouter.post('/score', verifyAuth, async (req, res) => {
 // Game endpoints
 apiRouter.post('/game/create', verifyAuth, async (req, res) => {
     const token = req.cookies[authCookieName];
-    const user = await findUser('token', token);
+    const user = await findUser(authCookieName, token);
     if (!user) {
         return res.status(401).send({ msg: 'Unauthorized' });
     }
@@ -325,7 +388,7 @@ apiRouter.post('/game/create', verifyAuth, async (req, res) => {
 apiRouter.post('/game/join', verifyAuth, async (req, res) => {
     const { gameID } = req.body;
     const token = req.cookies[authCookieName];
-    const user = await findUser('token', token);
+    const user = await findUser(authCookieName, token);
     if (!user) {
         return res.status(401).send({ msg: 'Unauthorized' });
     }
