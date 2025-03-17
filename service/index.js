@@ -12,20 +12,22 @@ let users = [];
 */
 let games = [];
 /* Game Structure
-
+    { gameID: int, players: player[], currentRound: int, currentItIndex: int, clueTarget: int, clue: string }
+    // Player structure:
+    { username: string, playerID: int, playerColor: string, score: int, activeVote: int, isHost: bool }
 */
 const authCookieName = 'authToken';
 const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
 
 // Dummy data until websocket is implemented
 const dummyUserData = [
-    { userID: 7, username: 'lindsey', password: 'Linds3y!', name: 'Lindsey' },
-    { userID: 8, username: 'kyle', password: 'Kyl3!!!!', name: 'Kyle' },
-    { userID: 9, username: 'jessica', password: 'J3ssica!', name: 'Jessica' },
-    { userID: 10, username: 'nathan', password: 'N4than!!', name: 'Nathan' },
-    { userID: 11, username: 'katelyn', password: 'K4telyn!', name: 'Katelyn' },
-    { userID: 12, username: 'heidi', password: 'H3idi!!!', name: 'Heidi' },
-    { userID: 13, username: 'travis', password: 'Tr4vis!!', name: 'Travis' },
+    { username: 'lindsey', password: 'Linds3y!', name: 'Lindsey' },
+    { username: 'kyle', password: 'Kyl3!!!!', name: 'Kyle' },
+    { username: 'jessica', password: 'J3ssica!', name: 'Jessica' },
+    { username: 'nathan', password: 'N4than!!', name: 'Nathan' },
+    { username: 'katelyn', password: 'K4telyn!', name: 'Katelyn' },
+    { username: 'heidi', password: 'H3idi!!!', name: 'Heidi' },
+    { username: 'travis', password: 'Tr4vis!!', name: 'Travis' },
 ];
 
 dummyUserData.forEach(user => {
@@ -34,22 +36,17 @@ dummyUserData.forEach(user => {
 });
 
 const dummyGamesData = [
-    {
-        gameID: 1234, players: [
-            { userID: 5, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
-            { userID: 7, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
-            { userID: 9, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
-            { userID: 11, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
-        ], currentRound: 1, currentItIndex: 0, clueTarget: 4, clue: '',
-    },
-    {
-        gameID: 5678, players: [
-            { userID: 12, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
-            { userID: 7, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
-            { userID: 8, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
-            { userID: 9, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 8, isHost: false },
-        ], currentRound: 1, currentItIndex: 0, clueTarget: 7, clue: '',
-    }
+    { gameID: 1234, players: [
+        { username: "lindsey", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
+        { username: "kyle", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
+        { username: "jessica", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },            
+        { username: "nathan", playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
+    ], currentRound: 0, currentItIndex: 0, clueTarget: 4, clue: '', },
+    { gameID: 5678, players: [
+        { username: "katelyn", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
+        { username: "heidi", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
+        { username: "travis", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
+    ], currentRound: 0, currentItIndex: 0, clueTarget: 7, clue: '', }
 ];
 
 dummyGamesData.forEach(game => {
@@ -72,13 +69,13 @@ app.use(express.static('public'));
 // });
 
 // Helper functions
-function setAuthCookie(res, token) {
-    res.cookie(authCookieName, token, {
-        secure: false,
-        httpOnly: true,
-        sameSite: 'strict',
-    });
-}
+// function setAuthCookie(res, token) {
+//     res.cookie(authCookieName, token, {
+//         secure: false,
+//         httpOnly: true,
+//         sameSite: 'strict',
+//     });
+// }
 
 const verifyAuth = async (req, res, next) => {
     const token = req.cookies[authCookieName];
@@ -132,6 +129,10 @@ async function passwordMeetsRequirements(password) {
     return password.length >= 12;
 }
 
+async function usernameMeetsRequirements(username) {
+    return username.length >= 6;
+}
+
 async function createUser(username, password, name) {
     const passwordHash = await bcrypt.hash(password, 10);
     const user = {
@@ -149,16 +150,22 @@ async function createUser(username, password, name) {
     return user;
 }
 
+async function setLastPlayed(user) {
+    user.stats["Last Played"] = new Date().toLocaleDateString();
+}
+
 // Endpoints
 app.post('/api/user', async (req, res) => {
     if (await getUser(req.body.username)) {
         res.status(409).send({ msg: 'Username already taken.' });
-    } else if (await passwordMeetsRequirements(req.body.password)) {
-        const user = await createUser(req.body.email, req.body.password, req.body.name);
-        setAuthCookie(res, user);
-        res.send({ username: user.username, name: user.name });
-    } else {
+    } else if (!await usernameMeetsRequirements(req.body.username)) {
+        res.status(400).send({ msg: 'Username must be at least 6 characters long.' });
+    } else if (!await passwordMeetsRequirements(req.body.password)) {
         res.status(400).send({ msg: 'Password must be at least 12 characters long.' });
+    } else {
+        const user = await createUser(req.body.username, req.body.password, req.body.name);
+        setAuthCookie(res, user);
+        res.send({ username: user.username, name: user.name, stats: user.stats });
     }
 });
 
@@ -166,7 +173,8 @@ app.put('/api/user', async (req, res) => {
     const user = await getUser(req.body.username);
     if (user && (await bcrypt.compare(req.body.password, user.password))) {
         setAuthCookie(res, user);
-        res.send({ username: user.username, name: user.name });
+        await setLastPlayed(user);
+        res.send({ username: user.username, name: user.name, stats: user.stats });
     } else {
         res.status(401).send({ msg: 'Please check your credentials' });
     }
@@ -183,9 +191,9 @@ app.delete('/api/user', async (req, res) => {
 
 app.get('/api/user/me', async (req, res) => {
     const token = req.cookies['token'];
-    const user = await getUser('token', token);
+    const user = await getUser(token, 'token');
     if (user) {
-        res.send({ username: user.username, name: user.name });
+        res.send({ username: user.username, name: user.name, stats: user.stats });
     } else {
         res.status(401).send({ msg: 'Unauthorized' });
     }

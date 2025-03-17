@@ -5,6 +5,7 @@ import "../styles.css";
 
 export default function Login() {
     const navigate = useNavigate();
+    const { setUser } = useGame();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -28,16 +29,16 @@ export default function Login() {
         });
         const data = await res.json();
         if (res.ok) {
+            setUser(data);
             navigate('home');
         } else {
-            console.log(data.msg);
             setError(data.msg);
         }
     }
 
     return (
         <main>
-            <section className="transparent-form">
+            <form onSubmit={e => e.preventDefault()} className="transparent-form">
                 <h1>{showCreateAccount ? 'Create Account' : 'Login'}</h1>
                 <div className="form-field">
                     <img src="/user.svg" />
@@ -70,7 +71,7 @@ export default function Login() {
                         <button type="submit" onClick={handleAccountCreation}>Create Account</button> :
                         <button type="submit" onClick={handleLogin}>Login</button>}
                 </div>
-            </section>
+            </form>
             {error && <p className="error">{error}</p>}
         </main>
     );

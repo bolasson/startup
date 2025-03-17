@@ -5,43 +5,26 @@ import "../styles.css";
 
 export default function Stats() {
     const navigate = useNavigate();
-    const { activeUser } = useGame();
-    const [stats, setStats] = useState(null);
-    const [error, setError] = useState(null);
-
-    if (!activeUser) {
-        navigate('/');
-    }
+    const { activeUser, setUser } = useGame();
 
     useEffect(() => {
-        fetch('/api/stats', {
-            credentials: 'include',
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Failed to fetch stats");
-                }
-                return response.json();
-            })
-            .then(data => setStats(data))
-            .catch(err => setError(err.message));
+        (async () => {
+            const res = await fetch('api/user/me');
+            const data = await res.json();
+            if (!res.ok) {
+                setUser(null);
+                navigate('/');
+            } else {
+                setUser(data);
+            }
+        })();
     }, []);
 
-    if (error) {
+    if (!activeUser) {
         return (
             <main>
-                <section>
-                    <p>Error: {error}</p>
-                </section>
-            </main>
-        );
-    }
-
-    if (!stats) {
-        return (
-            <main>
-                <section>
-                    <p>Loading stats...</p>
+                <section className="intro">
+                    <h2>Loading...</h2>
                 </section>
             </main>
         );
@@ -53,7 +36,7 @@ export default function Stats() {
                 <h2>Statistics for {activeUser?.name}</h2>
                 <table className="rounded-table">
                     <tbody>
-                        {Object.entries(stats).map(([stat, value], index) => (
+                        {Object.entries(activeUser?.stats).map(([stat, value], index) => (
                             <tr key={index}>
                                 <td>{stat}</td>
                                 <td>{value}</td>
