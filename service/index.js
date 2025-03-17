@@ -2,11 +2,18 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
-const path = require('path');
 
 // Data storage
 let users = [];
+/* User Structure
+    { username: string, password: string, name: string, stats: Stats, token: uuid }
+    // Stats structure: 
+    { roundsPlayed: int, pointsScored: int, dateJoined: date, lastPlayed: date }
+*/
 let games = [];
+/* Game Structure
+
+*/
 const authCookieName = 'authToken';
 const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
 
@@ -27,14 +34,16 @@ dummyUserData.forEach(user => {
 });
 
 const dummyGamesData = [
-    { gameID: 1234, players: [
+    {
+        gameID: 1234, players: [
             { userID: 5, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
             { userID: 7, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
             { userID: 9, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
             { userID: 11, playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
         ], currentRound: 1, currentItIndex: 0, clueTarget: 4, clue: '',
     },
-    { gameID: 5678, players: [
+    {
+        gameID: 5678, players: [
             { userID: 12, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
             { userID: 7, playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
             { userID: 8, playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
@@ -92,6 +101,62 @@ async function findUser(field, value) {
 // Router setup
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
+
+/* AUTH & COOKIES */
+// Helper functions
+function setAuthCookie(res, user) {
+    user.token = uuid.v4();
+
+    res.cookie('token', user.token, {
+        secure: true,
+        httpOnly: true,
+        sameSite: 'strict',
+    });
+}
+
+/* USER */
+// Helper functions
+function getUser(value, field = "username") {
+    if (value) {
+        return users.find((user) => user[field] === value);
+    }
+    return null;
+}
+
+async function passwordMeetsRequirements(password) {
+    return password.length >= 12;
+}
+
+async function createUser(username, password, name) {
+    const passwordHash = await bcrypt.hash(password, 10);
+    const user = {
+        username: username,
+        password: passwordHash,
+        name: name || username,
+        stats: {
+            "Rounds Played": 0,
+            "Total Points Scored": 0,
+            "Date Joined": new Date().toLocaleDateString(),
+            "Last Played": new Date().toLocaleDateString(),
+        },
+    };
+    users.push(user);
+    return user;
+}
+
+// Endpoints
+app.post('/api/user/create', async (req, res) => {
+    if (await getUser(req.body.username)) {
+        res.status(409).send({ msg: 'Username already taken.' });
+    } else if (await passwordMeetsRequirements(req.body.password)) {
+        const user = await createUser(req.body.email, req.body.password, req.body.name);
+        setAuthCookie(res, user);
+        res.send({ username: user.username, name: user.name });
+    } else {
+        res.status(400).send({ msg: 'Password must be at least 12 characters long.' });
+    }
+});
+
 
 // Login endpoints
 apiRouter.post('/auth/create', async (req, res) => {
