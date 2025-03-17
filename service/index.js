@@ -192,6 +192,7 @@ async function createGame() {
         clueTarget: Math.floor(Math.random() * 10) + 1,
         clue: '',
         createdAt: new Date().toLocaleDateString(),
+        isStarted: false,
     };
     games.push(game);
     return game;
@@ -200,7 +201,15 @@ async function createGame() {
 async function joinGame(gameID, user) {
     const game = getGame(gameID);
     if (game) {
-        if (game.players.length < 8) {
+        if (game.isStarted) {
+            throw new Error('Game has already started');
+        }
+        if (game.players.some((player) => player.username === user.username)) {
+            throw new Error('User is already in game');
+        }
+        if (game.players.length >= 8) {
+            throw new Error('Game is full');
+        } else {
             game.players.push({
                 username: user.username,
                 name: user.name,
@@ -211,8 +220,6 @@ async function joinGame(gameID, user) {
                 isHost: game.players.length === 0,
             });
             return game;
-        } else {
-            throw new Error('Game is full');
         }
     } else {
         throw new Error('No game with ID ' + gameID + ' found');
@@ -287,6 +294,17 @@ apiRouter.put('/game/join', verifyAuth, async (req, res) => {
         res.send(game);
     } catch (error) {
         res.status(400).send({ msg: error.message });
+    }
+});
+
+apiRouter.put('/game/start', verifyAuth, async (req, res) => {
+    const gameID = parseInt(req.body.gameID);
+    const game = getGame(gameID);
+    if (!game) {
+        res.status(404).send({ msg: 'Game not found' });
+    } else {
+        game.isStarted = true;
+        res.send(game);
     }
 });
 

@@ -47,6 +47,20 @@ export default function CreateGame() {
         console.log(updatedGame);
     }
 
+    async function startGame() {
+        const res = await fetch(`/api/game/start`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gameID: activeGame.gameID }),
+        });
+        const updatedGame = await res.json();
+        if (!res.ok) {
+            setError(updatedGame.msg);
+        }
+        setGame(updatedGame);
+        navigate('/play');
+    }
+
     useEffect(() => {
         if (!activeGame) {
           createGame();
@@ -72,13 +86,13 @@ export default function CreateGame() {
         );
     }
 
-    const startGame = (e) => {
+    const handleStartGame = (e) => {
         e.preventDefault();
         if (activeGame?.players.length < 2) {
             setError('You need at least 2 players to start a game.');
             return;
         }
-        navigate('/play');
+        startGame();
     }
 
     return (
@@ -88,7 +102,7 @@ export default function CreateGame() {
                 <input className="user-input" type="number" id="generatedCodeField" name="generatedCodeValue" value={gameID} readOnly />
                 {error && <p className="error">{error}</p>}
                 <PlayerList players={activeGame?.players || []} />
-                <button onClick={startGame} style={{ width: 'auto' }} >Start Game</button>
+                <button onClick={handleStartGame} style={{ width: 'auto' }} >Start Game</button>
             </form>
         </main>
     )

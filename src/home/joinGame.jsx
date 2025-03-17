@@ -4,27 +4,35 @@ import { useGame } from "../customContext/gameContext";
 
 export default function JoinGame() {
     const navigate = useNavigate();
-    const [joinCode, setJoinCode] = useState("");
+    const [gameID, setGameID] = useState("");
     const [error, setError] = useState(null);
-    const { joinGame } = useGame();
+    const { setGame } = useGame();
+
+    async function joinGame(targetGameID) {
+        const res = await fetch('/api/game/join', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gameID: targetGameID }),
+        });
+        const joinedGameData = await res.json();
+        if (!res.ok) {
+            setError(joinedGameData.msg);
+        } else {
+            setGame(joinedGameData);
+            navigate("/home/waiting-room");
+        }
+    }
 
     const handleJoin = (e) => {
         e.preventDefault();
-        const codeString = joinCode.toString();
+        const codeString = gameID.toString();
         if (codeString.length !== 4) {
             setError("Please enter a valid 4-digit code.");
             return;
         }
         setError(null);
-        const code = parseInt(joinCode, 10);
-        joinGame(code)
-            .then((response) => {
-                if (response?.success) {
-                    navigate("/home/waiting-room");
-                } else {
-                    setError(response.error || response.warning);
-                }
-            });
+        const code = parseInt(gameID, 10);
+        joinGame(code);
     };
 
     return (
@@ -37,8 +45,8 @@ export default function JoinGame() {
                         type="number"
                         placeholder="ie 5296"
                         required
-                        value={joinCode}
-                        onChange={(e) => setJoinCode(e.target.value)}
+                        value={gameID}
+                        onChange={(e) => setGameID(e.target.value)}
                     />
                 </div>
                 <br />
