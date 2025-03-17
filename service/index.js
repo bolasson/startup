@@ -258,6 +258,51 @@ async function startNextRound(gameID) {
     return game;
 }
 
+// Endpoints
+apiRouter.post('/game', verifyAuth, async (req, res) => {
+    const game = await createGame();
+    res.send(game);
+});
+
+apiRouter.put('/game/join', verifyAuth, async (req, res) => {
+    const gameID = parseInt(req.body.gameID);
+    const user = await getUser(req.cookies[authCookieName], 'token');
+    try {
+        const game = await joinGame(gameID, user);
+        res.send(game);
+    } catch (error) {
+        res.status(400).send({ msg: error.message });
+    }
+});
+
+apiRouter.put('/game/end-round', verifyAuth, async (req, res) => {
+    const gameID = parseInt(req.body.gameID);
+    try {
+        const game = await startNextRound(gameID);
+        res.send(game);
+    } catch (error) {
+        res.status(400).send({ msg: error.message });
+    }
+});
+
+apiRouter.put('/game/vote', verifyAuth, async (req, res) => {
+    const gameID = parseInt(req.body.gameID);
+    const vote = parseInt(req.body.vote);
+    const user = await getUser(req.cookies[authCookieName], 'token');
+    const game = getGame(gameID);
+    if (!game) {
+        res.status(400).send({ msg: 'Game not found' });
+    } else {
+        const player = game.players.find((player) => player.username === user.username);
+        if (!player) {
+            res.status(400).send({ msg: 'User not in game' });
+        } else {
+            player.activeVote = vote;
+            res.send(game);
+        }
+    }
+});
+
 // Login endpoints
 apiRouter.post('/auth/create', async (req, res) => {
     const { username, password, name } = req.body;
