@@ -150,7 +150,7 @@ async function createUser(username, password, name) {
 }
 
 // Endpoints
-app.post('/api/user/create', async (req, res) => {
+app.post('/api/user', async (req, res) => {
     if (await getUser(req.body.username)) {
         res.status(409).send({ msg: 'Username already taken.' });
     } else if (await passwordMeetsRequirements(req.body.password)) {
@@ -162,17 +162,17 @@ app.post('/api/user/create', async (req, res) => {
     }
 });
 
-app.put('/api/user/login', async (req, res) => {
+app.put('/api/user', async (req, res) => {
     const user = await getUser(req.body.username);
     if (user && (await bcrypt.compare(req.body.password, user.password))) {
         setAuthCookie(res, user);
         res.send({ username: user.username, name: user.name });
     } else {
-        res.status(401).send({ msg: 'Unauthorized' });
+        res.status(401).send({ msg: 'Please check your credentials' });
     }
 });
 
-app.delete('/api/user/logout', async (req, res) => {
+app.delete('/api/user', async (req, res) => {
     const token = req.cookies['token'];
     const user = await getUser('token', token);
     if (user) {

@@ -5,7 +5,6 @@ import "../styles.css";
 
 export default function Login() {
     const navigate = useNavigate();
-    const { loginUser, createUser } = useGame();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
@@ -13,31 +12,32 @@ export default function Login() {
     const [showCreateAccount, setShowCreateAccount] = useState(false);
     const [error, setError] = useState(null);
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        loginUser(username.toLowerCase(), password).then((result) => {
-            if (result.success) {
-                navigate('/home');
-            } else if (result.error) {
-                setError(result.error);
-            }
-        });
-    };
+    function handleLogin() {
+        authenticateUser('PUT');
+    }
 
-    const handleCreateAccount = (e) => {
-        e.preventDefault();
-        createUser(username.toLowerCase(), password, name).then((result) => {
-            if (result.success) {
-                navigate('/home');
-            } else if (result.error) {
-                setError(result.error);
-            }
+    function handleAccountCreation() {
+        authenticateUser('POST');
+    }
+
+    async function authenticateUser(method) {
+        const res = await fetch('api/user', {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: username.toLowerCase(), password: password, name: name }),
         });
-    };
+        const data = await res.json();
+        if (res.ok) {
+            navigate('home');
+        } else {
+            console.log(data.msg);
+            setError(data.msg);
+        }
+    }
 
     return (
         <main>
-            <form className="transparent-form">
+            <section className="transparent-form">
                 <h1>{showCreateAccount ? 'Create Account' : 'Login'}</h1>
                 <div className="form-field">
                     <img src="/user.svg" />
@@ -67,10 +67,10 @@ export default function Login() {
                 <br />
                 <div className="button-container">
                     {showCreateAccount ?
-                        <button type="submit" onClick={handleCreateAccount}>Create Account</button> :
+                        <button type="submit" onClick={handleAccountCreation}>Create Account</button> :
                         <button type="submit" onClick={handleLogin}>Login</button>}
                 </div>
-            </form>
+            </section>
             {error && <p className="error">{error}</p>}
         </main>
     );
