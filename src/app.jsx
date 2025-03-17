@@ -1,6 +1,7 @@
 import React from 'react';
 import './styles.css';
 import Login from './login/login.jsx';
+import Logout from './login/logout.jsx';
 import Play from './play/play.jsx';
 import Stats from './stats/stats.jsx';
 import Dev from './dev/dev.jsx';
@@ -8,6 +9,7 @@ import NotFound from './404/not_found.jsx';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { GameProvider } from './customContext/gameContext.jsx';
 import GameExitHandler from './gameExitHandler.jsx';
+import NavMenu from './navMenu/navMenu.jsx';
 import HowToPlay from './home/howToPlay.jsx';
 import CreateGame from './home/createNewGame.jsx';
 import JoinGame from './home/joinGame.jsx';
@@ -29,14 +31,7 @@ export default function App() {
                             <img src="/logo.png" alt="Logo" width="75" />
                             <h1>Rank It</h1>
                         </div>
-                        <nav>
-                            <menu>
-                                {/* <li><NavLink className='nav-link' to='dev'>Dev</NavLink></li> */}
-                                <li><NavLink className='nav-link' to='/'>Login</NavLink></li>
-                                <li><NavLink className='nav-link' to='home'>Home</NavLink></li>
-                                <li><NavLink className='nav-link' to='stats'>My Stats</NavLink></li>
-                            </menu>
-                        </nav>
+                        <NavMenu />
                     </header>
                     <Routes>
                         <Route path='/' element={<Login />} exact />
@@ -47,6 +42,7 @@ export default function App() {
                         <Route path='home' element={<HowToPlay />} />
                         <Route path='play' element={<Play />} />
                         <Route path='stats' element={<Stats />} />
+                        <Route path='logout' element={<Logout />} />
                         <Route path='*' element={<NotFound />} />
                     </Routes>
                     <footer>

@@ -2,6 +2,14 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
+const app = express();
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.static('public'));
+
+var apiRouter = express.Router();
+app.use(`/api`, apiRouter);
 
 // Data storage
 let users = [];
@@ -16,7 +24,7 @@ let games = [];
     // Player structure:
     { username: string, playerID: int, playerColor: string, score: int, activeVote: int, isHost: bool }
 */
-const authCookieName = 'authToken';
+const authCookieName = 'token';
 const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
 
 // Dummy data until websocket is implemented
@@ -36,32 +44,28 @@ dummyUserData.forEach(user => {
 });
 
 const dummyGamesData = [
-    { gameID: 1234, players: [
-        { username: "lindsey", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
-        { username: "kyle", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
-        { username: "jessica", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },            
-        { username: "nathan", playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
-    ], currentRound: 0, currentItIndex: 0, clueTarget: 4, clue: '', },
-    { gameID: 5678, players: [
-        { username: "katelyn", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
-        { username: "heidi", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
-        { username: "travis", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
-    ], currentRound: 0, currentItIndex: 0, clueTarget: 7, clue: '', }
+    {
+        gameID: 1234, players: [
+            { username: "lindsey", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
+            { username: "kyle", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
+            { username: "jessica", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
+            { username: "nathan", playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
+        ], currentRound: 0, currentItIndex: 0, clueTarget: 4, clue: '',
+    },
+    {
+        gameID: 5678, players: [
+            { username: "katelyn", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
+            { username: "heidi", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
+            { username: "travis", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
+        ], currentRound: 0, currentItIndex: 0, clueTarget: 7, clue: '',
+    }
 ];
 
 dummyGamesData.forEach(game => {
     games.push(game);
 });
 
-const app = express();
-
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
-
-// Middleware
-app.use(express.json());
-app.use(cookieParser());
-
-app.use(express.static('public'));
 
 // Default route
 // app.get('*', (_req, res) => {
@@ -77,27 +81,10 @@ app.use(express.static('public'));
 //     });
 // }
 
-const verifyAuth = async (req, res, next) => {
-    const token = req.cookies[authCookieName];
-    if (!token) {
-        return res.status(401).send({ msg: 'Unauthorized' });
-    }
-    const user = await findUser('token', token);
-    if (user) {
-        next();
-    } else {
-        return res.status(401).send({ msg: 'Unauthorized' });
-    }
-};
-
 async function findUser(field, value) {
     if (!value) return null;
     return users.find((u) => u[field] === value);
 }
-
-// Router setup
-var apiRouter = express.Router();
-app.use(`/api`, apiRouter);
 
 /* AUTH & COOKIES */
 // Helper functions
@@ -110,6 +97,15 @@ function setAuthCookie(res, user) {
         sameSite: 'strict',
     });
 }
+
+const verifyAuth = async (req, res, next) => {
+    const user = await findUser(req.cookies['token'], 'token');
+    if (user) {
+        next();
+    } else {
+        res.status(401).send({ msg: 'Unauthorized' });
+    }
+};
 
 function clearAuthCookie(res, user) {
     delete user.token;
@@ -155,7 +151,7 @@ async function setLastPlayed(user) {
 }
 
 // Endpoints
-app.post('/api/user', async (req, res) => {
+apiRouter.post('/user', async (req, res) => {
     if (await getUser(req.body.username)) {
         res.status(409).send({ msg: 'Username already taken.' });
     } else if (!await usernameMeetsRequirements(req.body.username)) {
@@ -169,7 +165,7 @@ app.post('/api/user', async (req, res) => {
     }
 });
 
-app.put('/api/user', async (req, res) => {
+apiRouter.put('/user', async (req, res) => {
     const user = await getUser(req.body.username);
     if (user && (await bcrypt.compare(req.body.password, user.password))) {
         setAuthCookie(res, user);
@@ -180,16 +176,16 @@ app.put('/api/user', async (req, res) => {
     }
 });
 
-app.delete('/api/user', async (req, res) => {
+apiRouter.delete('/user', async (req, res) => {
     const token = req.cookies['token'];
-    const user = await getUser('token', token);
+    const user = await getUser(token, 'token');
     if (user) {
         clearAuthCookie(res, user);
     }
-    res.send({ msg: 'Logged out' });
+    res.status(204).send({ msg: 'Logged out' });
 });
 
-app.get('/api/user/me', async (req, res) => {
+apiRouter.get('/user/me', async (req, res) => {
     const token = req.cookies['token'];
     const user = await getUser(token, 'token');
     if (user) {

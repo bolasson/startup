@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useGame } from "../customContext/gameContext.jsx";
 import { useNavigate } from "react-router-dom";
 import "../styles.css";
 
 export default function Login() {
     const navigate = useNavigate();
-    const { setUser } = useGame();
+    const { activeUser, setUser } = useGame();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showCreateAccount, setShowCreateAccount] = useState(false);
     const [error, setError] = useState(null);
+
+    useEffect(() => {
+        if (activeUser) {
+            navigate('home');
+        }
+    }, []);
 
     function handleLogin() {
         authenticateUser('PUT');
