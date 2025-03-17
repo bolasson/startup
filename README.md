@@ -150,4 +150,4 @@ For this deliverable I added backend endpoints that create games, join players t
 - [ ] **Calls to third party endpoints** - I didn't have time to implement this.
 - [x] **Backend service endpoints** - Placeholders for login that stores the current user in the app context. Endpoints for game creation and joining.
 - [x] **Frontend calls service endpoints** - I did this using the fetch function.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - Supports registration and login, but not logging out. Restriction is applied to the endpoints, but not the user's ability to see the pages.
+- [X] **Supports registration, login, logout, and restricted endpoint** - Supports registration, login, and logging out. Restriction is applied to the endpoints.
