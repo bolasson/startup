@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useGame } from '../customContext/gameContext.jsx';
 
-export default function Leaderboard() {
-    const { activeGame, getGameScores } = useGame();
+export default function Leaderboard({game}) {
     const [scores, setScores] = useState([]);
 
     useEffect(() => {
-        if (activeGame) {
-            const gameScores = getGameScores(activeGame.gameID);
+        if (game) {
+            const gameScores = game.players.map(player => ({
+                name: player.name,
+                score: player.score,
+                color: player.playerColor
+            }));
             const sortedScores = [...gameScores].sort((a, b) => b.score - a.score);
             setScores(sortedScores);
         }
-    }, [activeGame, getGameScores]);
+    }, [game]);
 
     return (
         <aside className="leaderboard">

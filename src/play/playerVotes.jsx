@@ -2,7 +2,6 @@ import React from 'react';
 import { useGame } from '../customContext/gameContext.jsx';
 
 export default function PlayerVotes({ players }) {
-    const { getUser } = useGame();
     const voteValues = Array.from({ length: 10 }, (_, i) => i + 1);
 
     const votesByValue = voteValues.map(value =>
@@ -24,8 +23,7 @@ export default function PlayerVotes({ players }) {
                                 let content = null;
                                 if (voteIndex >= 0 && voteIndex < count) {
                                     const player = columnVotes[voteIndex];
-                                    const playerName =
-                                        player?.name || (player && getUser(player.userID)?.name) || "?";
+                                    const playerName = player?.name || "?";
                                     content = (
                                         <div
                                             style={{

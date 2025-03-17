@@ -337,6 +337,43 @@ apiRouter.put('/game/vote', verifyAuth, async (req, res) => {
 });
 
 
+/* PLAY */
+// Helper functions
+function updateGameVote(game, user, vote) {
+    const player = game.players.find((player) => player.username === user.username);
+    player.activeVote = vote;
+}
+
+function updateGameClue(game, clue) {
+    game.clue = clue;
+}
+
+// Endpoints
+apiRouter.put('/play/vote', verifyAuth, async (req, res) => {
+    const gameID = parseInt(req.body.gameID);
+    const vote = parseInt(req.body.vote);
+    const user = await getUser(req.cookies[authCookieName], 'token');
+    const game = getGame(gameID);
+    if (!game) {
+        res.status(400).send({ msg: 'Game not found' });
+    } else {
+        updateGameVote(game, user, vote);
+        res.send(game);
+    }
+});
+
+apiRouter.put('/play/clue', verifyAuth, async (req, res) => {
+    const gameID = parseInt(req.body.gameID);
+    const clue = req.body.clue;
+    const game = getGame(gameID);
+    if (!game) {
+        res.status(400).send({ msg: 'Game not found' });
+    } else {
+        updateGameClue(game, clue);
+        res.send(game);
+    }
+});
+
 // Game endpoints
 apiRouter.post('/game/create', verifyAuth, async (req, res) => {
     const token = req.cookies[authCookieName];

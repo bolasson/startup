@@ -19,47 +19,83 @@ const presetScales = [
     { low: "Old", high: "New" }
 ];
 
-const presetClues = [
-    "a cat",
-    "a dog",
-    "a tree",
-    "a car",
-    "a house",
-    "a computer",
-    "a book",
-    "a phone",
-    "a person",
-    "a building"
-];
-
 export default function Play() {
     const { value: sliderValue, handleChange } = useSlider(5);
-    const { activeGame, activeUser, getUser, submitVote, scoreVotes, submitScore, submitClue } = useGame();
-    const { time, startTimer, pauseTimer, resetTimer } = useTimer(2);
+    const { activeGame, activeUser, setGame } = useGame();
+    const { time, startTimer, pauseTimer, resetTimer } = useTimer(15);
     const [clueInput, setClueInput] = useState("");
     const [scaleLabels, setScaleLabels] = useState(presetScales[0]);
 
-    const isIt = activeGame && activeUser && activeGame.players[activeGame.currentItIndex].userID === activeUser.userID;
+    const isIt = activeGame && activeUser && activeGame.players[activeGame.currentItIndex].username === activeUser.username;
 
     const itPlayer = activeGame && activeGame.players[activeGame.currentItIndex] ?
-        getUser(activeGame.players[activeGame.currentItIndex].userID) :
+        activeGame.players[activeGame.currentItIndex] :
         null;
+    
+    const itPlayerName = itPlayer?.name || "Loading...";
 
-    const itPlayerName = itPlayer?.name || "(Loading...)";
-
-    // Automatically submit a clue for websocket placeholder players
-    useEffect(() => {
-        if (activeGame && !activeGame.clue && !isIt) {
-            const timerId = setTimeout(() => {
-                const presetClue = presetClues[Math.floor(Math.random() * presetClues.length)];
-                const presetScale = presetScales[Math.floor(Math.random() * presetScales.length)];
-                submitClue(activeGame.gameID, presetClue);
-                setScaleLabels(presetScale);
-            }, 3000);
-            return () => clearTimeout(timerId);
+    // Replace me when you implement websocket!! :) - Bryce
+    async function updateGame() {
+        const res = await fetch(`/api/game?gameID=${activeGame.gameID}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const updatedGame = await res.json();
+        if (res.ok) {
+            setGame(updatedGame);
+        } else {
+            console.log(updatedGame.msg);
         }
-    }, [activeGame, isIt, submitClue]);
+    }
 
+    async function submitVote() {
+        const voteValue = parseInt(sliderValue, 10);
+        const game = await fetch('/api/play/vote', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gameID: activeGame.gameID, vote: voteValue }),
+        });
+        const gameData = await game.json();
+        if (!game.ok) {
+            console.log(gameData.msg);
+        }
+    }
+
+    async function submitClue() {
+        const game = await fetch('/api/play/clue', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gameID: activeGame.gameID, clue: clueInput.trim() }),
+        });
+        const gameData = await game.json();
+        if (!game.ok) {
+            console.log(gameData.msg);
+        }
+    }
+
+    async function endRound() {
+        const game = await fetch('/api/game/end-round', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gameID: activeGame.gameID }),
+        });
+        const gameData = await game.json();
+        if (!game.ok) {
+            console.log(gameData.msg);
+        } else {
+            resetTimer();
+            startTimer();
+        }
+    }
+
+    useEffect(() => {
+        if (activeGame) {
+            const interval = setInterval(() => {
+                updateGame();
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [activeGame]);
 
     useEffect(() => {
         if (activeGame && activeGame.clue) {
@@ -70,34 +106,27 @@ export default function Play() {
     }, [activeGame, startTimer, pauseTimer]);
 
     useEffect(() => {
-        if (time === 0 && activeGame) {
-            let scores = scoreVotes(activeGame.gameID);
-            submitScore(scores[activeUser.userID])
-                .catch(error => {
-                    console.error('Error submitting score:', error);
-                });
-            resetTimer();
-            startTimer();
+        if (time === 0 && activeGame && activeUser?.username === activeGame.players.find(player => player.isHost)?.username) {
+            endRound();
         }
-    }, [time, activeGame, scoreVotes, resetTimer, startTimer]);
+    }, [time, activeGame, resetTimer, startTimer]);
 
     const handleVoteSubmit = (e) => {
         e.preventDefault();
         if (!activeGame || !activeUser) return;
-        const voteValue = parseInt(sliderValue, 10);
-        submitVote(activeGame.gameID, activeUser.userID, voteValue);
+        submitVote();
     };
 
     const handleClueSubmit = (e) => {
         e.preventDefault();
         if (!activeGame || !activeUser || !clueInput.trim()) return;
-        submitClue(activeGame.gameID, clueInput.trim());
+        submitClue();
         setClueInput("");
     };
 
     return (
         <main className="play">
-            <Leaderboard />
+            <Leaderboard game={activeGame}/>
             <div className="play-area">
                 <section className="play-section">
                     {activeGame && activeGame.clue && (
@@ -123,7 +152,7 @@ export default function Play() {
                                 </form>
                             ) : (
                                 <p style={{ textAlign: 'center' }}>
-                                    Waiting for clue from {getUser(activeGame.players[activeGame.currentItIndex].userID).name}
+                                    Waiting for clue from {activeGame.players[activeGame.currentItIndex].name}
                                 </p>
                             )}
                         </>
@@ -131,24 +160,24 @@ export default function Play() {
                     {activeGame && activeGame.clue && (
                         <>
                             <h4 className="countdown" style={{ marginBottom: '2rem' }}>Time Remaining: {time}s</h4>
-                            <PlayerVotes players={activeGame?.players.filter(player => player.userID !== activeGame.players[activeGame.currentItIndex].userID) || []} />
+                            <PlayerVotes players={activeGame?.players.filter(player => player.username !== activeGame.players[activeGame.currentItIndex].username) || []} />
                             {!isIt && <><h2>Slider Value: {sliderValue}</h2>
-                            <div style={{ display: 'flex', width: '100%', alignItems: 'center', marginBottom: '2rem' }}>
-                                <span style={{ marginRight: '10px' }}><strong>{scaleLabels.low}</strong></span>
-                                <input
-                                    type="range"
-                                    min="1"
-                                    max="10"
-                                    value={sliderValue}
-                                    onChange={handleChange}
-                                    style={{ flex: 1 }}
-                                />
-                                <span style={{ marginLeft: '10px' }}><strong>{scaleLabels.high}</strong></span>
-                            </div>
-                            <form id="voteForm" onSubmit={handleVoteSubmit}>
-                                <input type="hidden" id="sliderValue" name="voteValue" value={sliderValue} />
-                                <button className="submit-vote" type="submit">Submit Vote</button>
-                            </form></>}
+                                <div style={{ display: 'flex', width: '100%', alignItems: 'center', marginBottom: '2rem' }}>
+                                    <span style={{ marginRight: '10px' }}><strong>{scaleLabels.low}</strong></span>
+                                    <input
+                                        type="range"
+                                        min="1"
+                                        max="10"
+                                        value={sliderValue}
+                                        onChange={handleChange}
+                                        style={{ flex: 1 }}
+                                    />
+                                    <span style={{ marginLeft: '10px' }}><strong>{scaleLabels.high}</strong></span>
+                                </div>
+                                <form id="voteForm" onSubmit={handleVoteSubmit}>
+                                    <input type="hidden" id="sliderValue" name="voteValue" value={sliderValue} />
+                                    <button className="submit-vote" type="submit">Submit Vote</button>
+                                </form></>}
                         </>)}
                 </section>
             </div>
