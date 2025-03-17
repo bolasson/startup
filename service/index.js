@@ -114,6 +114,11 @@ function setAuthCookie(res, user) {
     });
 }
 
+function clearAuthCookie(res, user) {
+    delete user.token;
+    res.clearCookie('token');
+}
+
 /* USER */
 // Helper functions
 function getUser(value, field = "username") {
@@ -157,6 +162,24 @@ app.post('/api/user/create', async (req, res) => {
     }
 });
 
+app.put('/api/user/login', async (req, res) => {
+    const user = await getUser(req.body.username);
+    if (user && (await bcrypt.compare(req.body.password, user.password))) {
+        setAuthCookie(res, user);
+        res.send({ username: user.username, name: user.name });
+    } else {
+        res.status(401).send({ msg: 'Unauthorized' });
+    }
+});
+
+app.delete('/api/auth', async (req, res) => {
+    const token = req.cookies['token'];
+    const user = await getUser('token', token);
+    if (user) {
+        clearAuthCookie(res, user);
+    }
+    res.send({ msg: 'Logged out' });
+});
 
 // Login endpoints
 apiRouter.post('/auth/create', async (req, res) => {
