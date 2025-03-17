@@ -32,8 +32,37 @@ export default function CreateGame() {
         setGameID(joinedGameData.gameID);
     }
 
+    // Replace me when you implement websocket!! :) - Bryce
+    async function updateGame() {
+        const res = await fetch(`/api/game?gameID=${activeGame.gameID}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const updatedGame = await res.json();
+        if (res.ok) {
+            setGame(updatedGame);
+        } else {
+            setError(updatedGame.msg);
+        }
+        console.log(updatedGame);
+    }
+
+    useEffect(() => {
+        if (!activeGame) {
+          createGame();
+        }
+    }, [activeGame]);      
+
+    useEffect(() => {
+        if (activeGame) {
+            const interval = setInterval(() => {
+                updateGame();
+            }, 1500);
+            return () => clearInterval(interval);
+        }
+    }, [activeGame]);
+
     if (!activeGame) {
-        createGame();
         return (
             <main>
                 <section className="intro">
@@ -41,22 +70,6 @@ export default function CreateGame() {
                 </section>
             </main>
         );
-    } else {
-            // const interval = setInterval(async () => {
-            //     const res = await fetch('api/game', {
-            //         method: 'GET',
-            //         headers: { 'Content-Type': 'application/json' },
-            //         body: JSON.stringify({ gameID: activeGame.gameID }),
-            //     });
-            //     const updatedGame = await res.json();
-            //     if (res.ok) {
-            //         setGame(updatedGame);
-            //     } else {
-            //         setError(updatedGame.msg);
-            //     }
-            // }, 1500);
-            // return () => clearInterval(interval);
-        console.log(activeGame ? activeGame : 'no active game');
     }
 
     const startGame = (e) => {
@@ -74,7 +87,7 @@ export default function CreateGame() {
                 <p>Head to <a href="https://startup.brycelasson.click" target="_blank">startup.brycelasson.click</a> and use the code below to join my game!</p>
                 <input className="user-input" type="number" id="generatedCodeField" name="generatedCodeValue" value={gameID} readOnly />
                 {error && <p className="error">{error}</p>}
-                {/* <PlayerList players={activeGame?.players || []} /> */}
+                <PlayerList players={activeGame?.players || []} />
                 <button onClick={startGame} style={{ width: 'auto' }} >Start Game</button>
             </form>
         </main>

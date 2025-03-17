@@ -2,7 +2,6 @@ import React from 'react';
 import { useGame } from '../customContext/gameContext.jsx';
 
 export default function PlayerList({ players }) {
-    const { getUser } = useGame();
     return (
         <ul style={{ width: '75%', padding: 0, marginBlock: '1rem' }}>
             {players.map((player, index) => (
@@ -15,7 +14,7 @@ export default function PlayerList({ players }) {
                         listStyle: 'none',
                     }}
                 >
-                    {getUser(player.userID).name + (player.playerID === 1 ? " (Host)" : "")}
+                    {player.name + (player.isHost ? " (Host)" : "")}
                 </li>
             ))}
         </ul>

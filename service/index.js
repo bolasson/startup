@@ -191,6 +191,7 @@ async function createGame() {
         currentItIndex: 0,
         clueTarget: Math.floor(Math.random() * 10) + 1,
         clue: '',
+        createdAt: new Date().toLocaleDateString(),
     };
     games.push(game);
     return game;
@@ -202,6 +203,7 @@ async function joinGame(gameID, user) {
         if (game.players.length < 8) {
             game.players.push({
                 username: user.username,
+                name: user.name,
                 playerID: game.players.length + 1,
                 playerColor: playerColors[game.players.length % playerColors.length],
                 score: 0,
