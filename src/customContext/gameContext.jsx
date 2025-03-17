@@ -11,6 +11,10 @@ export function GameProvider({ children }) {
         setActiveUser(user);
     }
 
+    function setGame(game) {
+        setActiveGame(game);
+    }
+
     function getNextUserID() {
         const highestUserID = users.reduce((maxID, user) => Math.max(maxID, user.userID), 0);
         return highestUserID + 1;
@@ -230,6 +234,7 @@ export function GameProvider({ children }) {
         loginUser,
         deleteUser,
         activeGame,
+        setGame,
         createGame,
         joinGame,
         joinDummyGame,

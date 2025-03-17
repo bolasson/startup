@@ -7,34 +7,64 @@ export default function CreateGame() {
     const navigate = useNavigate();
     const [gameID, setGameID] = useState('');
     const [error, setError] = useState(null);
-    const { activeUser, users, activeGame, createGame, joinGame, joinDummyGame, getGameUsers } = useGame();
+    const { activeUser, activeGame, setGame } = useGame();
 
-    useEffect(() => {
-        if (!activeUser) return;
-        if (activeGame != null) return;
-        createGame().then((response) => {
-            if (response?.success) {
-                setGameID(response.game.gameID);
-            } else if (response?.error) {
-                setError(response.error);
-            }
+    async function createGame() {
+        const game = await fetch('/api/game', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
         });
-    }, [activeUser, activeGame]);
+        const gameData = await game.json();
+        if (!game.ok) {
+            setError(gameData.msg);
+            return;
+        }
+        const res = await fetch('/api/game/join', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gameID: gameData.gameID }),
+        });
+        const joinedGameData = await res.json();
+        if (!res.ok) {
+            setError(joinedGameData.msg);
+        }
+        setGame(joinedGameData);
+        setGameID(joinedGameData.gameID);
+    }
 
-    useEffect(() => {
-        if (!activeGame) return;
-        const interval = setInterval(() => {
-            joinDummyGame(activeGame.gameID).then((response) => {
-                if (response?.error) {
-                    console.error("Error adding dummy user:", response.error);
-                }
-            });
-        }, 2000);
-        return () => clearInterval(interval);
-    }, [activeGame, joinDummyGame]);
+    if (!activeGame) {
+        createGame();
+        return (
+            <main>
+                <section className="intro">
+                    <h2>Loading...</h2>
+                </section>
+            </main>
+        );
+    } else {
+            // const interval = setInterval(async () => {
+            //     const res = await fetch('api/game', {
+            //         method: 'GET',
+            //         headers: { 'Content-Type': 'application/json' },
+            //         body: JSON.stringify({ gameID: activeGame.gameID }),
+            //     });
+            //     const updatedGame = await res.json();
+            //     if (res.ok) {
+            //         setGame(updatedGame);
+            //     } else {
+            //         setError(updatedGame.msg);
+            //     }
+            // }, 1500);
+            // return () => clearInterval(interval);
+        console.log(activeGame ? activeGame : 'no active game');
+    }
 
     const startGame = (e) => {
         e.preventDefault();
+        if (activeGame?.players.length < 2) {
+            setError('You need at least 2 players to start a game.');
+            return;
+        }
         navigate('/play');
     }
 
@@ -44,8 +74,8 @@ export default function CreateGame() {
                 <p>Head to <a href="https://startup.brycelasson.click" target="_blank">startup.brycelasson.click</a> and use the code below to join my game!</p>
                 <input className="user-input" type="number" id="generatedCodeField" name="generatedCodeValue" value={gameID} readOnly />
                 {error && <p className="error">{error}</p>}
-                <PlayerList players={activeGame?.players || []} />
-                <button onClick={startGame} style={{ width: 'auto' }} disabled={activeGame?.players.length < 2}>Start Game</button>
+                {/* <PlayerList players={activeGame?.players || []} /> */}
+                <button onClick={startGame} style={{ width: 'auto' }} >Start Game</button>
             </form>
         </main>
     )

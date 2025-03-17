@@ -264,9 +264,22 @@ apiRouter.post('/game', verifyAuth, async (req, res) => {
     res.send(game);
 });
 
+apiRouter.get('/game', verifyAuth, async (req, res) => {
+    const gameID = parseInt(req.query.gameID);
+    const game = getGame(gameID);
+    if (game) {
+        res.send(game);
+    } else {
+        res.status(404).send({ msg: 'Game not found' });
+    }
+});
+
 apiRouter.put('/game/join', verifyAuth, async (req, res) => {
     const gameID = parseInt(req.body.gameID);
     const user = await getUser(req.cookies[authCookieName], 'token');
+    if (!user) {
+        res.status(401).send({ msg: 'Unauthorized' });
+    }
     try {
         const game = await joinGame(gameID, user);
         res.send(game);
@@ -303,103 +316,6 @@ apiRouter.put('/game/vote', verifyAuth, async (req, res) => {
     }
 });
 
-// Login endpoints
-apiRouter.post('/auth/create', async (req, res) => {
-    const { username, password, name } = req.body;
-
-    if (!username || !password || !name) {
-        return res.status(400).send({ msg: 'Missing required fields.' });
-    }
-
-    const lowercaseUsername = username.toLowerCase();
-
-    const existingUser = await findUser('username', lowercaseUsername);
-    if (existingUser) {
-        return res.status(409).send({ msg: 'Username is already taken' });
-    }
-
-    if (password.length < 12) {
-        return res.status(400).send({ msg: 'Password must be at least 12 characters long.' });
-    }
-
-    const passwordHash = await bcrypt.hash(password, 10);
-    const newUser = {
-        userID: users.length > 0 ? users[users.length - 1].userID + 1 : 1,
-        username: lowercaseUsername,
-        password: passwordHash,
-        name,
-        token: uuid.v4(),
-        stats: {
-            "Rounds Played": 0,
-            "Total Points Scored": 0,
-            "Date Joined": new Date().toLocaleDateString(),
-            "Last Played": new Date().toLocaleDateString(),
-        },
-    };
-
-    users.push(newUser);
-    setAuthCookie(res, newUser.token);
-    res.send({ userID: newUser.userID, username: newUser.username, name: newUser.name });
-});
-
-apiRouter.post('/auth/login', async (req, res) => {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-        return res.status(400).send({ msg: 'Missing required fields: username and password.' });
-    }
-
-    const lowercaseUsername = username.toLowerCase();
-    const user = await findUser('username', lowercaseUsername);
-
-    if (user && await bcrypt.compare(password, user.password)) {
-        user.token = uuid.v4();
-        if (user.stats) {
-            user.stats["Last Played"] = new Date().toLocaleDateString();
-        }
-        setAuthCookie(res, user.token);
-        return res.send({
-            userID: user.userID,
-            username: user.username,
-            name: user.name,
-        });
-    }
-    return res.status(401).send({ msg: 'Invalid Credentials' });
-});
-
-// Stats endpoints
-apiRouter.get('/stats', verifyAuth, async (req, res) => {
-    const token = req.cookies[authCookieName];
-    const user = await findUser(authCookieName, token);
-    if (!user) {
-        return res.status(401).send({ msg: 'Unauthorized' });
-    }
-    res.send(user.stats);
-});
-
-apiRouter.post('/score', verifyAuth, async (req, res) => {
-    const token = req.cookies[authCookieName];
-    const user = await findUser(authCookieName, token);
-    if (!user) {
-        return res.status(401).send({ msg: 'Unauthorized' });
-    }
-
-    const { score } = req.body;
-    if (typeof score !== 'number') {
-        return res.status(400).send({ msg: 'Score must be a number' });
-    }
-    if (!user.stats) {
-        user.stats = {
-            "Rounds Played": 0,
-            "Total Points Scored": 0,
-            "Date Joined": new Date().toLocaleDateString(),
-            "Last Played": new Date().toLocaleDateString(),
-        };
-    }
-    user.stats["Rounds Played"] += 1;
-    user.stats["Total Points Scored"] += score;
-    res.send(user.stats);
-});
 
 // Game endpoints
 apiRouter.post('/game/create', verifyAuth, async (req, res) => {
