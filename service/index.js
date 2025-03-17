@@ -172,13 +172,23 @@ app.put('/api/user/login', async (req, res) => {
     }
 });
 
-app.delete('/api/auth', async (req, res) => {
+app.delete('/api/user/logout', async (req, res) => {
     const token = req.cookies['token'];
     const user = await getUser('token', token);
     if (user) {
         clearAuthCookie(res, user);
     }
     res.send({ msg: 'Logged out' });
+});
+
+app.get('/api/user/me', async (req, res) => {
+    const token = req.cookies['token'];
+    const user = await getUser('token', token);
+    if (user) {
+        res.send({ username: user.username, name: user.name });
+    } else {
+        res.status(401).send({ msg: 'Unauthorized' });
+    }
 });
 
 // Login endpoints
