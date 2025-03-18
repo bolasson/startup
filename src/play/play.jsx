@@ -6,25 +6,11 @@ import PlayerVotes from "./playerVotes.jsx";
 import useTimer from "../customHooks/useTimer.jsx";
 import "../styles.css";
 
-const presetScales = [
-    { low: "Ancient", high: "Modern" },
-    { low: "Slow", high: "Fast" },
-    { low: "Soft", high: "Loud" },
-    { low: "Small", high: "Big" },
-    { low: "Cold", high: "Hot" },
-    { low: "Simple", high: "Complex" },
-    { low: "Cheap", high: "Expensive" },
-    { low: "Weak", high: "Strong" },
-    { low: "Dull", high: "Bright" },
-    { low: "Old", high: "New" }
-];
-
 export default function Play() {
     const { value: sliderValue, handleChange } = useSlider(5);
     const { activeGame, activeUser, setGame } = useGame();
     const { time, startTimer, pauseTimer, resetTimer } = useTimer(15);
     const [clueInput, setClueInput] = useState("");
-    const [scaleLabels, setScaleLabels] = useState(presetScales[0]);
 
     const isIt = activeGame && activeUser && activeGame.players[activeGame.currentItIndex].username === activeUser.username;
 
@@ -45,6 +31,11 @@ export default function Play() {
             setGame(updatedGame);
         } else {
             console.log(updatedGame.msg);
+        }
+        if (updatedGame.state === 'waiting') {
+            resetTimer();
+        } else if (updatedGame.state === 'voting') {
+            startTimer();
         }
     }
 
@@ -82,9 +73,6 @@ export default function Play() {
         const gameData = await game.json();
         if (!game.ok) {
             console.log(gameData.msg);
-        } else {
-            resetTimer();
-            startTimer();
         }
     }
 
@@ -131,14 +119,14 @@ export default function Play() {
                 <section className="play-section">
                     {activeGame && activeGame.clue && (
                         <h2 style={{ textAlign: 'center', lineHeight: '2rem' }}>
-                            On a scale of <strong>{scaleLabels.low}</strong> to <strong>{scaleLabels.high}</strong>, where does <i>{itPlayerName}</i> place <strong>{activeGame.clue}</strong>?
+                            On a scale of <strong>{activeGame.lowerScale}</strong> to <strong>{activeGame.upperScale}</strong>, where does <i>{itPlayerName}</i> place <strong>{activeGame.clue}</strong>?
                         </h2>)}
                     {activeGame && !activeGame.clue && (
                         <>
                             {isIt ? (
                                 <form className="transparent-form" onSubmit={handleClueSubmit} style={{ textAlign: 'center' }}>
                                     <h2 style={{ textAlign: 'center', lineHeight: '2rem' }}>
-                                        For a scale of <strong>{scaleLabels.low}</strong> to <strong>{scaleLabels.high}</strong>, submit a clue to help players guess the number <strong>{activeGame.clueTarget}</strong>.
+                                        For a scale of <strong>{activeGame.lowerScale}</strong> to <strong>{activeGame.upperScale}</strong>, submit a clue to help players guess the number <strong>{activeGame.clueTarget}</strong>.
                                     </h2>
                                     <br />
                                     <input
@@ -163,7 +151,7 @@ export default function Play() {
                             <PlayerVotes players={activeGame?.players.filter(player => player.username !== activeGame.players[activeGame.currentItIndex].username) || []} />
                             {!isIt && <><h2>Slider Value: {sliderValue}</h2>
                                 <div style={{ display: 'flex', width: '100%', alignItems: 'center', marginBottom: '2rem' }}>
-                                    <span style={{ marginRight: '10px' }}><strong>{scaleLabels.low}</strong></span>
+                                    <span style={{ marginRight: '10px' }}><strong>{activeGame.lowerScale}</strong></span>
                                     <input
                                         type="range"
                                         min="1"
@@ -172,7 +160,7 @@ export default function Play() {
                                         onChange={handleChange}
                                         style={{ flex: 1 }}
                                     />
-                                    <span style={{ marginLeft: '10px' }}><strong>{scaleLabels.high}</strong></span>
+                                    <span style={{ marginLeft: '10px' }}><strong>{activeGame.upperScale}</strong></span>
                                 </div>
                                 <form id="voteForm" onSubmit={handleVoteSubmit}>
                                     <input type="hidden" id="sliderValue" name="voteValue" value={sliderValue} />

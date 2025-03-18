@@ -9,6 +9,16 @@ export default function CreateGame() {
     const [error, setError] = useState(null);
     const { activeUser, activeGame, setGame } = useGame();
 
+    if (!activeUser) {
+        return (
+            <main>
+                <section className="intro">
+                    <h2>You must be logged in to access this page</h2>
+                </section>
+            </main>
+        );
+    }
+
     async function createGame() {
         const game = await fetch('/api/game', {
             method: 'POST',
@@ -44,7 +54,6 @@ export default function CreateGame() {
         } else {
             setError(updatedGame.msg);
         }
-        console.log(updatedGame);
     }
 
     async function startGame() {

@@ -28,40 +28,18 @@ let games = [];
 */
 const authCookieName = 'authToken';
 const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
-
-// Dummy data until websocket is implemented
-const dummyUserData = [
-    { username: 'lindsey', password: 'Linds3y!', name: 'Lindsey' },
-    { username: 'kyle', password: 'Kyl3!!!!', name: 'Kyle' },
-    { username: 'jessica', password: 'J3ssica!', name: 'Jessica' },
-    { username: 'nathan', password: 'N4than!!', name: 'Nathan' },
-    { username: 'katelyn', password: 'K4telyn!', name: 'Katelyn' },
-    { username: 'heidi', password: 'H3idi!!!', name: 'Heidi' },
-    { username: 'travis', password: 'Tr4vis!!', name: 'Travis' },
+const presetScales = [
+    { low: "Ancient", high: "Modern" },
+    { low: "Slow", high: "Fast" },
+    { low: "Soft", high: "Loud" },
+    { low: "Small", high: "Big" },
+    { low: "Cold", high: "Hot" },
+    { low: "Simple", high: "Complex" },
+    { low: "Cheap", high: "Expensive" },
+    { low: "Weak", high: "Strong" },
+    { low: "Dull", high: "Bright" },
+    { low: "Old", high: "New" }
 ];
-
-dummyUserData.forEach(user => {
-    user.password = bcrypt.hashSync(user.password, 10);
-    users.push(user);
-});
-
-const dummyGamesData = [
-    { gameID: 1234, players: [
-        { username: "lindsey", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true },
-        { username: "kyle", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 3, isHost: false },
-        { username: "jessica", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 6, isHost: false },
-        { username: "nathan", playerID: 4, playerColor: "#ffff00", score: 0, activeVote: 3, isHost: false },
-    ], currentRound: 0, currentItIndex: 0, clueTarget: 4, clue: '' },
-    { gameID: 5678, players: [
-        { username: "katelyn", playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 4, isHost: true },
-        { username: "heidi", playerID: 2, playerColor: "#0FFF00", score: 0, activeVote: 8, isHost: false },
-        { username: "travis", playerID: 3, playerColor: "#a545ff", score: 0, activeVote: 5, isHost: false },
-    ], currentRound: 0, currentItIndex: 0, clueTarget: 7, clue: '' },
-];
-
-dummyGamesData.forEach(game => {
-    games.push(game);
-});
 
 /* AUTH & COOKIES */
 // Helper functions
@@ -184,6 +162,7 @@ async function createGame() {
     do {
         newGameID = Math.floor(1000 + Math.random() * 9000);
     } while (getGame(newGameID));
+    const randomScale = presetScales[Math.floor(Math.random() * presetScales.length)];
     const game = {
         gameID: newGameID,
         players: [],
@@ -193,6 +172,9 @@ async function createGame() {
         clue: '',
         createdAt: new Date().toLocaleDateString(),
         isStarted: false,
+        lowerScale: randomScale.low,
+        upperScale: randomScale.high,
+        state: 'waiting'
     };
     games.push(game);
     return game;
@@ -264,6 +246,10 @@ async function startNextRound(gameID) {
     game.players.forEach((player) => {
         player.activeVote = 0;
     });
+    const randomScale = presetScales[Math.floor(Math.random() * presetScales.length)];
+    game.lowerScale = randomScale.low;
+    game.upperScale = randomScale.high
+    game.state = 'waiting';
     return game;
 }
 
@@ -346,6 +332,7 @@ function updateGameVote(game, user, vote) {
 
 function updateGameClue(game, clue) {
     game.clue = clue;
+    game.state = 'voting';
 }
 
 // Endpoints
