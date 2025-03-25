@@ -22,7 +22,7 @@ let users = [];
 */
 let games = [];
 /* Game Structure
-    { gameID: int, players: player[], currentRound: int, currentItIndex: int, clueTarget: int, clue: string }
+    { gameID: int, players: player[], currentRound: int, currentItIndex: int, clueTarget: int, clue: string, upperScale: string, lowerScale: string, state: string }
     // Player structure:
     { username: string, playerID: int, playerColor: string, score: int, activeVote: int, isHost: bool }
 */
@@ -304,25 +304,6 @@ apiRouter.put('/game/end-round', verifyAuth, async (req, res) => {
     }
 });
 
-apiRouter.put('/game/vote', verifyAuth, async (req, res) => {
-    const gameID = parseInt(req.body.gameID);
-    const vote = parseInt(req.body.vote);
-    const user = await getUser(req.cookies[authCookieName], 'token');
-    const game = getGame(gameID);
-    if (!game) {
-        res.status(400).send({ msg: 'Game not found' });
-    } else {
-        const player = game.players.find((player) => player.username === user.username);
-        if (!player) {
-            res.status(400).send({ msg: 'User not in game' });
-        } else {
-            player.activeVote = vote;
-            res.send(game);
-        }
-    }
-});
-
-
 /* PLAY */
 // Helper functions
 function updateGameVote(game, user, vote) {
@@ -361,99 +342,15 @@ apiRouter.put('/play/clue', verifyAuth, async (req, res) => {
     }
 });
 
-// Game endpoints
-apiRouter.post('/game/create', verifyAuth, async (req, res) => {
-    const token = req.cookies[authCookieName];
-    const user = await findUser(authCookieName, token);
-    if (!user) {
-        return res.status(401).send({ msg: 'Unauthorized' });
-    }
-
-    let newGameID;
-    do {
-        newGameID = Math.floor(1000 + Math.random() * 9000);
-    } while (games.some(game => game.gameID === newGameID));
-
-    const newGame = {
-        gameID: newGameID,
-        host: user.userID,
-        players: [
-            { userID: user.userID, playerID: 1, playerColor: "#00D2FF", score: 0, activeVote: 1, isHost: true }
-        ],
-        currentRound: 0,
-        currentItIndex: 0,
-        clueTarget: Math.floor(Math.random() * 10) + 1,
-        clue: ''
-    };
-
-    games.push(newGame);
-    res.send(newGame);
-});
-
-apiRouter.post('/game/join', verifyAuth, async (req, res) => {
-    const { gameID } = req.body;
-    const token = req.cookies[authCookieName];
-    const user = await findUser(authCookieName, token);
-    if (!user) {
-        return res.status(401).send({ msg: 'Unauthorized' });
-    }
-
-    const game = games.find(g => g.gameID === gameID);
+apiRouter.put('/play/update-state', verifyAuth, async (req, res) => {
+    const gameID = parseInt(req.body.gameID);
+    const game = getGame(gameID);
     if (!game) {
-        return res.status(404).send({ msg: 'Game not found' });
+        res.status(400).send({ msg: 'Game not found' });
+    } else {
+        game.state = req.body.state;
+        res.send(game);
     }
-
-    if (game.players.some(p => p.userID === user.userID)) {
-        return res.status(400).send({ error: "User is already in the game", game });
-    }
-
-    if (game.players.length >= 8) {
-        return res.status(400).send({ error: "Game is full" });
-    }
-
-    const newPlayer = {
-        userID: user.userID,
-        playerID: game.players.length + 1,
-        playerColor: playerColors[game.players.length % playerColors.length],
-        score: 0,
-        activeVote: 0,
-        isHost: false
-    };
-
-    game.players.push(newPlayer);
-    res.send(game);
-});
-
-apiRouter.post('/game/join/dummy', verifyAuth, async (req, res) => {
-    const { gameID } = req.body;
-    const game = games.find(g => g.gameID === gameID);
-    if (!game) {
-        return res.status(404).send({ msg: 'Game not found' });
-    }
-
-    const availableDummy = dummyUserData.find(
-        (dummy) => !game.players.some(p => p.userID === dummy.userID)
-    );
-
-    if (game.players.length >= 8) {
-        return res.status(400).send({ msg: 'Game is full' });
-    }
-
-    if (!availableDummy) {
-        return res.status(400).send({ msg: 'No available dummy users to add.' });
-    }
-
-    const newPlayer = {
-        userID: availableDummy.userID,
-        playerID: game.players.length + 1,
-        playerColor: playerColors[game.players.length % playerColors.length],
-        score: 0,
-        activeVote: 0,
-        isHost: false,
-    };
-
-    game.players.push(newPlayer);
-    res.send(game);
 });
 
 app.use((_req, res) => {

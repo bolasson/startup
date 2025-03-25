@@ -114,7 +114,7 @@ export default function Play() {
 
     return (
         <main className="play">
-            <Leaderboard game={activeGame}/>
+            {activeGame.state === 'waiting' && <Leaderboard game={activeGame}/>}
             <div className="play-area">
                 <section className="play-section">
                     {activeGame && activeGame.clue && (

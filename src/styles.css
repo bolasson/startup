@@ -660,10 +660,6 @@ table.slider td.partial {
         padding: 0.25rem;
     }
 
-    .leaderboard {
-        display: none;
-    }
-
     .transparent-form input,
     .transparent-form select,
     .transparent-form textarea,

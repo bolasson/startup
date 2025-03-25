@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const GameContext = createContext();
 
 export function GameProvider({ children }) {
-
+    const navigate = useNavigate();
     const [activeUser, setActiveUser] = useState(null);
     const [activeGame, setActiveGame] = useState();
 
@@ -11,6 +12,8 @@ export function GameProvider({ children }) {
         const user = localStorage.getItem('user');
         if (user) {
             setActiveUser(JSON.parse(user));
+        } else if (!activeUser) {
+            navigate('/');
         }
         const game = localStorage.getItem('game');
         if (game) {
