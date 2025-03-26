@@ -27,7 +27,7 @@ let games = [];
 */
 const authCookieName = 'authToken';
 const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
-const presetScales = [
+const scales = [
     { low: "Ancient", high: "Modern" },
     { low: "Slow", high: "Fast" },
     { low: "Soft", high: "Loud" },
@@ -168,7 +168,7 @@ async function createGame() {
     do {
         newGameID = Math.floor(1000 + Math.random() * 9000);
     } while (getGame(newGameID));
-    const randomScale = presetScales[Math.floor(Math.random() * presetScales.length)];
+    const randomScale = scales[Math.floor(Math.random() * scales.length)];
     const game = {
         gameID: newGameID,
         players: [],
@@ -253,7 +253,7 @@ async function startNextRound(gameID) {
     game.players.forEach((player) => {
         player.activeVote = 0;
     });
-    const randomScale = presetScales[Math.floor(Math.random() * presetScales.length)];
+    const randomScale = scales[Math.floor(Math.random() * scales.length)];
     game.lowerScale = randomScale.low;
     game.upperScale = randomScale.high
     game.state = 'waiting';
