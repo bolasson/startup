@@ -39,7 +39,7 @@ function getHighScores() {
         sort: { "stats.Total Points Scored": -1 },
         limit: 5,
         projection: {
-            username: 1,
+            name: 1,
             "stats.Total Points Scored": 1,
         },
     };

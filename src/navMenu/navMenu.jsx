@@ -20,7 +20,7 @@ export default function NavMenu() {
         <nav>
             <menu>
                 <li><NavLink className='nav-link' to='home'>Home</NavLink></li>
-                <li><NavLink className='nav-link' to='stats'>My Stats</NavLink></li>
+                <li><NavLink className='nav-link' to='stats'>Stats</NavLink></li>
                 <li><NavLink className='nav-link' to='logout'>Logout</NavLink></li>
             </menu>
         </nav>

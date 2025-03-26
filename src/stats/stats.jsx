@@ -6,6 +6,7 @@ import "../styles.css";
 export default function Stats() {
     const navigate = useNavigate();
     const { activeUser, setUser } = useGame();
+    const [highscores, setHighscores] = useState(null);
 
     useEffect(() => {
         (async () => {
@@ -16,6 +17,15 @@ export default function Stats() {
                 navigate('/');
             } else {
                 setUser(data);
+            }
+        })();
+        (async () => {
+            const res = await fetch('api/scores');
+            const data = await res.json();
+            if (!res.ok) {
+                console.log(data.msg);
+            } else {
+                setHighscores(data);
             }
         })();
     }, []);
@@ -40,6 +50,23 @@ export default function Stats() {
                             <tr key={index}>
                                 <td>{stat}</td>
                                 <td>{value}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <h2>Global Highscores</h2>
+                <table className="rounded-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {highscores && Object.entries(highscores).map((user, index) => (
+                            <tr key={index}>
+                                <td>{user[1].name}</td>
+                                <td>{user[1].stats["Total Points Scored"]}</td>
                             </tr>
                         ))}
                     </tbody>
