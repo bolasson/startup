@@ -6,7 +6,6 @@ const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostna
 const client = new MongoClient(url);
 const db = client.db('RankIt');
 const userCollection = db.collection('users');
-const gameCollection = db.collection('games');
 
 (async function connectionTest() {
     try {
@@ -23,51 +22,15 @@ async function createUser(user) {
 }
 
 function getUser(username) {
-    return userCollection.findOne(
-        { username: username },
-        { projection: { password: 0 } }
-    );
+    return userCollection.findOne({ username: username });
 }
 
 function getUserByToken(token) {
-    return userCollection.findOne(
-        { token: token },
-        { projection: { password: 0 } }
-    );
+    return userCollection.findOne({ token: token });
 }
 
 async function updateUser(user) {
     await userCollection.updateOne({ username: user.username }, { $set: user });
-}
-
-async function createGame(game) {
-    await gameCollection.insertOne(game);
-}
-
-function getGame(gameID) {
-    return gameCollection.findOne({ gameID: gameID });
-}
-
-async function updateGame(game) {
-    await gameCollection.updateOne({ gameID: game.gameID }, { $set: game });
-}
-
-async function deleteGame(gameID) {
-    await gameCollection.deleteOne({ gameID: gameID });
-}
-
-function getHighScores() {
-    const query = { "stats.Total Points Scored": { $gt: 0 } };
-    const options = {
-        sort: { "stats.Total Points Scored": -1 },
-        limit: 5,
-        projection: {
-            username: 1,
-            "stats.Total Points Scored": 1,
-        },
-    };
-    const cursor = userCollection.find(query, options);
-    return cursor.toArray();
 }
 
 module.exports = {
@@ -75,9 +38,4 @@ module.exports = {
     getUser,
     getUserByToken,
     updateUser,
-    createGame,
-    getGame,
-    updateGame,
-    deleteGame,
-    getHighScores,
 };

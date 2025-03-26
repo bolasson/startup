@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 const app = express();
+const DB = require('./database.js');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -13,8 +14,6 @@ app.use(`/api`, apiRouter);
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
-// Data storage
-let users = [];
 /* User Structure
     { username: string, password: string, name: string, stats: Stats, token: uuid }
     // Stats structure: 
@@ -51,6 +50,8 @@ function setAuthCookie(res, user) {
         httpOnly: true,
         sameSite: 'strict',
     });
+
+    DB.updateUser(user);
 }
 
 const verifyAuth = async (req, res, next) => {
@@ -66,13 +67,18 @@ const verifyAuth = async (req, res, next) => {
 function clearAuthCookie(res, user) {
     delete user.token;
     res.clearCookie(authCookieName);
+    DB.updateUser(user);
 }
 
 /* USER */
 // Helper functions
-function getUser(value, field = "username") {
+async function getUser(value, field = "username") {
     if (value) {
-        return users.find((user) => user[field] === value);
+        if (field === 'token') {
+            return DB.getUserByToken(value);
+        } else if (field === 'username') {
+            return DB.getUser(value);
+        }
     }
     return null;
 }
@@ -98,7 +104,7 @@ async function createUser(username, password, name) {
             "Last Played": new Date().toLocaleDateString(),
         },
     };
-    users.push(user);
+    DB.createUser(user);
     return user;
 }
 
@@ -213,8 +219,8 @@ async function calculateScores(game) {
         throw new Error('No game provided to score');
     }
     const it = game.players[game.currentItIndex];
-    game.players.forEach((player) => {
-        const user = getUser(player.username);
+    for (const player of game.players) {
+        const user = await getUser(player.username);
         if (!user) {
             throw new Error(`User with username '${player.username}' not found`);
         }
@@ -229,7 +235,8 @@ async function calculateScores(game) {
             user.stats["Total Points Scored"] += score;
         }
         user.stats["Rounds Played"] += 1;
-    });
+        await DB.updateUser(user);
+    }
     return game;
 }
 

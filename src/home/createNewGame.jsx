@@ -80,7 +80,7 @@ export default function CreateGame() {
         if (activeGame) {
             const interval = setInterval(() => {
                 updateGame();
-            }, 1500);
+            }, 1250);
             return () => clearInterval(interval);
         }
     }, [activeGame]);
