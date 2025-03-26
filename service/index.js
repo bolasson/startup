@@ -19,6 +19,8 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
     // Stats structure: 
     { roundsPlayed: int, pointsScored: int, dateJoined: date, lastPlayed: date }
 */
+
+// These are kept here until websocket implementation
 let games = [];
 /* Game Structure
     { gameID: int, players: player[], currentRound: int, currentItIndex: int, clueTarget: int, clue: string, upperScale: string, lowerScale: string, state: string }
