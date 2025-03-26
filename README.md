@@ -151,3 +151,10 @@ For this deliverable I added backend endpoints that create games, join players t
 - [x] **Backend service endpoints** - Placeholders for login that stores the current user in the app context. Endpoints for game creation and joining.
 - [x] **Frontend calls service endpoints** - I did this using the fetch function.
 - [X] **Supports registration, login, logout, and restricted endpoint** - Supports registration, login, and logging out. Restriction is applied to the endpoints.
+
+## DB/Login deliverable
+
+For this deliverable I associate the statistics with the logged in user. I stored the users and stats in the database.
+
+- [x] **Stores data in MongoDB** - Done!
+- [x] **Use MongoDB to store credentials** - Stores users and their statistics. Games are not stored, since they are designed to only last temporarily, and are placeholders for the websocket deliverable.
