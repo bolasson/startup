@@ -33,9 +33,24 @@ async function updateUser(user) {
     await userCollection.updateOne({ username: user.username }, { $set: user });
 }
 
+function getHighScores() {
+    const query = { "stats.Total Points Scored": { $gt: 0 } };
+    const options = {
+        sort: { "stats.Total Points Scored": -1 },
+        limit: 5,
+        projection: {
+            username: 1,
+            "stats.Total Points Scored": 1,
+        },
+    };
+    const cursor = userCollection.find(query, options);
+    return cursor.toArray();
+}
+
 module.exports = {
     createUser,
     getUser,
     getUserByToken,
     updateUser,
+    getHighScores,
 };

@@ -360,6 +360,13 @@ apiRouter.put('/play/update-state', verifyAuth, async (req, res) => {
     }
 });
 
+/* STATS */
+// Endpoints
+apiRouter.get('/scores', verifyAuth, async (req, res) => {
+    const scores = await DB.getHighScores();
+    res.send(scores);
+});
+
 app.use((_req, res) => {
     res.sendFile('index.html', { root: 'public' });
 });
