@@ -39,7 +39,7 @@ export default function Results(props) {
         <section className="results">
             <h2 className="results-header">
                 On a scale of <strong>{lowerScale}</strong> to <strong>{upperScale}</strong>,{" "}
-                <i>{clueGiver.name}</i> thought <strong>{clue}</strong> should be a{" "}
+                <i>{clueGiver?.name}</i> thought <strong>{clue}</strong> should be a{" "}
                 <strong>{clueTarget}</strong>.
             </h2>
             <div className="results-content">

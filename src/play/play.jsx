@@ -124,10 +124,12 @@ export default function Play() {
 
     return (
         <main className="play">
-            {activeGame.state === 'waiting' && <Leaderboard game={activeGame}/>}
-            <div className="play-area">
+            {activeGame?.state === "results" && <div className="round-results">
+                <Results resultsProps={resultsProps} />
+                <Leaderboard game={activeGame}/>
+            </div>}
+            {/* <div className="play-area">
                 <section className="play-section">
-                    <Results resultsProps={resultsProps} />
                     {activeGame && activeGame.clue && (
                         <h2 style={{ textAlign: 'center', lineHeight: '2rem' }}>
                             On a scale of <strong>{activeGame.lowerScale}</strong> to <strong>{activeGame.upperScale}</strong>, where does <i>{itPlayerName}</i> place <strong>{activeGame.clue}</strong>?
@@ -179,7 +181,7 @@ export default function Play() {
                                 </form></>}
                         </>)}
                 </section>
-            </div>
+            </div> */}
         </main>
     );
 }
