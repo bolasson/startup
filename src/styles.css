@@ -181,6 +181,35 @@ section,
     align-items: center;
 }
 
+section.results div {
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
+}
+
+section.results p {
+    margin: auto 0px;
+    text-align: center;
+    white-space: nowrap;
+    font-weight: bold;
+}
+
+.results-header {
+    text-align: center; 
+    line-height: 2rem;
+}
+
+.results-content {
+    width: 95%; 
+    flex-direction: column;
+}
+
+.player-icon {
+    border-radius: 4px;
+    padding: 4px 10px;
+    color: black;
+}
+
 .error {
     background: rgba(33, 53, 77, 0.2);
     backdrop-filter: blur(10px);

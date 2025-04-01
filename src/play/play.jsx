@@ -5,6 +5,7 @@ import Leaderboard from "./leaderboard.jsx";
 import PlayerVotes from "./playerVotes.jsx";
 import useTimer from "../customHooks/useTimer.jsx";
 import "../styles.css";
+import Results from "./results.jsx";
 
 export default function Play() {
     const { value: sliderValue, handleChange } = useSlider(5);
@@ -12,9 +13,9 @@ export default function Play() {
     const { time, startTimer, pauseTimer, resetTimer } = useTimer(15);
     const [clueInput, setClueInput] = useState("");
 
-    const isIt = activeGame && activeUser && activeGame.players[activeGame.currentItIndex].username === activeUser.username;
+    const isIt = activeUser && activeGame?.players[activeGame.currentItIndex].username === activeUser.username;
 
-    const itPlayer = activeGame && activeGame.players[activeGame.currentItIndex] ?
+    const itPlayer = activeGame?.players[activeGame.currentItIndex] ?
         activeGame.players[activeGame.currentItIndex] :
         null;
     
@@ -32,9 +33,9 @@ export default function Play() {
         } else {
             console.log(updatedGame.msg);
         }
-        if (updatedGame.state === 'waiting') {
+        if (updatedGame?.state === 'waiting') {
             resetTimer();
-        } else if (updatedGame.state === 'voting') {
+        } else if (updatedGame?.state === 'voting') {
             startTimer();
         }
     }
@@ -112,11 +113,21 @@ export default function Play() {
         setClueInput("");
     };
 
+    const resultsProps = {
+        clueGiver: activeGame?.players[activeGame?.currentItIndex],
+        clue: activeGame?.clue,
+        clueTarget: activeGame?.clueTarget,
+        lowerScale: activeGame?.lowerScale,
+        upperScale: activeGame?.upperScale,
+        players: activeGame?.players,
+    };
+
     return (
         <main className="play">
             {activeGame.state === 'waiting' && <Leaderboard game={activeGame}/>}
             <div className="play-area">
                 <section className="play-section">
+                    <Results resultsProps={resultsProps} />
                     {activeGame && activeGame.clue && (
                         <h2 style={{ textAlign: 'center', lineHeight: '2rem' }}>
                             On a scale of <strong>{activeGame.lowerScale}</strong> to <strong>{activeGame.upperScale}</strong>, where does <i>{itPlayerName}</i> place <strong>{activeGame.clue}</strong>?
