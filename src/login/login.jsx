@@ -47,16 +47,17 @@ export default function Login() {
             <form onSubmit={e => e.preventDefault()} className="transparent-form">
                 <h1>{showCreateAccount ? 'Create Account' : 'Login'}</h1>
                 <div className="form-field">
-                    <img src="/user.svg" />
+                    <img src="/user.svg" width={40} height={40}/>
                     <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" autoComplete="username" />
                     <div style={{ width: '25px' }}></div>
                 </div>
                 <div className="form-field">
-                    <img src="/key.svg" />
+                    <img src="/key.svg" width={40} height={40} />
                     <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" autoComplete="current-password" />
                     <img
                         src={showPassword ? "/show.svg" : "/hide.svg"}
-                        width="25"
+                        width={25}
+                        height={25}
                         alt={showPassword ? "Show" : "Hide"}
                         onClick={() => setShowPassword(prev => !prev)}
                         style={{ cursor: "pointer" }}
@@ -64,7 +65,7 @@ export default function Login() {
                 </div>
                 {showCreateAccount &&
                     <div className="form-field">
-                        <img src="/name.svg" />
+                        <img src="/name.svg" width={40} height={40} />
                         <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Display name" autoComplete="name" />
                         <div style={{ width: '25px' }}></div>
                     </div>

@@ -4,9 +4,8 @@ import Login from './login/login.jsx';
 import Logout from './login/logout.jsx';
 import Play from './play/play.jsx';
 import Stats from './stats/stats.jsx';
-import Dev from './dev/dev.jsx';
 import NotFound from './404/not_found.jsx';
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { GameProvider } from './customContext/gameContext.jsx';
 import GameExitHandler from './gameExitHandler.jsx';
 import NavMenu from './navMenu/navMenu.jsx';
@@ -28,14 +27,13 @@ export default function App() {
                     </div>
                     <header>
                         <div className="logo-container">
-                            <img src="/logo.png" alt="Logo" width="75" />
+                            <img src="/logo.png" alt="Logo" width={75} height={75} />
                             <h1>Rank It</h1>
                         </div>
                         <NavMenu />
                     </header>
                     <Routes>
                         <Route path='/' element={<Login />} exact />
-                        {/* <Route path='dev' element={<Dev />} /> */}
                         <Route path='home/create-game' element={<CreateGame />} />
                         <Route path='home/join-game' element={<JoinGame />} />
                         <Route path='home/waiting-room' element={<WaitingRoom />} />
