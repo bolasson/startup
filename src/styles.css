@@ -105,7 +105,7 @@ footer {
 }
 
 a,
-a:visited {
+a:visited, p.text-button {
     color: #00ddff;
     text-decoration: none;
 }
@@ -267,6 +267,12 @@ section p,
 
 .leaderboard {
     margin-inline: 1rem;
+}
+
+p.text-button {
+    cursor: pointer;
+    align-content: center;
+    margin: 0rem;
 }
 
 /* ==========================================================================
@@ -470,29 +476,29 @@ table tbody tr:nth-child(even) {
 
 .image1 {
     animation-duration: 210s;
-    background-image: url('/Stars.png');
+    background-image: url('/Stars.webp');
 }
 
 .image1::after {
-    background-image: url('/Stars.png');
+    background-image: url('/Stars.webp');
 }
 
 .image2 {
     animation-duration: 175s;
-    background-image: url('/Stars2.png');
+    background-image: url('/Stars2.webp');
 }
 
 .image2::after {
-    background-image: url('/Stars2.png');
+    background-image: url('/Stars2.webp');
 }
 
 .image3 {
     animation-duration: 140s;
-    background-image: url('/Stars3.png');
+    background-image: url('/Stars3.webp');
 }
 
 .image3::after {
-    background-image: url('/Stars3.png');
+    background-image: url('/Stars3.webp');
 }
 
 @keyframes moveLeft {

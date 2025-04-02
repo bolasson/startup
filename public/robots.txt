@@ -1,0 +1,15 @@
+User-agent: *
+# Allow login and general home page
+Allow: /
+Allow: /home$
+
+# Block all other routes
+Disallow: /home/create-game
+Disallow: /home/join-game
+Disallow: /home/waiting-room
+Disallow: /play
+Disallow: /stats
+Disallow: /logout
+Disallow: /*?*
+Disallow: /*.js$
+Disallow: /*.jsx$

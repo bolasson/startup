@@ -47,18 +47,18 @@ export default function Login() {
             <form onSubmit={e => e.preventDefault()} className="transparent-form">
                 <h1>{showCreateAccount ? 'Create Account' : 'Login'}</h1>
                 <div className="form-field">
-                    <img src="/user.svg" width={40} height={40}/>
+                    <img src="/user.svg" width={40} height={40} alt="User Icon" />
                     <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" autoComplete="username" />
                     <div style={{ width: '25px' }}></div>
                 </div>
                 <div className="form-field">
-                    <img src="/key.svg" width={40} height={40} />
+                    <img src="/key.svg" width={40} height={40} alt="Key Icon" />
                     <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" autoComplete="current-password" />
                     <img
                         src={showPassword ? "/show.svg" : "/hide.svg"}
                         width={25}
                         height={25}
-                        alt={showPassword ? "Show" : "Hide"}
+                        alt={showPassword ? "Show Icon" : "Hide Icon"}
                         onClick={() => setShowPassword(prev => !prev)}
                         style={{ cursor: "pointer" }}
                     />
@@ -71,7 +71,7 @@ export default function Login() {
                     </div>
                 }
                 <br />
-                <a onClick={() => setShowCreateAccount(!showCreateAccount)} style={{ cursor: "pointer", alignContent: 'center' }}>{showCreateAccount ? 'Back to login' : 'Create a new account'}</a>
+                <p className="text-button" onClick={() => setShowCreateAccount(!showCreateAccount)}>{showCreateAccount ? 'Back to login' : 'Create a new account'}</p>
                 <br />
                 <div className="button-container">
                     {showCreateAccount ?
