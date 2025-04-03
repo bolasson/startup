@@ -165,6 +165,15 @@ function getGame(gameID) {
     return games.find((game) => game.gameID === gameID);
 }
 
+function updateGame(game) {
+    const gameIndex = games.find((game) => game.gameID === game.gameID);
+    if (gameIndex !== -1) {
+        games[gameIndex] = game;
+    } else {
+        throw new Error('Game not found');
+    }
+}
+
 async function createGame() {
     let newGameID;
     do {
@@ -275,6 +284,19 @@ apiRouter.get('/game', verifyAuth, async (req, res) => {
         res.send(game);
     } else {
         res.status(404).send({ msg: 'Game not found' });
+    }
+});
+
+apiRouter.put('/game', verifyAuth, async (req, res) => {
+    if (!game) {
+        res.status(404).send({ msg: 'Game not found' });
+    } else {
+        try {
+            updateGame(req.body.game);
+            res.send(req.body.game);
+        } catch (error) {
+            res.status(400).send({ msg: error.message });
+        }
     }
 });
 

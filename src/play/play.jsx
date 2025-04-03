@@ -6,64 +6,66 @@ import PlayerVotes from "./playerVotes.jsx";
 import useTimer from "../customHooks/useTimer.jsx";
 import "../styles.css";
 import Results from "./results.jsx";
+import SubmitClue from "./submitClue.jsx";
 
 export default function Play() {
     const { value: sliderValue, handleChange } = useSlider(5);
     const { activeGame, activeUser, setGame } = useGame();
     const { time, startTimer, pauseTimer, resetTimer } = useTimer(15);
     const [clueInput, setClueInput] = useState("");
+    const clueGiver = activeGame?.players[activeGame?.currentItIndex]?.username || { name: "Loading...", username: "Loading..." };
+    const activeUserIsClueGiver = activeUser?.username == clueGiver.username;
 
-    const isIt = activeUser && activeGame?.players[activeGame.currentItIndex].username === activeUser.username;
+    // Replace me when you implement websocket!! :) -     
+    async function getGameUpdates() {
+        if (!activeGame) return;
+        try {
+            const res = await fetch(`/api/game?gameID=${activeGame.gameID}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            const updatedGame = await res.json();
+            if (res.ok) {
+                setGame(updatedGame);
+            } else {
+                console.error(updatedGame.msg);
+            }
+        } catch (error) {
+            console.error("Failed to update game", error);
+        }
+    }
 
-    const itPlayer = activeGame?.players[activeGame.currentItIndex] ?
-        activeGame.players[activeGame.currentItIndex] :
-        null;
-    
-    const itPlayerName = itPlayer?.name || "Loading...";
-
-    // Replace me when you implement websocket!! :) - Bryce
-    async function updateGame() {
-        const res = await fetch(`/api/game?gameID=${activeGame.gameID}`, {
-            method: 'GET',
+    async function updateGame(game) {
+        const res = await fetch(`/api/game?gameID=${game.gameID}`, {
+            method: 'PUT',
+            body: JSON.stringify({ game: game }),
             headers: { 'Content-Type': 'application/json' },
         });
         const updatedGame = await res.json();
         if (res.ok) {
             setGame(updatedGame);
         } else {
-            console.log(updatedGame.msg);
-        }
-        if (updatedGame?.state === 'waiting') {
-            resetTimer();
-        } else if (updatedGame?.state === 'voting') {
-            startTimer();
+            console.error(updatedGame.msg);
         }
     }
-
-    async function submitVote() {
-        const voteValue = parseInt(sliderValue, 10);
-        const game = await fetch('/api/play/vote', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ gameID: activeGame.gameID, vote: voteValue }),
-        });
-        const gameData = await game.json();
-        if (!game.ok) {
-            console.log(gameData.msg);
-        }
-    }
-
-    async function submitClue() {
-        const game = await fetch('/api/play/clue', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ gameID: activeGame.gameID, clue: clueInput.trim() }),
-        });
-        const gameData = await game.json();
-        if (!game.ok) {
-            console.log(gameData.msg);
-        }
-    }
+    
+    // async function updateGame() {
+    //     const res = await fetch(`/api/game?gameID=${activeGame.gameID}`, {
+    //         method: 'GET',
+    //         headers: { 'Content-Type': 'application/json' },
+    //     });
+    //     const updatedGame = await res.json();
+    //     if (res.ok) {
+    //         setGame(updatedGame);
+    //     } else {
+    //         console.log(updatedGame.msg);
+    //     }
+    //     if (updatedGame?.state === 'waiting') {
+    //         resetTimer();
+    //     } else if (updatedGame?.state === 'voting') {
+    //         startTimer();
+    //     }
+    // }
 
     async function endRound() {
         const game = await fetch('/api/game/end-round', {
@@ -79,9 +81,7 @@ export default function Play() {
 
     useEffect(() => {
         if (activeGame) {
-            const interval = setInterval(() => {
-                updateGame();
-            }, 1000);
+            const interval = setInterval(getGameUpdates(), 1000);
             return () => clearInterval(interval);
         }
     }, [activeGame]);
@@ -103,13 +103,18 @@ export default function Play() {
     const handleVoteSubmit = (e) => {
         e.preventDefault();
         if (!activeGame || !activeUser) return;
-        submitVote();
+        const game = { ...activeGame };
+        game.players.findIndex(player => player.username === activeUser.username).activeVote = sliderValue;
+        updateGame(game);
     };
 
     const handleClueSubmit = (e) => {
         e.preventDefault();
-        if (!activeGame || !activeUser || !clueInput.trim()) return;
-        submitClue();
+        if (!clueInput.trim()) return;
+        const game = { ...activeGame };
+        game.clue = clueInput.trim();
+        game.state = "voting";
+        updateGame(game);
         setClueInput("");
     };
 
@@ -126,62 +131,39 @@ export default function Play() {
         <main className="play">
             {activeGame?.state === "results" && <div className="round-results">
                 <Results resultsProps={resultsProps} />
-                <Leaderboard game={activeGame}/>
+                <Leaderboard game={activeGame} />
             </div>}
-            {/* <div className="play-area">
-                <section className="play-section">
-                    {activeGame && activeGame.clue && (
-                        <h2 style={{ textAlign: 'center', lineHeight: '2rem' }}>
-                            On a scale of <strong>{activeGame.lowerScale}</strong> to <strong>{activeGame.upperScale}</strong>, where does <i>{itPlayerName}</i> place <strong>{activeGame.clue}</strong>?
-                        </h2>)}
-                    {activeGame && !activeGame.clue && (
-                        <>
-                            {isIt ? (
-                                <form className="transparent-form" onSubmit={handleClueSubmit} style={{ textAlign: 'center' }}>
-                                    <h2 style={{ textAlign: 'center', lineHeight: '2rem' }}>
-                                        For a scale of <strong>{activeGame.lowerScale}</strong> to <strong>{activeGame.upperScale}</strong>, submit a clue to help players guess the number <strong>{activeGame.clueTarget}</strong>.
-                                    </h2>
-                                    <br />
-                                    <input
-                                        type="text"
-                                        placeholder="Enter your clue..."
-                                        value={clueInput}
-                                        onChange={(e) => setClueInput(e.target.value)}
-                                    />
-                                    <br />
-                                    <button type="submit">Submit Clue</button>
-                                </form>
-                            ) : (
-                                <p style={{ textAlign: 'center' }}>
-                                    Waiting for clue from {activeGame.players[activeGame.currentItIndex].name}
-                                </p>
-                            )}
-                        </>
-                    )}
-                    {activeGame && activeGame.clue && (
-                        <>
-                            <h4 className="countdown" style={{ marginBottom: '2rem' }}>Time Remaining: {time}s</h4>
-                            <PlayerVotes players={activeGame?.players.filter(player => player.username !== activeGame.players[activeGame.currentItIndex].username) || []} />
-                            {!isIt && <><h2>Slider Value: {sliderValue}</h2>
-                                <div style={{ display: 'flex', width: '100%', alignItems: 'center', marginBottom: '2rem' }}>
-                                    <span style={{ marginRight: '10px' }}><strong>{activeGame.lowerScale}</strong></span>
-                                    <input
-                                        type="range"
-                                        min="1"
-                                        max="10"
-                                        value={sliderValue}
-                                        onChange={handleChange}
-                                        style={{ flex: 1 }}
-                                    />
-                                    <span style={{ marginLeft: '10px' }}><strong>{activeGame.upperScale}</strong></span>
-                                </div>
-                                <form id="voteForm" onSubmit={handleVoteSubmit}>
-                                    <input type="hidden" id="sliderValue" name="voteValue" value={sliderValue} />
-                                    <button className="submit-vote" type="submit">Submit Vote</button>
-                                </form></>}
-                        </>)}
-                </section>
-            </div> */}
+            {activeGame?.state === "waiting" || true  && <div className="play-area">
+                {!activeUserIsClueGiver ?
+                    <SubmitClue clueInput={clueInput} handleClueSubmit={handleClueSubmit} setClueInput={setClueInput} activeGame={activeGame} /> :
+                    <section>
+                        <h2 className="play-header">
+                            On a scale of <strong>{activeGame?.lowerScale}</strong> to <strong>{activeGame?.upperScale}</strong>, where does <i>{clueGiver.name}</i> place <strong>{activeGame?.clue}</strong>?
+                        </h2>
+                        <p style={{ textAlign: 'center' }}>
+                            Waiting for a clue from {clueGiver.name}
+                        </p>
+                    </section>
+                }
+            </div>}
+            {activeGame?.state === "voting" || true && <section>
+                <h2 className="play-header">
+                    On a scale of <strong>{activeGame?.lowerScale}</strong> to <strong>{activeGame?.upperScale}</strong>, where does <i>{clueGiver.name}</i> place <strong>{activeGame?.clue}</strong>?
+                </h2>
+                <h4 className="countdown" style={{ marginBottom: '2rem' }}>Time Remaining: {time}s</h4>
+                <PlayerVotes players={activeGame?.players.filter(player => player.username !== clueGiver.username) || []} />
+                {activeUserIsClueGiver && <>
+                    <div style={{ display: 'flex', width: '100%', alignItems: 'center', marginBlock: '1rem' }}>
+                        <span style={{ marginRight: '10px' }}><strong>{activeGame?.lowerScale}</strong></span>
+                        <input type="range" min="1" max="10" value={sliderValue} onChange={handleChange} style={{ flex: 1 }} />
+                        <span style={{ marginLeft: '10px' }}><strong>{activeGame?.upperScale}</strong></span>
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                        <input type="hidden" value={sliderValue} />
+                        <button className="submit-vote" onClick={handleVoteSubmit}>Submit Vote</button>
+                    </div>
+                </>}
+            </section>}
         </main>
     );
 }

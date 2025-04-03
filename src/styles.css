@@ -254,6 +254,17 @@ h2 {
     margin-bottom: 1.5rem;
 }
 
+h4.countdown {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+h2.play-header {
+    text-align: center; 
+    line-height: 2rem;
+}
+
 .transparent-form p {
     margin-block: 1rem;
     max-width: 75%;
@@ -661,7 +672,12 @@ table.slider td.partial {
     }
 
     h2 {
-        font-size: 0.9rem;
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    h4.countdown {
+        font-size: 0.5rem;
         text-align: center;
     }
 
