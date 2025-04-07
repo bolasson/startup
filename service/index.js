@@ -165,10 +165,10 @@ function getGame(gameID) {
     return games.find((game) => game.gameID === gameID);
 }
 
-function updateGame(game) {
-    const gameIndex = games.find((game) => game.gameID === game.gameID);
+function updateGame(providedGame) {
+    const gameIndex = games.find((game) => game.gameID === providedGame.gameID);
     if (gameIndex !== -1) {
-        games[gameIndex] = game;
+        games[gameIndex] = providedGame;
     } else {
         throw new Error('Game not found');
     }
@@ -260,7 +260,6 @@ async function startNextRound(gameID) {
     game.currentRound += 1;
     game.currentItIndex = (game.currentItIndex + 1) % game.players.length;
     game.clueTarget = Math.floor(Math.random() * 10) + 1;
-    game.clue = '';
     game.players.forEach((player) => {
         player.activeVote = 0;
     });
@@ -288,15 +287,11 @@ apiRouter.get('/game', verifyAuth, async (req, res) => {
 });
 
 apiRouter.put('/game', verifyAuth, async (req, res) => {
-    if (!game) {
-        res.status(404).send({ msg: 'Game not found' });
-    } else {
-        try {
-            updateGame(req.body.game);
-            res.send(req.body.game);
-        } catch (error) {
-            res.status(400).send({ msg: error.message });
-        }
+    try {
+        updateGame(req.body.game);
+        res.send(req.body.game);
+    } catch (error) {
+        res.status(400).send({ msg: error.message });
     }
 });
 
@@ -325,28 +320,7 @@ apiRouter.put('/game/start', verifyAuth, async (req, res) => {
     }
 });
 
-apiRouter.put('/game/end-round', verifyAuth, async (req, res) => {
-    const gameID = parseInt(req.body.gameID);
-    try {
-        const game = await startNextRound(gameID);
-        res.send(game);
-    } catch (error) {
-        res.status(400).send({ msg: error.message });
-    }
-});
-
 /* PLAY */
-// Helper functions
-function updateGameVote(game, user, vote) {
-    const player = game.players.find((player) => player.username === user.username);
-    player.activeVote = vote;
-}
-
-function updateGameClue(game, clue) {
-    game.clue = clue;
-    game.state = 'voting';
-}
-
 // Endpoints
 apiRouter.put('/play/vote', verifyAuth, async (req, res) => {
     const gameID = parseInt(req.body.gameID);
@@ -356,7 +330,7 @@ apiRouter.put('/play/vote', verifyAuth, async (req, res) => {
     if (!game) {
         res.status(400).send({ msg: 'Game not found' });
     } else {
-        updateGameVote(game, user, vote);
+        game.players.find((player) => player.username === user.username).activeVote = vote;
         res.send(game);
     }
 });
@@ -365,11 +339,29 @@ apiRouter.put('/play/clue', verifyAuth, async (req, res) => {
     const gameID = parseInt(req.body.gameID);
     const clue = req.body.clue;
     const game = getGame(gameID);
-    if (!game) {
-        res.status(400).send({ msg: 'Game not found' });
+    if (!game) { 
+        return res.status(400).send({ msg: 'Game not found' });
     } else {
-        updateGameClue(game, clue);
+        game.clue = clue;
+        game.state = 'voting';
+        updateGame(game);
         res.send(game);
+    }
+});
+
+apiRouter.put('/play/view-results', verifyAuth, async (req, res) => {
+    const gameID = parseInt(req.body.gameID);
+    const game = getGame(gameID);
+    if (!game) {
+        return res.status(400).send({ msg: 'Game not found' });
+    }
+    try {
+        await calculateScores(game);
+        game.state = 'results';
+        updateGame(game);
+        res.send(game);
+    } catch (error) {
+        res.status(500).send({ msg: error.message });
     }
 });
 
@@ -381,6 +373,27 @@ apiRouter.put('/play/update-state', verifyAuth, async (req, res) => {
     } else {
         game.state = req.body.state;
         res.send(game);
+    }
+});
+
+apiRouter.put('/play/end-round', verifyAuth, async (req, res) => {
+    const gameID = parseInt(req.body.gameID);
+    const game = getGame(gameID);
+    if (!game) return res.status(404).send({ msg: 'Game not found' });
+    try {
+        game.currentRound += 1;
+        game.currentItIndex = (game.currentItIndex + 1) % game.players.length;
+        game.clue = '';
+        game.clueTarget = Math.floor(Math.random() * 10) + 1;
+        game.players.forEach((player) => player.activeVote = 0);
+        const randomScale = scales[Math.floor(Math.random() * scales.length)];
+        game.lowerScale = randomScale.low;
+        game.upperScale = randomScale.high;
+        game.state = 'waiting';
+        updateGame(game);
+        res.send(game);
+    } catch (error) {
+        res.status(500).send({ msg: error.message });
     }
 });
 

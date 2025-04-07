@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useSlider from "../customHooks/useSlider.jsx";
 import { useGame } from "../customContext/gameContext.jsx";
 import Leaderboard from "./leaderboard.jsx";
@@ -9,12 +10,44 @@ import Results from "./results.jsx";
 import SubmitClue from "./submitClue.jsx";
 
 export default function Play() {
+    const navigate = useNavigate();
     const { value: sliderValue, handleChange } = useSlider(5);
-    const { activeGame, activeUser, setGame } = useGame();
-    const { time, startTimer, pauseTimer, resetTimer } = useTimer(15);
+    const { activeGame, activeUser, setGame, setUser } = useGame();
+    const { time: votingTime, startTimer: startVotingTimer, pauseTimer: pauseVotingTimer, resetTimer: resetVotingTimer } = useTimer(20);
+    const { time: resultsTime, startTimer: startResultsTimer, pauseTimer: pauseResultsTimer, resetTimer: resetResultsTimer } = useTimer(11);
     const [clueInput, setClueInput] = useState("");
-    const clueGiver = activeGame?.players[activeGame?.currentItIndex]?.username || { name: "Loading...", username: "Loading..." };
-    const activeUserIsClueGiver = activeUser?.username == clueGiver.username;
+    const clueGiver = activeGame?.players[activeGame?.currentItIndex] || { name: "Loading...", username: "Loading..." };
+    const hostUser = activeGame?.players.find(player => player.isHost) || { name: "Loading...", username: "Loading..." };
+    const isHostUser = activeUser?.username == hostUser.username;
+    const isClueGiver = activeUser?.username == clueGiver.username;
+
+    useEffect(() => {
+        if (!activeUser) {
+            navigate("/", { replace: true });
+        } else if (!activeGame) {
+            navigate("/home", { replace: true });
+        }
+    }, [activeUser, activeGame]);
+
+    if (!activeUser) {
+        return (
+            <main>
+                <section className="intro">
+                    <h2>You must be logged in to access this page.</h2>
+                </section>
+            </main>
+        );
+    }
+
+    if (!activeGame) {
+        return (
+            <main>
+                <section className="intro">
+                    <h2>Loading...</h2>
+                </section>
+            </main>
+        );
+    }
 
     // Replace me when you implement websocket!! :) -     
     async function getGameUpdates() {
@@ -35,88 +68,115 @@ export default function Play() {
         }
     }
 
-    async function updateGame(game) {
-        const res = await fetch(`/api/game?gameID=${game.gameID}`, {
-            method: 'PUT',
-            body: JSON.stringify({ game: game }),
-            headers: { 'Content-Type': 'application/json' },
-        });
-        const updatedGame = await res.json();
-        if (res.ok) {
-            setGame(updatedGame);
-        } else {
-            console.error(updatedGame.msg);
-        }
-    }
-    
-    // async function updateGame() {
-    //     const res = await fetch(`/api/game?gameID=${activeGame.gameID}`, {
-    //         method: 'GET',
-    //         headers: { 'Content-Type': 'application/json' },
-    //     });
-    //     const updatedGame = await res.json();
-    //     if (res.ok) {
-    //         setGame(updatedGame);
-    //     } else {
-    //         console.log(updatedGame.msg);
-    //     }
-    //     if (updatedGame?.state === 'waiting') {
-    //         resetTimer();
-    //     } else if (updatedGame?.state === 'voting') {
-    //         startTimer();
-    //     }
-    // }
-
-    async function endRound() {
-        const game = await fetch('/api/game/end-round', {
+    async function viewResults() {
+        const game = await fetch('/api/play/view-results', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ gameID: activeGame.gameID }),
         });
         const gameData = await game.json();
-        if (!game.ok) {
+        if (game.ok) {
+            setGame(gameData);
+        } else {
+            console.log(gameData.msg);
+        }
+    }
+
+    async function endRound() {
+        const game = await fetch('/api/play/end-round', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gameID: activeGame.gameID }),
+        });
+        const gameData = await game.json();
+        if (game.ok) {
+            setGame(gameData);
+        } else {
             console.log(gameData.msg);
         }
     }
 
     useEffect(() => {
         if (activeGame) {
-            const interval = setInterval(getGameUpdates(), 1000);
+            const interval = setInterval(() => {getGameUpdates()}, 1000);
             return () => clearInterval(interval);
         }
     }, [activeGame]);
 
     useEffect(() => {
-        if (activeGame && activeGame.clue) {
-            startTimer();
+        if (activeGame?.state === "voting") {
+            resetResultsTimer();
+            startVotingTimer();
         } else {
-            pauseTimer();
+            pauseVotingTimer();
         }
-    }, [activeGame, startTimer, pauseTimer]);
+        if (activeGame?.state === "results") {
+            resetVotingTimer();
+            startResultsTimer();
+        } else {
+            pauseResultsTimer();
+        }
+    }, [activeGame, startVotingTimer, startResultsTimer]);
 
     useEffect(() => {
-        if (time === 0 && activeGame && activeUser?.username === activeGame.players.find(player => player.isHost)?.username) {
-            endRound();
+        if (activeGame?.state === "voting" && votingTime === 0 && isHostUser) {
+            viewResults();
+            resetVotingTimer();
         }
-    }, [time, activeGame, resetTimer, startTimer]);
+    }, [votingTime, activeGame]);   
 
-    const handleVoteSubmit = (e) => {
-        e.preventDefault();
-        if (!activeGame || !activeUser) return;
-        const game = { ...activeGame };
-        game.players.findIndex(player => player.username === activeUser.username).activeVote = sliderValue;
-        updateGame(game);
+    useEffect(() => {
+        if (activeGame?.state === "results" && resultsTime === 0 && isHostUser) {
+            endRound();
+            resetResultsTimer();
+        }
+    }, [resultsTime, activeGame]);
+
+    const handleVoteSubmit = async (e) => {
+        e.preventDefault();    
+        try {
+            const res = await fetch("/api/play/vote", {
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gameID: activeGame.gameID,
+                    vote: sliderValue,
+                }),
+            });
+            const updatedGame = await res.json();
+            if (res.ok) {
+                setGame(updatedGame);
+            } else {
+                console.error(updatedGame.msg);
+            }
+        } catch (err) {
+            console.error("Vote submit failed:", err);
+        }
     };
-
-    const handleClueSubmit = (e) => {
+    
+    const handleClueSubmit = async (e) => {
         e.preventDefault();
         if (!clueInput.trim()) return;
-        const game = { ...activeGame };
-        game.clue = clueInput.trim();
-        game.state = "voting";
-        updateGame(game);
-        setClueInput("");
-    };
+        try {
+            const res = await fetch("/api/play/clue", {
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gameID: activeGame.gameID,
+                    clue: clueInput.trim(),
+                }),
+            });
+            const updatedGame = await res.json();
+            if (res.ok) {
+                setGame(updatedGame);
+                setClueInput("");
+            } else {
+                console.error(updatedGame.msg);
+            }
+        } catch (err) {
+            console.error("Clue submit failed:", err);
+        }
+    };    
 
     const resultsProps = {
         clueGiver: activeGame?.players[activeGame?.currentItIndex],
@@ -125,6 +185,7 @@ export default function Play() {
         lowerScale: activeGame?.lowerScale,
         upperScale: activeGame?.upperScale,
         players: activeGame?.players,
+        nextRoundTimer: resultsTime,
     };
 
     return (
@@ -133,26 +194,23 @@ export default function Play() {
                 <Results resultsProps={resultsProps} />
                 <Leaderboard game={activeGame} />
             </div>}
-            {activeGame?.state === "waiting" || true  && <div className="play-area">
-                {!activeUserIsClueGiver ?
+            {activeGame?.state === "waiting" && <div className="play-area">
+                {isClueGiver ?
                     <SubmitClue clueInput={clueInput} handleClueSubmit={handleClueSubmit} setClueInput={setClueInput} activeGame={activeGame} /> :
                     <section>
-                        <h2 className="play-header">
-                            On a scale of <strong>{activeGame?.lowerScale}</strong> to <strong>{activeGame?.upperScale}</strong>, where does <i>{clueGiver.name}</i> place <strong>{activeGame?.clue}</strong>?
-                        </h2>
                         <p style={{ textAlign: 'center' }}>
                             Waiting for a clue from {clueGiver.name}
                         </p>
                     </section>
                 }
             </div>}
-            {activeGame?.state === "voting" || true && <section>
+            {activeGame?.state === "voting" && <section>
                 <h2 className="play-header">
                     On a scale of <strong>{activeGame?.lowerScale}</strong> to <strong>{activeGame?.upperScale}</strong>, where does <i>{clueGiver.name}</i> place <strong>{activeGame?.clue}</strong>?
                 </h2>
-                <h4 className="countdown" style={{ marginBottom: '2rem' }}>Time Remaining: {time}s</h4>
+                <h4 className="countdown" style={{ marginBottom: '2rem' }}>Time Remaining: {votingTime}s</h4>
                 <PlayerVotes players={activeGame?.players.filter(player => player.username !== clueGiver.username) || []} />
-                {activeUserIsClueGiver && <>
+                {!isClueGiver && <>
                     <div style={{ display: 'flex', width: '100%', alignItems: 'center', marginBlock: '1rem' }}>
                         <span style={{ marginRight: '10px' }}><strong>{activeGame?.lowerScale}</strong></span>
                         <input type="range" min="1" max="10" value={sliderValue} onChange={handleChange} style={{ flex: 1 }} />

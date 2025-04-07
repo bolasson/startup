@@ -214,6 +214,7 @@ section.results p {
 .results-content {
     width: 95%; 
     flex-direction: column;
+    margin-bottom: 2rem;
 }
 
 .player-icon {

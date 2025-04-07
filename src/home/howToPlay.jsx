@@ -1,8 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGame } from '../customContext/gameContext';
 
 export default function HowToPlay() {
     const navigate = useNavigate();
+    const { activeUser } = useGame();
 
     return (
         <main>
@@ -26,10 +28,13 @@ export default function HowToPlay() {
                 <p>
                     You can create a new game and invite your friends or join an existing game using a code from your host. Once everyone has joined, the host will start the game.
                 </p>
-                <div style={{ display: 'flex', gap: '2rem' }}>
+                {activeUser ? <div style={{ display: 'flex', gap: '2rem' }}>
                     <button onClick={() => { navigate("/home/create-game") }} className="submit-vote" style={{ color: '#fff' }}>Create Game</button>
                     <button onClick={() => { navigate("/home/join-game") }} className="submit-vote" style={{ color: '#fff' }}>Join Game</button>
-                </div>
+                </div> : 
+                <div style={{ display: 'flex', gap: '2rem' }}>
+                    <button onClick={() => { navigate("/") }} className="submit-vote" style={{ color: '#fff' }}>Login</button>
+                </div>}
             </section>
         </main>
     );

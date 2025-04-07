@@ -17,7 +17,7 @@ function PointsSection({ label, players }) {
 }
 
 export default function Results(props) {
-    const { clueGiver, clue, clueTarget, lowerScale, upperScale, players } = props.resultsProps;
+    const { clueGiver, clue, clueTarget, lowerScale, upperScale, players, nextRoundTimer } = props.resultsProps;
     const playersByPointsScored = {
         "+3 Points": [],
         "+1 Point": [],
@@ -45,8 +45,11 @@ export default function Results(props) {
             <div className="results-content">
                 {Object.entries(playersByPointsScored).map(([label, players]) => (
                     <><hr /><PointsSection key={label} label={label} players={players} /></>
-                ))}    
+                ))}
             </div>
+            {nextRoundTimer != 11 && <p>
+                Next round starts in: {nextRoundTimer}
+            </p>}
         </section>
     );
 }

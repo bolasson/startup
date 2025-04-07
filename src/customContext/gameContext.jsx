@@ -4,7 +4,7 @@ const GameContext = createContext();
 
 export function GameProvider({ children }) {
     const [activeUser, setActiveUser] = useState(null);
-    const [activeGame, setActiveGame] = useState();
+    const [activeGame, setActiveGame] = useState(null);
 
     useEffect(() => {
         const user = localStorage.getItem('user');

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGame } from "../customContext/gameContext";
 
@@ -6,7 +6,23 @@ export default function JoinGame() {
     const navigate = useNavigate();
     const [gameID, setGameID] = useState("");
     const [error, setError] = useState(null);
-    const { setGame } = useGame();
+    const { activeUser, setGame } = useGame();
+
+    useEffect(() => {
+        if (!activeUser) {
+            navigate("/", { replace: true });
+        }
+    }, [activeUser]);
+
+    if (!activeUser) {
+        return (
+            <main>
+                <section className="intro">
+                    <h2>You must be logged in to access this page.</h2>
+                </section>
+            </main>
+        );
+    }
 
     async function joinGame(targetGameID) {
         const res = await fetch('/api/game/join', {

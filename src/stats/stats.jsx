@@ -9,16 +9,9 @@ export default function Stats() {
     const [highscores, setHighscores] = useState(null);
 
     useEffect(() => {
-        (async () => {
-            const res = await fetch('api/user/me');
-            const data = await res.json();
-            if (!res.ok) {
-                setUser(null);
-                navigate('/');
-            } else {
-                setUser(data);
-            }
-        })();
+        if (!activeUser) {
+            navigate("/", { replace: true });
+        }
         (async () => {
             const res = await fetch('api/scores');
             const data = await res.json();
@@ -34,7 +27,7 @@ export default function Stats() {
         return (
             <main>
                 <section className="intro">
-                    <h2>Loading...</h2>
+                    <h2>You must be logged in to access this page.</h2>
                 </section>
             </main>
         );

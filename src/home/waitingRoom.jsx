@@ -5,8 +5,24 @@ import { useGame } from "../customContext/gameContext.jsx";
 
 export default function WaitingRoom() {
     const navigate = useNavigate();
-    const { activeGame, setGame } = useGame();
+    const { activeUser, activeGame, setGame } = useGame();
     const [loadingText, setLoadingText] = useState('');
+
+    useEffect(() => {
+        if (!activeUser) {
+            navigate("/", { replace: true });
+        }
+    }, [activeUser]);
+
+    if (!activeUser) {
+        return (
+            <main>
+                <section className="intro">
+                    <h2>You must be logged in to access this page.</h2>
+                </section>
+            </main>
+        );
+    }
 
     useEffect(() => {
         const interval = setInterval(() => {

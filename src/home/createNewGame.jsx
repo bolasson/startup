@@ -9,11 +9,17 @@ export default function CreateGame() {
     const [error, setError] = useState(null);
     const { activeUser, activeGame, setGame } = useGame();
 
+    useEffect(() => {
+        if (!activeUser) {
+            navigate("/", { replace: true });
+        }
+    }, [activeUser]);
+
     if (!activeUser) {
         return (
             <main>
                 <section className="intro">
-                    <h2>You must be logged in to access this page</h2>
+                    <h2>You must be logged in to access this page.</h2>
                 </section>
             </main>
         );
