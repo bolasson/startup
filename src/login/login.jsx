@@ -14,7 +14,7 @@ export default function Login() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (activeUser) {
+        if (activeUser || localStorage.getItem('user')) {
             navigate('home');
         }
     }, []);

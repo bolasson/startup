@@ -9,7 +9,7 @@ This application allows players to test how well they know their friends’ opin
 ## Specification Deliverable  
 
 ### Elevator Pitch 🛗  
-Have you ever wondered how well you know your friends’ niche opinions? Rank It is the ultimate social guessing game where players compete to match their friends’ opinions on dynamic, creative scales. From scales like "disgusting to delicious" to "old-fashioned to modern", Rank It keeps everyone engaged with fun clues, real-time voting, and friendly competition. Create or join a game, and see how well you know each other!
+Have you ever wondered how well you know your friends’ niche opinions? Rank It is the ultimate social guessing game where players compete to match their friends’ opinions on dynamic, creative scales. From scales like "disgusting to delicious" to "ancient to futuristic", Rank It keeps everyone engaged with fun clues, real-time voting, and friendly competition. Create or join a game, and see how well you know each other!
 
 ### Design
 The app has three primary views:  
@@ -150,7 +150,7 @@ For this deliverable I added backend endpoints that create games, join players t
 - [ ] **Calls to third party endpoints** - I didn't have time to implement this.
 - [x] **Backend service endpoints** - Placeholders for login that stores the current user in the app context. Endpoints for game creation and joining.
 - [x] **Frontend calls service endpoints** - I did this using the fetch function.
-- [X] **Supports registration, login, logout, and restricted endpoint** - Supports registration, login, and logging out. Restriction is applied to the endpoints.
+- [X] **Supports registration, login, logout, and restricted endpoint** - Supports registration, login, and logging out.Restriction is applied to both the endpoints and the frontend.
 
 ## DB/Login deliverable
 

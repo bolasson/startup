@@ -9,10 +9,10 @@ export default function HowToPlay() {
     return (
         <main>
             <section>
-                <h2>How To Play</h2>
+                <h2>Hello {activeUser?.name}, welcome to Rank It!</h2>
                 <ol>
                     <li>
-                        Each round, a scale of 1 to 10 will be given with a word on each end (e.g., <strong>Ancient</strong> to <strong>Modern</strong>).
+                        Each round, a scale of 1 to 10 will be given with a word on each end (e.g., <strong>Ancient</strong> to <strong>Futuristic</strong>).
                     </li>
                     <li>One player will receive a random number and provide a clue that helps the other players guess the number.</li>
                     <li>Then, all other players must guess what number the player was given.</li>

@@ -30,16 +30,48 @@ let games = [];
 const authCookieName = 'authToken';
 const playerColors = ['#00D2FF', '#0FFF00', '#a545ff', '#ffff00', '#FF9200', '#FF00EC', '#665bff', '#FF0010'];
 const scales = [
-    { low: "Ancient", high: "Modern" },
-    { low: "Slow", high: "Fast" },
-    { low: "Soft", high: "Loud" },
-    { low: "Small", high: "Big" },
-    { low: "Cold", high: "Hot" },
-    { low: "Simple", high: "Complex" },
-    { low: "Cheap", high: "Expensive" },
-    { low: "Weak", high: "Strong" },
-    { low: "Dull", high: "Bright" },
-    { low: "Old", high: "New" }
+    { low: "Ancient", high: "Futuristic" },
+    { low: "Ugly", high: "Beautiful" },
+    { low: "Safe", high: "Deadly" },
+    { low: "Casual", high: "Formal" },
+    { low: "Serious", high: "Playful" },
+    { low: "Ordinary", high: "Bizarre" },
+    { low: "Practical", high: "Impractical" },
+    { low: "Cheap", high: "Luxurious" },
+    { low: "Messy", high: "Organized" },
+    { low: "Natural", high: "Artificial" },
+    { low: "Common", high: "Rare" },
+    { low: "Peaceful", high: "Chaotic" },
+    { low: "Temporary", high: "Permanent" },
+    { low: "Silent", high: "Deafening" },
+    { low: "Fresh", high: "Stale" },
+    { low: "Transparent", high: "Opaque" },
+    { low: "Flexible", high: "Brittle" },
+    { low: "Funny", high: "Serious" },
+    { low: "Realistic", high: "Fantasy" },
+    { low: "Healthy", high: "Unhealthy" },
+    { low: "Rural", high: "Urban" },
+    { low: "Minimalist", high: "Extravagant" },
+    { low: "Relaxing", high: "Stressful" },
+    { low: "Colorless", high: "Colorful" },
+    { low: "Sparse", high: "Crowded" },
+    { low: "Reliable", high: "Unpredictable" },
+    { low: "Mild", high: "Intense" },
+    { low: "Lighthearted", high: "Dark" },
+    { low: "Harmless", high: "Harmful" },
+    { low: "Plain", high: "Decorative" },
+    { low: "Comfortable", high: "Uncomfortable" },
+    { low: "Smooth", high: "Textured" },
+    { low: "Innocent", high: "Sinister" },
+    { low: "Accidental", high: "Intentional" },
+    { low: "Private", high: "Public" },
+    { low: "Independent", high: "Dependent" },
+    { low: "Logical", high: "Emotional" },
+    { low: "Optimistic", high: "Pessimistic" },
+    { low: "Generic", high: "Unique" },
+    { low: "Inclusive", high: "Exclusive" },
+    { low: "Direct", high: "Abstract" },
+    { low: "Disgusting", high: "Delicious" },
 ];
 
 /* AUTH & COOKIES */
@@ -251,25 +283,6 @@ async function calculateScores(game) {
     return game;
 }
 
-async function startNextRound(gameID) {
-    const game = getGame(gameID);
-    if (!game) {
-        throw new Error('No game with ID ' + gameID + ' found');
-    }
-    await calculateScores(game);
-    game.currentRound += 1;
-    game.currentItIndex = (game.currentItIndex + 1) % game.players.length;
-    game.clueTarget = Math.floor(Math.random() * 10) + 1;
-    game.players.forEach((player) => {
-        player.activeVote = 0;
-    });
-    const randomScale = scales[Math.floor(Math.random() * scales.length)];
-    game.lowerScale = randomScale.low;
-    game.upperScale = randomScale.high
-    game.state = 'waiting';
-    return game;
-}
-
 // Endpoints
 apiRouter.post('/game', verifyAuth, async (req, res) => {
     const game = await createGame();
@@ -283,15 +296,6 @@ apiRouter.get('/game', verifyAuth, async (req, res) => {
         res.send(game);
     } else {
         res.status(404).send({ msg: 'Game not found' });
-    }
-});
-
-apiRouter.put('/game', verifyAuth, async (req, res) => {
-    try {
-        updateGame(req.body.game);
-        res.send(req.body.game);
-    } catch (error) {
-        res.status(400).send({ msg: error.message });
     }
 });
 
@@ -362,17 +366,6 @@ apiRouter.put('/play/view-results', verifyAuth, async (req, res) => {
         res.send(game);
     } catch (error) {
         res.status(500).send({ msg: error.message });
-    }
-});
-
-apiRouter.put('/play/update-state', verifyAuth, async (req, res) => {
-    const gameID = parseInt(req.body.gameID);
-    const game = getGame(gameID);
-    if (!game) {
-        res.status(400).send({ msg: 'Game not found' });
-    } else {
-        game.state = req.body.state;
-        res.send(game);
     }
 });
 

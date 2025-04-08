@@ -13,6 +13,7 @@ export default function Logout() {
         })
         .finally(() => {
             setUser(null);
+            localStorage.removeItem('user');
             navigate('/');
         });
     }
