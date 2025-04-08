@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles.css';
+import Dev from './dev/dev.jsx';
 import Login from './login/login.jsx';
 import Logout from './login/logout.jsx';
 import Play from './play/play.jsx';
@@ -33,6 +34,7 @@ export default function App() {
                         <NavMenu />
                     </header>
                     <Routes>
+                        <Route path='/dev' element={<Dev />} exact />
                         <Route path='/' element={<Login />} exact />
                         <Route path='home/create-game' element={<CreateGame />} />
                         <Route path='home/join-game' element={<JoinGame />} />
