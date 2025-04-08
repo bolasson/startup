@@ -35,7 +35,7 @@ export default function Stats() {
     }
 
     return (
-        <main>
+        <main style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center" }}>
             <section className="intro">
                 <h2>Statistics for {activeUser?.name}</h2>
                 <table className="rounded-table">
@@ -48,6 +48,8 @@ export default function Stats() {
                         ))}
                     </tbody>
                 </table>
+            </section>
+            <section className="intro">
                 <h2>Global Highscores</h2>
                 <table className="rounded-table">
                     <thead>

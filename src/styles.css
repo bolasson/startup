@@ -114,7 +114,7 @@ strong {
 }
 
 i {
-    color: #00ff0d !important;
+    color: #00ff0d;
 }
 
 .tabs {
@@ -227,7 +227,7 @@ h2 {
 }
 
 h2 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 3rem;
 }
 
 h4.countdown {

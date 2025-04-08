@@ -9,7 +9,7 @@ export default function HowToPlay() {
     return (
         <main>
             <section>
-                <h2>Hello<i>{activeUser && " " + activeUser.name}</i>, welcome to Rank It!</h2>
+                <h2>Hello{activeUser && " " + activeUser.name}, welcome to Rank It!</h2>
                 <ol>
                     <li>
                         Each round, a scale of 1 to 10 will be given with a word on each end (e.g., <strong>Ancient</strong> to <strong>Futuristic</strong>).
@@ -22,11 +22,11 @@ export default function HowToPlay() {
                     </li>
                     <li>Play for as long or as short as you want!</li>
                 </ol>
-                {activeUser ? <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
+                {activeUser ? <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
                     <button onClick={() => { navigate("/home/create-game") }} className="submit-vote" style={{ color: '#fff' }}>Create Game</button>
                     <button onClick={() => { navigate("/home/join-game") }} className="submit-vote" style={{ color: '#fff' }}>Join Game</button>
                 </div> : 
-                <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
+                <div style={{ display: 'flex', gap: '2rem', marginTop: '2rem' }}>
                     <button onClick={() => { navigate("/") }} className="submit-vote" style={{ color: '#fff' }}>Login</button>
                 </div>}
             </section>
