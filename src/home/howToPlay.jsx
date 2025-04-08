@@ -15,7 +15,6 @@ export default function HowToPlay() {
                         Each round, a scale of 1 to 10 will be given with a word on each end (e.g., <strong>Ancient</strong> to <strong>Futuristic</strong>).
                     </li>
                     <li>One player will receive a random number and provide a clue that helps the other players guess the number.</li>
-                    {/* I didn't like the way I had to adjust sytling for list elements within list elements, so I styled this manually. */}
                     <li> Players will receive:
                         <br />• <strong>3 points</strong> for an exact match
                         <br />• <strong>1 point</strong> for being 1 away from the correct answer

@@ -11,6 +11,7 @@ export default function NavMenu() {
             <nav>
                 <menu>
                     <li><NavLink className='nav-link' to='/'>Login</NavLink></li>
+                    <li><NavLink className='nav-link' to='home'>Home</NavLink></li>
                 </menu>
             </nav>
         );    

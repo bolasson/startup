@@ -193,19 +193,6 @@ apiRouter.get('/user/me', async (req, res) => {
     }
 });
 
-// Research, and then ask Professor Jensen about this, because while it seemd like a good idea in my head, I'm hearing faint alarm bells.
-// Update, major alarm bells. This is called with user data stored in localstorage, which anyone can add to. 
-// This is a major security issue, as I'd only need to know someone's username to be 'authenticated' as them.
-apiRouter.put('/user/refresh', async (req, res) => {
-    const user = await getUser(req.body.username);
-    if (user) {
-        setAuthCookie(res, user);
-        res.send({ msg: 'Auth cookie refreshed' });
-    } else {
-        res.status(401).send({ msg: 'Stored user not found.' });
-    }
-});
-
 /* GAME */
 // Helper functions
 function getGame(gameID) {
