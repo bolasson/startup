@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 const app = express();
 const DB = require('./database.js');
+const { gameProxy } = require('./gameProxy');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -314,6 +315,7 @@ apiRouter.put('/game/join', verifyAuth, async (req, res) => {
     try {
         const game = await joinGame(gameID, user);
         res.send(game);
+        gameWS.broadcastGameUpdate(game);
     } catch (error) {
         res.status(400).send({ msg: error.message });
     }
@@ -412,6 +414,8 @@ app.use((err, req, res, next) => {
     res.status(500).send({ type: err.name, message: err.message });
 });
 
-app.listen(port, () => {
+const httpServer = app.listen(port, () => {
     console.log(`Backend service listening on port ${port}`);
 });
+
+const gameWS = gameProxy(httpServer);
