@@ -7,6 +7,7 @@ export default function WaitingRoom() {
     const navigate = useNavigate();
     const { activeUser, activeGame, setGame } = useGame();
     const [loadingText, setLoadingText] = useState('');
+    const [joke, setJoke] = useState('Loading dad joke...');
 
     useEffect(() => {
         if (!activeUser) {
@@ -23,6 +24,23 @@ export default function WaitingRoom() {
             </main>
         );
     }
+
+    useEffect(() => {
+        fetch('https://icanhazdadjoke.com/', {
+            headers: {
+                'Accept': 'application/json',
+                'User-Agent': 'MyReactApp (https://github.com/yourusername/yourrepo)'
+            }
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setJoke(data.joke);
+            })
+            .catch((error) => {
+                console.error('Error fetching dad joke:', error);
+                setJoke('Two solidiers are in a tank. One turns to the other and says, "glub glub glub"');
+            });
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -73,6 +91,7 @@ export default function WaitingRoom() {
                 {!activeGame?.isStarted && <p>Waiting for the host to start the game{loadingText}</p>}
                 {activeGame?.isStarted && <p>Starting game{loadingText}</p>}
                 <PlayerList players={activeGame?.players || []} />
+                <p style={{ fontStyle: "italic", marginBlock: "1rem" }}>{joke}</p>
             </form>
         </main>
     )

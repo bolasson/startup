@@ -9,30 +9,25 @@ export default function HowToPlay() {
     return (
         <main>
             <section>
-                <h2>Hello {activeUser?.name}, welcome to Rank It!</h2>
+                <h2>Hello<i>{activeUser && " " + activeUser.name}</i>, welcome to Rank It!</h2>
                 <ol>
                     <li>
                         Each round, a scale of 1 to 10 will be given with a word on each end (e.g., <strong>Ancient</strong> to <strong>Futuristic</strong>).
                     </li>
                     <li>One player will receive a random number and provide a clue that helps the other players guess the number.</li>
-                    <li>Then, all other players must guess what number the player was given.</li>
-                    <li>
-                        The player with the most points wins. Players will get:
-                        <ul>
-                            <li><strong>3 points</strong> for an exact match.</li>
-                            <li><strong>1 point</strong> for being 1 away from the correct answer.</li>
-                        </ul>
+                    {/* I didn't like the way I had to adjust sytling for list elements within list elements, so I styled this manually. */}
+                    <li> Players will receive:
+                        <br />• <strong>3 points</strong> for an exact match
+                        <br />• <strong>1 point</strong> for being 1 away from the correct answer
+                        <br />• <strong>1 point</strong> for every player that guesses their clue correctly
                     </li>
                     <li>Play for as long or as short as you want!</li>
                 </ol>
-                <p>
-                    You can create a new game and invite your friends or join an existing game using a code from your host. Once everyone has joined, the host will start the game.
-                </p>
-                {activeUser ? <div style={{ display: 'flex', gap: '2rem' }}>
+                {activeUser ? <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
                     <button onClick={() => { navigate("/home/create-game") }} className="submit-vote" style={{ color: '#fff' }}>Create Game</button>
                     <button onClick={() => { navigate("/home/join-game") }} className="submit-vote" style={{ color: '#fff' }}>Join Game</button>
                 </div> : 
-                <div style={{ display: 'flex', gap: '2rem' }}>
+                <div style={{ display: 'flex', gap: '2rem', marginTop: '1rem' }}>
                     <button onClick={() => { navigate("/") }} className="submit-vote" style={{ color: '#fff' }}>Login</button>
                 </div>}
             </section>

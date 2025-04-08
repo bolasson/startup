@@ -218,7 +218,7 @@ export default function Play() {
                     </div>
                     <div style={{ textAlign: 'center' }}>
                         <input type="hidden" value={sliderValue} />
-                        <button className="submit-vote" onClick={handleVoteSubmit}>Submit Vote</button>
+                        <button className="submit-vote" onClick={handleVoteSubmit}>{`Submit Vote (${sliderValue})`}</button>
                     </div>
                 </>}
             </section>}

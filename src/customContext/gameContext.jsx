@@ -7,9 +7,9 @@ export function GameProvider({ children }) {
     const [activeGame, setActiveGame] = useState(null);
 
     useEffect(() => {
-        const user = localStorage.getItem('user');
-        if (user) {
-            setActiveUser(JSON.parse(user));
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setActiveUser(JSON.parse(storedUser));
         }
     }, []);
 

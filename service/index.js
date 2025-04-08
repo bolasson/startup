@@ -20,7 +20,9 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
     { roundsPlayed: int, pointsScored: int, dateJoined: date, lastPlayed: date }
 */
 
-// These are kept here until websocket implementation
+/* Why aren't games stored in the database you ask? Games don't last long enough to be stored in the database, and keeping them
+here reduces the amount of calls that modify the game, which reduces concurrency errors. Ideally I'll add a cleanup function, but for
+now there is a limit of 9999 unique games ;) */
 let games = [];
 /* Game Structure
     { gameID: int, players: player[], currentRound: int, currentItIndex: int, clueTarget: int, clue: string, upperScale: string, lowerScale: string, state: string }
@@ -188,6 +190,19 @@ apiRouter.get('/user/me', async (req, res) => {
         res.send({ username: user.username, name: user.name, stats: user.stats });
     } else {
         res.status(401).send({ msg: 'Unauthorized' });
+    }
+});
+
+// Research, and then ask Professor Jensen about this, because while it seemd like a good idea in my head, I'm hearing faint alarm bells.
+// Update, major alarm bells. This is called with user data stored in localstorage, which anyone can add to. 
+// This is a major security issue, as I'd only need to know someone's username to be 'authenticated' as them.
+apiRouter.put('/user/refresh', async (req, res) => {
+    const user = await getUser(req.body.username);
+    if (user) {
+        setAuthCookie(res, user);
+        res.send({ msg: 'Auth cookie refreshed' });
+    } else {
+        res.status(401).send({ msg: 'Stored user not found.' });
     }
 });
 

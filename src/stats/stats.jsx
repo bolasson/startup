@@ -5,7 +5,7 @@ import "../styles.css";
 
 export default function Stats() {
     const navigate = useNavigate();
-    const { activeUser, setUser } = useGame();
+    const { activeUser } = useGame();
     const [highscores, setHighscores] = useState(null);
 
     useEffect(() => {
@@ -22,6 +22,7 @@ export default function Stats() {
             }
         })();
     }, []);
+    
 
     if (!activeUser) {
         return (
