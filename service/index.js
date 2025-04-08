@@ -263,16 +263,18 @@ async function calculateScores(game) {
     if (!game) {
         throw new Error('No game provided to score');
     }
-    const it = game.players[game.currentItIndex];
+    const clueGiver = game.players[game.currentItIndex];
+    let clueGiverScore = 0;
     for (const player of game.players) {
         const user = await getUser(player.username);
         if (!user) {
             throw new Error(`User with username '${player.username}' not found`);
         }
-        if (player !== it) {
+        if (player !== clueGiver) {
             let score = 0;
             if (player.activeVote === game.clueTarget) {
                 score = 3;
+                clueGiverScore += 1;
             } else if (player.activeVote === game.clueTarget + 1 || player.activeVote === game.clueTarget - 1) {
                 score = 1;
             }
@@ -282,6 +284,8 @@ async function calculateScores(game) {
         user.stats["Rounds Played"] += 1;
         await DB.updateUser(user);
     }
+    clueGiver.score += clueGiverScore;
+    await DB.updateUser(clueGiver);
     return game;
 }
 
