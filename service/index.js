@@ -120,11 +120,11 @@ async function getUser(value, field = "username") {
     return null;
 }
 
-async function passwordMeetsRequirements(password) {
+function passwordMeetsRequirements(password) {
     return password.length >= 12;
 }
 
-async function usernameMeetsRequirements(username) {
+function usernameMeetsRequirements(username) {
     return username.length >= 6;
 }
 
@@ -145,7 +145,7 @@ async function createUser(username, password, name) {
     return user;
 }
 
-async function setLastPlayed(user) {
+function setLastPlayed(user) {
     user.stats["Last Played"] = new Date().toLocaleDateString();
 }
 
@@ -153,9 +153,9 @@ async function setLastPlayed(user) {
 apiRouter.post('/user', async (req, res) => {
     if (await getUser(req.body.username)) {
         res.status(409).send({ msg: 'Username already taken.' });
-    } else if (!await usernameMeetsRequirements(req.body.username)) {
+    } else if (!usernameMeetsRequirements(req.body.username)) {
         res.status(400).send({ msg: 'Username must be at least 6 characters long.' });
-    } else if (!await passwordMeetsRequirements(req.body.password)) {
+    } else if (!passwordMeetsRequirements(req.body.password)) {
         res.status(400).send({ msg: 'Password must be at least 12 characters long.' });
     } else {
         const user = await createUser(req.body.username, req.body.password, req.body.name);
@@ -168,7 +168,7 @@ apiRouter.put('/user', async (req, res) => {
     const user = await getUser(req.body.username);
     if (user && (await bcrypt.compare(req.body.password, user.password))) {
         setAuthCookie(res, user);
-        await setLastPlayed(user);
+        setLastPlayed(user);
         res.send({ username: user.username, name: user.name, stats: user.stats });
     } else {
         res.status(401).send({ msg: 'Please check your credentials' });
@@ -182,16 +182,6 @@ apiRouter.delete('/user', async (req, res) => {
         clearAuthCookie(res, user);
     }
     res.status(204).send({ msg: 'Logged out' });
-});
-
-apiRouter.get('/user/me', async (req, res) => {
-    const token = req.cookies[authCookieName];
-    const user = await getUser(token, 'token');
-    if (user) {
-        res.send({ username: user.username, name: user.name, stats: user.stats });
-    } else {
-        res.status(401).send({ msg: 'Unauthorized' });
-    }
 });
 
 /* GAME */
@@ -297,16 +287,6 @@ apiRouter.post('/game', verifyAuth, async (req, res) => {
     res.send(game);
 });
 
-apiRouter.get('/game', verifyAuth, async (req, res) => {
-    const gameID = parseInt(req.query.gameID);
-    const game = getGame(gameID);
-    if (game) {
-        res.send(game);
-    } else {
-        res.status(404).send({ msg: 'Game not found' });
-    }
-});
-
 apiRouter.put('/game/join', verifyAuth, async (req, res) => {
     const gameID = parseInt(req.body.gameID);
     const user = await getUser(req.cookies[authCookieName], 'token');
@@ -330,6 +310,7 @@ apiRouter.put('/game/start', verifyAuth, async (req, res) => {
     } else {
         game.isStarted = true;
         res.send(game);
+        gameWS.broadcastGameUpdate(game);
     }
 });
 
@@ -345,6 +326,7 @@ apiRouter.put('/play/vote', verifyAuth, async (req, res) => {
     } else {
         game.players.find((player) => player.username === user.username).activeVote = vote;
         res.send(game);
+        gameWS.broadcastGameUpdate(game);
     }
 });
 
@@ -359,6 +341,7 @@ apiRouter.put('/play/clue', verifyAuth, async (req, res) => {
         game.state = 'voting';
         updateGame(game);
         res.send(game);
+        gameWS.broadcastGameUpdate(game);
     }
 });
 
@@ -373,6 +356,7 @@ apiRouter.put('/play/view-results', verifyAuth, async (req, res) => {
         game.state = 'results';
         updateGame(game);
         res.send(game);
+        gameWS.broadcastGameUpdate(game);
     } catch (error) {
         res.status(500).send({ msg: error.message });
     }
@@ -394,6 +378,7 @@ apiRouter.put('/play/end-round', verifyAuth, async (req, res) => {
         game.state = 'waiting';
         updateGame(game);
         res.send(game);
+        gameWS.broadcastGameUpdate(game);
     } catch (error) {
         res.status(500).send({ msg: error.message });
     }
