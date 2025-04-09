@@ -33,6 +33,9 @@ export default function JoinGame() {
         const joinedGameData = await res.json();
         if (!res.ok) {
             setError(joinedGameData.msg);
+            if (joinedGameData.msg === "Unauthorized") {
+                navigate("/logout", { replace: true });
+            }
         } else {
             setGame(joinedGameData);
             navigate("/home/waiting-room");

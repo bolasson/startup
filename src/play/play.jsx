@@ -5,10 +5,10 @@ import { useGame } from "../customContext/gameContext.jsx";
 import Leaderboard from "./leaderboard.jsx";
 import PlayerVotes from "./playerVotes.jsx";
 import useTimer from "../customHooks/useTimer.jsx";
-import "../styles.css";
 import Results from "./results.jsx";
 import SubmitClue from "./submitClue.jsx";
 import { GameEvent, GameNotifier } from "../components/gameNotifier.js";
+import "../styles.css";
 
 export default function Play() {
     const navigate = useNavigate();
@@ -44,7 +44,7 @@ export default function Play() {
         return (
             <main>
                 <section className="intro">
-                    <h2>Loading...</h2>
+                    <h2>You have not joined a game. Please join one from the home screen.</h2>
                 </section>
             </main>
         );

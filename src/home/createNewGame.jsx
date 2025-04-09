@@ -40,6 +40,9 @@ export default function CreateGame() {
         const gameData = await game.json();
         if (!game.ok) {
             setError(gameData.msg);
+            if (gameData.msg === "Unauthorized") {
+                navigate("/logout", { replace: true });
+            }
             return;
         }
         const res = await fetch('/api/game/join', {
