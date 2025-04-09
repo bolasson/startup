@@ -293,6 +293,7 @@ async function calculateScores(game) {
 // Endpoints
 apiRouter.post('/game', verifyAuth, async (req, res) => {
     const game = await createGame();
+    gameWS.broadcastGameUpdate(game);
     res.send(game);
 });
 

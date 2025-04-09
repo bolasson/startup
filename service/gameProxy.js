@@ -16,7 +16,7 @@ function gameProxy(httpServer) {
                 return;
             }
             if (msg.type === 'subscribe' && msg.gameID) {
-                socket.gameID = msg.gameID;
+                socket.gameID = Number(msg.gameID);
                 console.log(`Client subscribed to game ${msg.gameID}`);
             }
         });
@@ -40,7 +40,7 @@ function gameProxy(httpServer) {
     function broadcastGameUpdate(game) {
         const update = JSON.stringify({ type: 'game-update', game });
         socketServer.clients.forEach((client) => {
-            if (client.readyState === client.OPEN && client.gameID === game.gameID) {
+            if (client.readyState === WebSocket.OPEN && client.gameID === game.gameID) {
                 client.send(update);
             }
         });
