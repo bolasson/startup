@@ -2,7 +2,7 @@
 
 This application allows players to test how well they know their friends’ opinions on fun and unexpected scales. Rank It is a multiplayer guessing game designed for social interaction and engagement. The app allows up to 8 players per game and tracks scores across rounds. It combines creativity, humor, and real-time collaboration, ensuring an entertaining experience for all participants.
 
-[Check out the app's current progress here!](https://brycelasson.click)
+[Check out the app here!](https://startup.brycelasson.click)
 
 ---
 
@@ -147,7 +147,7 @@ For this deliverable I added backend endpoints that create games, join players t
 
 - [x] **Node.js/Express HTTP service** - done!
 - [x] **Static middleware for frontend** - done!
-- [ ] **Calls to third party endpoints** - I didn't have time to implement this.
+- [X] **Calls to third party endpoints** - Calls a dad joke API and displays jokes for users in the waiting room
 - [x] **Backend service endpoints** - Placeholders for login that stores the current user in the app context. Endpoints for game creation and joining.
 - [x] **Frontend calls service endpoints** - I did this using the fetch function.
 - [X] **Supports registration, login, logout, and restricted endpoint** - Supports registration, login, and logging out.Restriction is applied to both the endpoints and the frontend.
@@ -157,4 +157,33 @@ For this deliverable I added backend endpoints that create games, join players t
 For this deliverable I associate the statistics with the logged in user. I stored the users and stats in the database.
 
 - [x] **Stores data in MongoDB** - Done!
-- [x] **Use MongoDB to store credentials** - Stores users and their statistics. Games are not stored, since they are designed to only last temporarily, and are placeholders for the websocket deliverable.
+- [x] **Use MongoDB to store credentials** - Stores users and their statistics. Games are not stored, since they are designed to only last temporarily.
+
+## WebSocket deliverable
+
+For this deliverable I used webSocket to update the games on the frontend in realtime. And I'm really happy with how it turned out.
+
+- [x] **Backend listens for WebSocket connection** - Done!
+- [x] **Frontend makes WebSocket connection** - Done!
+- [x] **Data sent over WebSocket connection** - Done! Game data is sent and filtered based on the gameID the user is subscribed to.
+- [x] **WebSocket data displayed** - Done! Game data is displayed on the createGame, waitingRoom, and play pages. The data includes clues, players, and votes.
+- [x] **The application is fully functional** - Yes, it is! Kinda crazy to think it actually all worked. There were some additional ideas I had along the way, such as a final results page, leaving game logic, styling and structure cleanup, but I'm happy with how my app turned out. I may add some of those in preperation for demo day though!
+
+---
+
+# Final Notes
+This was an awesome project to work on. It took a lot of debugging and critical thinking, and inspired me to think more about the sites I use and how they work. I think my next project (hopefully over the summer, but we'll see with my internship and database class) will be to develop a site that keeps track of freelance work hours using these principles, where you can subscribe to certain people's clock in and clock out times and log different job hours and rates. If I make it happen, I'll update this with a link.
+
+Thanks for playing Rank It,
+Bryce
+
+Special thanks to:
+- Tim Berners-Lee (HTML)
+- Håkon Wium Lie (Cascading Style Sheets)
+- Brendan Eich (JavaScript)
+- Jordan Walke (React)
+- Eliot Horowitz, Kevin P. Ryan, and Dwight Merriman (MongoDB)
+- Ian Hickson and Michael Carter (Websocket)
+- Professor Lee Jensen and CS 260 TA's
+- Issac Teichert, Ethan Thompson, Toby Hunt, Jason Elzinga, and Kirk McMasters (Classmates) 
+- Jessica Lasson (My wife)
