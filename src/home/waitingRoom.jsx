@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PlayerList from "./playerList";
 import { useGame } from "../customContext/gameContext.jsx";
+import { GameEvent, GameNotifier } from "../components/gameNotifier.js";
 
 export default function WaitingRoom() {
     const navigate = useNavigate();
@@ -64,10 +65,17 @@ export default function WaitingRoom() {
 
     useEffect(() => {
         if (activeGame) {
-            const interval = setInterval(() => {
-                updateGame();
-            }, 1500);
-            return () => clearInterval(interval);
+            console.log("Subscribing to game updates for gameID:", activeGame.gameID);
+            GameNotifier.sendMessage({ type: "subscribe", gameID: activeGame.gameID });
+            const handleGameUpdate = (event) => {
+                if (event.type === GameEvent.Update && event.game && event.game.gameID === activeGame.gameID) {
+                    setGame(event.game);
+                }
+            };
+            GameNotifier.addHandler(handleGameUpdate);
+            return () => {
+                GameNotifier.removeHandler(handleGameUpdate);
+            };
         }
     }, [activeGame]);
 
