@@ -16,11 +16,11 @@ export default function CreateGame() {
         }
     }, [activeUser]);
 
-    // useEffect(() => {
-    //     if (activeGame) {
-    //         setGame(null);
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (activeGame) {
+            setGame(null);
+        }
+    }, []);
 
     if (!activeUser) {
         return (
