@@ -55,20 +55,6 @@ export default function CreateGame() {
         setGameID(joinedGameData.gameID);
     }
 
-    // Replace me when you implement websocket!! :) - Bryce
-    async function updateGame() {
-        const res = await fetch(`/api/game?gameID=${activeGame.gameID}`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        });
-        const updatedGame = await res.json();
-        if (res.ok) {
-            setGame(updatedGame);
-        } else {
-            setError(updatedGame.msg);
-        }
-    }
-
     async function startGame() {
         const res = await fetch(`/api/game/start`, {
             method: 'PUT',

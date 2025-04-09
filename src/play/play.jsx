@@ -8,6 +8,7 @@ import useTimer from "../customHooks/useTimer.jsx";
 import "../styles.css";
 import Results from "./results.jsx";
 import SubmitClue from "./submitClue.jsx";
+import { GameEvent, GameNotifier } from "../components/gameNotifier.js";
 
 export default function Play() {
     const navigate = useNavigate();
@@ -49,25 +50,6 @@ export default function Play() {
         );
     }
 
-    // Replace me when you implement websocket!! :) -     
-    async function getGameUpdates() {
-        if (!activeGame) return;
-        try {
-            const res = await fetch(`/api/game?gameID=${activeGame.gameID}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            });
-            const updatedGame = await res.json();
-            if (res.ok) {
-                setGame(updatedGame);
-            } else {
-                console.error(updatedGame.msg);
-            }
-        } catch (error) {
-            console.error("Failed to update game", error);
-        }
-    }
-
     async function viewResults() {
         const game = await fetch('/api/play/view-results', {
             method: 'PUT',
@@ -98,8 +80,17 @@ export default function Play() {
 
     useEffect(() => {
         if (activeGame) {
-            const interval = setInterval(() => {getGameUpdates()}, 1000);
-            return () => clearInterval(interval);
+            console.log("Subscribing to game updates for gameID:", activeGame.gameID);
+            GameNotifier.sendMessage({ type: "subscribe", gameID: activeGame.gameID });
+            const handleGameUpdate = (event) => {
+                if (event.type === GameEvent.Update && event.game && event.game.gameID === activeGame.gameID) {
+                    setGame(event.game);
+                }
+            };
+            GameNotifier.addHandler(handleGameUpdate);
+            return () => {
+                GameNotifier.removeHandler(handleGameUpdate);
+            };
         }
     }, [activeGame]);
 
